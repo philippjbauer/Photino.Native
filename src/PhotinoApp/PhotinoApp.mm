@@ -1,5 +1,3 @@
-#include "../Helpers/Log.h"
-#include "../Helpers/Monitor.h"
 #include "PhotinoApp.h"
 
 PhotinoApp::PhotinoApp()
@@ -11,6 +9,12 @@ PhotinoApp::~PhotinoApp()
 {
     // Release memory after window was closed
     Log::WriteLine("Release resources");
+
+    // for (PhotinoWindow* photinoWindow in _photinoWindows)
+    // {
+    //     delete photinoWindow;
+    // }
+
     [_application release];
     [_pool release];
 }
@@ -53,4 +57,11 @@ std::vector<Monitor> PhotinoApp::GetMonitors()
     }
 
     return monitors;
+}
+
+PhotinoApp* PhotinoApp::AddPhotinoWindow(PhotinoWindow* photinoWindow)
+{
+    _photinoWindows.push_back(photinoWindow);
+
+    return this;
 }

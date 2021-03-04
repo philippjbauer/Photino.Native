@@ -44,6 +44,10 @@ int main() {
         ->LoadHtmlString("Second Window");
     Log::WriteMetrics(AppMetrics);
 
+    app->AddPhotinoWindow(mainWindow)
+       ->AddPhotinoWindow(secondWindow);
+    Log::WriteMetrics(AppMetrics);
+
     app->Run();
     delete app;
 

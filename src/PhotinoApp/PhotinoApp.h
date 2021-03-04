@@ -15,6 +15,8 @@ class PhotinoApp
         PhotinoAppDelegate* _appDelegate;
         NSApplication* _application;
 
+        std::vector<PhotinoWindow*> _photinoWindows;
+
         PhotinoApp* Init();
 
     public:
@@ -25,5 +27,5 @@ class PhotinoApp
 
         std::vector<Monitor> GetMonitors();
 
-        void AddPhotinoWindow(PhotinoWindow* photinoWindow);
+        PhotinoApp* AddPhotinoWindow(PhotinoWindow* photinoWindow);
 };
