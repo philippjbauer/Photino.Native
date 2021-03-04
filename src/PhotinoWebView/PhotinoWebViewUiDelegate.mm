@@ -1,10 +1,8 @@
-#import "../Helpers/Log.h"
-#import "../Structs/WindowSize.h"
-#import "../Structs/WindowLocation.h"
+#include "../Helpers/Log.h"
+#include "../Structs/WindowSize.h"
+#include "../Structs/WindowLocation.h"
 
-#import "PhotinoWebViewUiDelegate.h"
-
-using namespace std;
+#include "PhotinoWebViewUiDelegate.h"
 
 @implementation PhotinoWebViewUiDelegate : NSObject
 - (void)windowDidResize: (NSNotification *)notification

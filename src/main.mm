@@ -1,51 +1,52 @@
-#import <Cocoa/Cocoa.h>
+#include <memory>
+#include <Cocoa/Cocoa.h>
 
-#import "Helpers/Log.h"
-#import "PhotinoApp/AppDelegate.h"
-#import "PhotinoWindow/PhotinoWindow.h"
+#include "PhotinoApp/PhotinoApp.h"
 
-using namespace std;
+static Metrics AppMetrics;
+
+void* operator new(size_t size) _THROW_BAD_ALLOC
+{
+    AppMetrics.UsedInstances++;
+    AppMetrics.UsedMemory += size;
+    
+    return malloc(size);
+}
+
+void operator delete(void* memory, size_t size)
+{
+    AppMetrics.FreedInstances++;
+    AppMetrics.FreedMemory += size;
+    
+    free(memory);
+}
 
 int main() {
     Log::WriteLine("Starting execution");
 
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
-    PhotinoAppDelegate* applicationDelegate = [[
-        [PhotinoAppDelegate alloc]
-        init
-    ] autorelease];
+    PhotinoApp* app = new PhotinoApp();
+    Log::WriteMetrics(AppMetrics);
 
-    [NSApplication sharedApplication];
-    [NSApp setDelegate: applicationDelegate];
-    [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
-
-    // id applicationName = [[NSProcessInfo processInfo] processName];
-
-    PhotinoWindow* mainWindow = new PhotinoWindow("Main Window", 800, 600, 200, 200);
+    PhotinoWindow* mainWindow = new PhotinoWindow("Main Window");
+    Log::WriteMetrics(AppMetrics);
 
     mainWindow
         ->GetPhotinoWebView()
-            ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
+        ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
+    Log::WriteMetrics(AppMetrics);
 
-    // PhotinoWindow* secondWindow = new PhotinoWindow("Second Window", 200, 200, 20, 20);
+    PhotinoWindow* secondWindow = new PhotinoWindow("Second Window");
+    Log::WriteMetrics(AppMetrics);
 
-    // secondWindow
-    //     ->SetParent(mainWindow)
-    //     ->GetPhotinoWebView()
-    //         ->LoadHtmlString("Second Window");
+    secondWindow
+        ->SetParent(mainWindow)
+        ->GetPhotinoWebView()
+        ->LoadHtmlString("Second Window");
+    Log::WriteMetrics(AppMetrics);
 
-    // Run application
-    Log::WriteLine("Run application");
-    [NSApp run];
+    app->Run();
+    delete app;
 
-    // Release memory after window was closed
-    Log::WriteLine("Release resources");
-    [NSApp release];
-    [pool release];
-
-    Log::WriteLine("Exit application");
-    return(EXIT_SUCCESS);
-
+    Log::WriteLine("Stopping execution");
     return 0;
-};
+}

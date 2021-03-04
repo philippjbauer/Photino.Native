@@ -1,5 +1,5 @@
-#import "../Helpers/Log.h"
-#import "AppDelegate.h"
+#include "../Helpers/Log.h"
+#include "AppDelegate.h"
 
 @implementation PhotinoAppDelegate : NSObject
 - (PhotinoAppDelegate *)init

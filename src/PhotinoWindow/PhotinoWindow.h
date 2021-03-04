@@ -1,13 +1,12 @@
-#import <cstdio>
-#import <string>
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
+#pragma once
+#include <string>
+#include <Cocoa/Cocoa.h>
 
-#import "../PhotinoWebView/PhotinoWebView.h"
-#import "../Structs/WindowLocation.h"
-#import "../Structs/WindowSize.h"
-
-using namespace std;
+#include "../Helpers/Monitor.h"
+#include "../PhotinoWebView/PhotinoWebView.h"
+#include "../Structs/Monitor.h"
+#include "../Structs/WindowLocation.h"
+#include "../Structs/WindowSize.h"
 
 class PhotinoWindow
 {
@@ -17,7 +16,9 @@ class PhotinoWindow
 
         PhotinoWindow* _parent;
 
-        string _title;
+        std::string _title;
+
+        Monitor _monitor;
         WindowSize _size;
         WindowLocation _location;
 
@@ -35,14 +36,17 @@ class PhotinoWindow
         /**
          *  Constructor / Destructor
          */
+        PhotinoWindow(std::string title);
+
         PhotinoWindow(
-            string windowTitle,
+            std::string title,
+            Monitor monitor,
             int width = 800,
             int height = 600,
             int left = 20,
             int top = 20,
-            bool resizable = true,
-            bool fullscreen = false);
+            bool isResizable = true,
+            bool isfullscreen = false);
 
         ~PhotinoWindow();
 
@@ -55,11 +59,7 @@ class PhotinoWindow
         PhotinoWindow* Show();
         PhotinoWindow* Hide();
 
-        bool IsResizable();
-        PhotinoWindow* IsResizable(bool value);
-
-        bool IsFullscreen();
-        PhotinoWindow* IsFullscreen(bool value);
+        PhotinoWindow* Center();
 
         /**
          * Getters & Setters
@@ -72,17 +72,31 @@ class PhotinoWindow
 
         // Parent
         PhotinoWindow* GetParent();
-        PhotinoWindow* SetParent(PhotinoWindow *value);
+        PhotinoWindow* SetParent(PhotinoWindow* value);
 
         // Title
-        string GetTitle();
-        PhotinoWindow* SetTitle(string value);
+        std::string GetTitle();
+        PhotinoWindow* SetTitle(std::string value);
+
+        // Monitor
+        Monitor GetMonitor();
+        PhotinoWindow* SetMonitor(Monitor value);
 
         // Size
         WindowSize GetSize();
         PhotinoWindow* SetSize(WindowSize value);
+        PhotinoWindow* SetSize(int width, int height);
 
         // Location
         WindowLocation GetLocation();
         PhotinoWindow* SetLocation(WindowLocation value);
+        PhotinoWindow* SetLocation(int left, int top);
+
+        // IsResizable
+        bool IsResizable();
+        PhotinoWindow* IsResizable(bool value);
+
+        // IsFullscreen
+        bool IsFullscreen();
+        PhotinoWindow* IsFullscreen(bool value);
 };

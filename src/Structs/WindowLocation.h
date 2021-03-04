@@ -1,13 +1,14 @@
-#import <string>
-
-using namespace std;
+#pragma once
+#include <string>
 
 struct WindowLocation
 {
     int left;
     int top;
 
-    WindowLocation(int left = 0, int top = 0);
+    WindowLocation(
+        int left = 0,
+        int top = 0);
 
-    string ToString();
+    std::string ToString();
 };

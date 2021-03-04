@@ -1,9 +1,7 @@
-#import <cstdio>
-#import <string>
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
-
-using namespace std;
+#pragma once
+#include <string>
+#include <Cocoa/Cocoa.h>
+#include <WebKit/WebKit.h>
 
 class PhotinoWebView
 {
@@ -41,8 +39,8 @@ class PhotinoWebView
         /**
          * Class Methods
          */
-        PhotinoWebView* LoadResource(string url);
-        PhotinoWebView* LoadHtmlString(string content);
+        PhotinoWebView* LoadResource(std::string url);
+        PhotinoWebView* LoadHtmlString(std::string content);
 
         /**
          * Getters & Setters

@@ -17,11 +17,12 @@ clean:
 
 compile:
 	$(CC) $(CFLAGS)\
+		$(SRC)Helpers/*.cpp\
 		$(SRC)Helpers/*.mm\
 		$(SRC)PhotinoApp/*.mm\
 		$(SRC)PhotinoWebView/*.mm\
 		$(SRC)PhotinoWindow/*.mm\
-		$(SRC)Structs/*.mm\
+		$(SRC)Structs/*.cpp\
 		$(SRC)main.mm\
 		-o $(DEST_PATH_DEV)$(DEST_FILE)
 

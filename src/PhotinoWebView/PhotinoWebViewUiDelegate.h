@@ -1,8 +1,8 @@
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
+#pragma once
+#include <Cocoa/Cocoa.h>
+#include <WebKit/WebKit.h>
 
 // typedef void (*WebMessageReceivedCallback) (char* message);
-
 @interface PhotinoWebViewUiDelegate : NSObject <WKUIDelegate/*, WKScriptMessageHandler*/>
 {
     @public

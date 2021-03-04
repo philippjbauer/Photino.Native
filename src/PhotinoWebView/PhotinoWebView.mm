@@ -1,7 +1,5 @@
-#import "PhotinoWebView.h"
-#import "PhotinoWebViewUiDelegate.h"
-
-using namespace std;
+#include "PhotinoWebView.h"
+#include "PhotinoWebViewUiDelegate.h"
 
 /**
  * Construct PhotinoWebView
@@ -129,7 +127,7 @@ WKWebView* PhotinoWebView::CreateNativeWebView(
     return nativeWebView;
 }
 
-PhotinoWebView* PhotinoWebView::LoadResource(string resource)
+PhotinoWebView* PhotinoWebView::LoadResource(std::string resource)
 {
     WKWebView* webview = this->GetNativeWebView();
 
@@ -150,7 +148,7 @@ PhotinoWebView* PhotinoWebView::LoadResource(string resource)
     return this;
 }
 
-PhotinoWebView* PhotinoWebView::LoadHtmlString(string content)
+PhotinoWebView* PhotinoWebView::LoadHtmlString(std::string content)
 {
     WKWebView* webview = this->GetNativeWebView();
 

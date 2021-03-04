@@ -1,31 +1,48 @@
-#import "PhotinoWindow.h"
-
-using namespace std;
+#include <cmath>
+#include "PhotinoWindow.h"
 
 /**
  * Construct PhotinoWindow
  */
+PhotinoWindow::PhotinoWindow(std::string title)
+{
+    NSScreen* mainScreen = [[NSScreen screens] objectAtIndex: 0];
+
+    Monitor monitor = MakeMonitor(mainScreen, false);
+
+    this->Init()
+        ->SetTitle(title)
+        ->SetMonitor(monitor)
+        ->SetSize(800, 600)
+        ->Center()
+        ->IsResizable(true)
+        ->IsFullscreen(false)
+        ->Open();
+}
+
 PhotinoWindow::PhotinoWindow(
-    string windowTitle,
+    std::string title,
+    Monitor monitor,
     int width,
     int height,
     int left,
     int top,
-    bool resizable,
-    bool fullscreen)
+    bool isResizable,
+    bool isFullscreen)
 {
     this->Init()
-        ->SetTitle(windowTitle)
-        ->SetSize(WindowSize(width, height))
-        ->SetLocation(WindowLocation(left, top))
-        ->IsResizable(resizable)
-        ->IsFullscreen(fullscreen)
+        ->SetTitle(title)
+        ->SetMonitor(monitor)
+        ->SetSize(width, height)
+        ->SetLocation(left, top)
+        ->IsResizable(isResizable)
+        ->IsFullscreen(isFullscreen)
         ->Open();
 }
 
 PhotinoWindow::~PhotinoWindow()
 {
-    _photinoWebView->~PhotinoWebView();
+    delete _photinoWebView;
     [_nativeWindow release];
 }
 
@@ -100,33 +117,17 @@ PhotinoWindow* PhotinoWindow::Hide()
     return this;
 }
 
-bool PhotinoWindow::IsResizable() { return _isResizable; }
-PhotinoWindow* PhotinoWindow::IsResizable(bool value)
+PhotinoWindow* PhotinoWindow::Center()
 {
-    if (value == true)
-    {
-        _nativeWindow.styleMask |= NSWindowStyleMaskResizable;
-    }
-    else
-    {
-        _nativeWindow.styleMask &= ~NSWindowStyleMaskResizable;
-    }
-    
-    _isResizable = value;
+    Monitor monitor = this->GetMonitor();
+    MonitorFrame workArea = monitor.workArea;
 
-    return this;
-}
+    WindowSize size = this->GetSize();
 
-bool PhotinoWindow::IsFullscreen() { return _isFullscreen; }
-PhotinoWindow* PhotinoWindow::IsFullscreen(bool value)
-{
-    if (_isFullscreen != value)
-    {
-        _isFullscreen = value;
-        [_nativeWindow toggleFullScreen: nil];
-    }
+    int left = round((workArea.width / 2) - (size.width / 2));
+    int top = round((workArea.height / 2) - (size.height / 2));
 
-    return this;
+    return this->SetLocation(left, top);
 }
 
 /**
@@ -149,8 +150,8 @@ PhotinoWindow* PhotinoWindow::SetParent(PhotinoWindow *value) {
 }
 
 // Title
-string PhotinoWindow::GetTitle() { return _title; }
-PhotinoWindow* PhotinoWindow::SetTitle(string value)
+std::string PhotinoWindow::GetTitle() { return _title; }
+PhotinoWindow* PhotinoWindow::SetTitle(std::string value)
 {
     _title = value;
 
@@ -164,8 +165,18 @@ PhotinoWindow* PhotinoWindow::SetTitle(string value)
     return this;
 }
 
+// Monitor
+Monitor PhotinoWindow::GetMonitor() { return _monitor; }
+PhotinoWindow* PhotinoWindow::SetMonitor(Monitor value)
+{
+    _monitor = value;
+
+    return this;
+}
+
 // Size
 WindowSize PhotinoWindow::GetSize() { return _size; }
+
 PhotinoWindow* PhotinoWindow::SetSize(WindowSize value)
 {
     _size = value;
@@ -173,36 +184,83 @@ PhotinoWindow* PhotinoWindow::SetSize(WindowSize value)
     CGFloat width = (CGFloat)value.width;
     CGFloat height = (CGFloat)value.height;
 
-    NSRect windowContentRect = [_nativeWindow frame];
-    windowContentRect.size = CGSizeMake(width, height);
+    NSRect frame = [_nativeWindow frame];
+    frame.size = CGSizeMake(width, height);
 
     [
         _nativeWindow
-        setFrame: windowContentRect
+        setFrame: frame
         display: YES
     ];
 
     return this;
 }
 
+PhotinoWindow* PhotinoWindow::SetSize(int width, int height)
+{
+    return this->SetSize(WindowSize(width, height));
+}
+
 // Location
 WindowLocation PhotinoWindow::GetLocation() { return _location; }
+
 PhotinoWindow* PhotinoWindow::SetLocation(WindowLocation value)
 {
     _location = value;
 
-    CGFloat top = (CGFloat)value.top;
+    Monitor monitor = this->GetMonitor();
+    NSRect frame = [_nativeWindow frame];
+
     CGFloat left = (CGFloat)value.left;
 
-    NSRect windowContentRect = [_nativeWindow frame];
-    windowContentRect.origin.y = windowContentRect.size.height - top;
-    windowContentRect.origin.x = left;
+    // 0, 0 starts at left, bottom of workArea
+    // Calcualte values so it is left, top
+    int offsetValue = monitor.workArea.height - value.top - frame.size.height; 
+    CGFloat top = (CGFloat)offsetValue;
+
+    frame.origin = CGPointMake(left, top);
 
     [
         _nativeWindow
-        setFrame: windowContentRect
+        setFrame: frame
         display: YES
     ];
+
+    return this;
+}
+
+PhotinoWindow* PhotinoWindow::SetLocation(int left, int top)
+{
+    return this->SetLocation(WindowLocation(left, top));
+}
+
+// IsResizable
+bool PhotinoWindow::IsResizable() { return _isResizable; }
+PhotinoWindow* PhotinoWindow::IsResizable(bool value)
+{
+    if (value == true)
+    {
+        _nativeWindow.styleMask |= NSWindowStyleMaskResizable;
+    }
+    else
+    {
+        _nativeWindow.styleMask &= ~NSWindowStyleMaskResizable;
+    }
+    
+    _isResizable = value;
+
+    return this;
+}
+
+// IsFullscreen
+bool PhotinoWindow::IsFullscreen() { return _isFullscreen; }
+PhotinoWindow* PhotinoWindow::IsFullscreen(bool value)
+{
+    if (_isFullscreen != value)
+    {
+        _isFullscreen = value;
+        [_nativeWindow toggleFullScreen: nil];
+    }
 
     return this;
 }

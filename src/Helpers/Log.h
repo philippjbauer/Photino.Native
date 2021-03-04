@@ -1,9 +1,10 @@
-#import <iostream>
-
-using namespace std;
+#pragma once
+#include <iostream>
+#include "Metrics.h"
 
 class Log
 {
     public:
-        static void WriteLine(string message);
+        static void WriteLine(std::string message);
+        static void WriteMetrics(Metrics metrics);
 };
