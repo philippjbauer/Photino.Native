@@ -1,7 +1,13 @@
 #include <memory>
 #include <Cocoa/Cocoa.h>
 
-#include "PhotinoApp/PhotinoApp.h"
+#include "Photino/App/App.h"
+#include "PhotinoHelpers/Metrics.h"
+#include "PhotinoShared/Log.h"
+
+using namespace Photino;
+using namespace PhotinoHelpers;
+using namespace PhotinoShared;
 
 static Metrics AppMetrics;
 
@@ -21,31 +27,32 @@ void operator delete(void* memory, size_t size)
     free(memory);
 }
 
-int main() {
+int main()
+{
     Log::WriteLine("Starting execution");
 
-    PhotinoApp* app = new PhotinoApp();
+    App* app = new App();
     Log::WriteMetrics(AppMetrics);
 
-    PhotinoWindow* mainWindow = new PhotinoWindow("Main Window");
+    Window* mainWindow = new Window("Main Window");
     Log::WriteMetrics(AppMetrics);
 
     mainWindow
-        ->GetPhotinoWebView()
+        ->GetWebView()
         ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
     Log::WriteMetrics(AppMetrics);
 
-    PhotinoWindow* secondWindow = new PhotinoWindow("Second Window");
+    Window* secondWindow = new Window("Second Window");
     Log::WriteMetrics(AppMetrics);
 
     secondWindow
         ->SetParent(mainWindow)
-        ->GetPhotinoWebView()
-        ->LoadResource("https://news.ycombinator.com/item?id=26339065");
+        ->GetWebView()
+        ->LoadResource("http://www.tryphotino.io");
     Log::WriteMetrics(AppMetrics);
 
-    app->AddPhotinoWindow(mainWindow)
-       ->AddPhotinoWindow(secondWindow);
+    app->AddWindow(mainWindow)
+       ->AddWindow(secondWindow);
     Log::WriteMetrics(AppMetrics);
 
     app->Run();

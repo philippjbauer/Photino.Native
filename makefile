@@ -13,12 +13,13 @@ DEST_DEV = $(DEST_PATH)/dev
 DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
 DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
 
-MAC_SRCS = $(SRC)/Helpers/*.mm\
-		   $(SRC)/PhotinoApp/*.mm\
-		   $(SRC)/PhotinoWebView/*.mm\
-		   $(SRC)/PhotinoWindow/*.mm\
-		   $(SRC)/Shared/*.cpp\
-		   $(SRC)/Structs/*.cpp\
+MAC_SRCS = $(SRC)/Photino/App/*.mm\
+		   $(SRC)/Photino/Structs/*.cpp\
+		   $(SRC)/Photino/WebView/*.mm\
+		   $(SRC)/Photino/Window/*.mm\
+		   $(SRC)/PhotinoHelpers/*.mm\
+		   $(SRC)/PhotinoHelpers/*.cpp\
+		   $(SRC)/PhotinoShared/*.cpp\
 
 MAC_DEPS = -framework Cocoa\
 		   -framework WebKit
