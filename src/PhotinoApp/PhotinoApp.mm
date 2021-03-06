@@ -24,13 +24,13 @@ PhotinoApp* PhotinoApp::Init()
     Log::WriteLine("Init resources");
     _pool = [[NSAutoreleasePool alloc] init];
     
-    _appDelegate = [[
+    PhotinoAppDelegate* appDelegate = [[
         [PhotinoAppDelegate alloc]
         init
     ] autorelease];
 
     _application = [NSApplication sharedApplication];
-    [_application setDelegate: _appDelegate];
+    [_application setDelegate: appDelegate];
     [_application setActivationPolicy: NSApplicationActivationPolicyRegular];
 
     // id applicationName = [[NSProcessInfo processInfo] processName];

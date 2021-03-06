@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
+#include <Cocoa/Cocoa.h>
 
-#include "../Helpers/Log.h"
+#include "../Shared/Log.h"
 #include "../Structs/Monitor.h"
 #include "../Structs/MonitorFrame.h"
 #include "../PhotinoWindow/PhotinoWindow.h"
@@ -12,7 +13,6 @@ class PhotinoApp
 {
     private:
         NSAutoreleasePool* _pool;
-        PhotinoAppDelegate* _appDelegate;
         NSApplication* _application;
 
         std::vector<PhotinoWindow*> _photinoWindows;

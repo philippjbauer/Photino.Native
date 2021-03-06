@@ -41,7 +41,7 @@ int main() {
     secondWindow
         ->SetParent(mainWindow)
         ->GetPhotinoWebView()
-        ->LoadHtmlString("Second Window");
+        ->LoadResource("https://news.ycombinator.com/item?id=26339065");
     Log::WriteMetrics(AppMetrics);
 
     app->AddPhotinoWindow(mainWindow)

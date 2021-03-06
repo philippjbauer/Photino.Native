@@ -1,5 +1,6 @@
 #include <cmath>
 #include "PhotinoWindow.h"
+#include "PhotinoWindowDelegate.h"
 
 /**
  * Construct PhotinoWindow
@@ -43,7 +44,7 @@ PhotinoWindow::PhotinoWindow(
 PhotinoWindow::~PhotinoWindow()
 {
     delete _photinoWebView;
-    [_nativeWindow release];
+    [this->GetNativeWindow() release];
 }
 
 /**
@@ -52,7 +53,7 @@ PhotinoWindow::~PhotinoWindow()
 PhotinoWindow* PhotinoWindow::Init()
 {
     _nativeWindow = this->CreateNativeWindow();
-    _photinoWebView = this->CreatePhotinoWebView(_nativeWindow);
+    _photinoWebView = this->CreatePhotinoWebView(this->GetNativeWindow());
 
     return this;
 }
@@ -62,7 +63,11 @@ NSWindow* PhotinoWindow::CreateNativeWindow()
     WindowSize size = this->GetSize();
     WindowLocation location = this->GetLocation();
 
-    NSRect windowContentRect = NSMakeRect(size.width, size.height, location.left, location.top);
+    NSRect windowContentRect = NSMakeRect(
+        size.width,
+        size.height,
+        location.left,
+        location.top);
     
     NSWindowStyleMask windowStyleMask =
         NSWindowStyleMaskTitled
@@ -77,6 +82,15 @@ NSWindow* PhotinoWindow::CreateNativeWindow()
         backing: NSBackingStoreBuffered
         defer: NO
     ];
+
+    // Add WindowDelegate
+    PhotinoWindowDelegate* windowDelegate = [[
+        [PhotinoWindowDelegate alloc] init
+    ] autorelease];
+
+    windowDelegate->photinoWindow = this;
+
+    window.delegate = windowDelegate;
 
     return window;
 }
@@ -95,24 +109,24 @@ void PhotinoWindow::Open()
 
 void PhotinoWindow::Close()
 {
-    [_nativeWindow close];
+    [this->GetNativeWindow() performClose: this->GetNativeWindow()];
 }
 
 PhotinoWindow* PhotinoWindow::Show()
 {
-    if (_nativeWindow.miniaturized)
+    if (this->GetNativeWindow().miniaturized)
     {
-        [_nativeWindow deminiaturize: nil];
+        [this->GetNativeWindow() deminiaturize: this->GetNativeWindow()];
     }
 
-    [_nativeWindow makeKeyAndOrderFront: nil];
+    [this->GetNativeWindow() orderFrontRegardless];
 
     return this;
 }
 
 PhotinoWindow* PhotinoWindow::Hide()
 {
-    [_nativeWindow miniaturize: nil];
+    [this->GetNativeWindow() miniaturize: this->GetNativeWindow()];
 
     return this;
 }
@@ -160,7 +174,7 @@ PhotinoWindow* PhotinoWindow::SetTitle(std::string value)
         stringWithUTF8String: value.c_str()
     ] autorelease];
 
-    [_nativeWindow setTitle: windowTitle];
+    [this->GetNativeWindow() setTitle: windowTitle];
 
     return this;
 }
@@ -184,11 +198,11 @@ PhotinoWindow* PhotinoWindow::SetSize(WindowSize value)
     CGFloat width = (CGFloat)value.width;
     CGFloat height = (CGFloat)value.height;
 
-    NSRect frame = [_nativeWindow frame];
+    NSRect frame = [this->GetNativeWindow() frame];
     frame.size = CGSizeMake(width, height);
 
     [
-        _nativeWindow
+        this->GetNativeWindow()
         setFrame: frame
         display: YES
     ];
@@ -208,23 +222,12 @@ PhotinoWindow* PhotinoWindow::SetLocation(WindowLocation value)
 {
     _location = value;
 
-    Monitor monitor = this->GetMonitor();
-    NSRect frame = [_nativeWindow frame];
-
     CGFloat left = (CGFloat)value.left;
+    CGFloat top = (CGFloat)value.left;
 
-    // 0, 0 starts at left, bottom of workArea
-    // Calcualte values so it is left, top
-    int offsetValue = monitor.workArea.height - value.top - frame.size.height; 
-    CGFloat top = (CGFloat)offsetValue;
+    CGPoint location = CGPointMake(left, top);
 
-    frame.origin = CGPointMake(left, top);
-
-    [
-        _nativeWindow
-        setFrame: frame
-        display: YES
-    ];
+    [this->GetNativeWindow() setFrameTopLeftPoint: location];
 
     return this;
 }
@@ -240,11 +243,11 @@ PhotinoWindow* PhotinoWindow::IsResizable(bool value)
 {
     if (value == true)
     {
-        _nativeWindow.styleMask |= NSWindowStyleMaskResizable;
+        this->GetNativeWindow().styleMask |= NSWindowStyleMaskResizable;
     }
     else
     {
-        _nativeWindow.styleMask &= ~NSWindowStyleMaskResizable;
+        this->GetNativeWindow().styleMask &= ~NSWindowStyleMaskResizable;
     }
     
     _isResizable = value;
@@ -259,7 +262,7 @@ PhotinoWindow* PhotinoWindow::IsFullscreen(bool value)
     if (_isFullscreen != value)
     {
         _isFullscreen = value;
-        [_nativeWindow toggleFullScreen: nil];
+        [this->GetNativeWindow() toggleFullScreen: this->GetNativeWindow()];
     }
 
     return this;

@@ -1,7 +1,7 @@
 #include "MonitorFrame.h"
 
 MonitorFrame::MonitorFrame(){
-    MonitorFrame(100, 100, 0, 0);
+    MonitorFrame(0, 0, 0, 0);
 };
 
 MonitorFrame::MonitorFrame(

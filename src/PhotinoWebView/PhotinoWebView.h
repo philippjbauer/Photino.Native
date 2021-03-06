@@ -3,6 +3,8 @@
 #include <Cocoa/Cocoa.h>
 #include <WebKit/WebKit.h>
 
+#include "../Shared/TextFile.h"
+
 class PhotinoWebView
 {
     private:

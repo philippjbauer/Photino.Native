@@ -1,4 +1,4 @@
-#include "../Helpers/Log.h"
+#include "../Shared/Log.h"
 #include "AppDelegate.h"
 
 @implementation PhotinoAppDelegate : NSObject
@@ -7,7 +7,6 @@
     if (self = [super init])
     {
         Log::WriteLine("PAD init");
-        // Initialize
     }
     
     return self;

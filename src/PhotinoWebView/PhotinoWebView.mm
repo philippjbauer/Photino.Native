@@ -1,5 +1,5 @@
 #include "PhotinoWebView.h"
-#include "PhotinoWebViewUiDelegate.h"
+#include "PhotinoWebKitUiDelegate.h"
 
 /**
  * Construct PhotinoWebView
@@ -14,8 +14,8 @@ PhotinoWebView::PhotinoWebView(
 
 PhotinoWebView::~PhotinoWebView()
 {
-    [_configuration release];
-    [_nativeWebView release];
+    [this->GetConfiguration() release];
+    [this->GetNativeWebView() release];
 }
 
 /**
@@ -24,7 +24,7 @@ PhotinoWebView::~PhotinoWebView()
 PhotinoWebView* PhotinoWebView::Init(NSWindow* nativeWindow)
 {
     _configuration = this->CreateConfiguration();
-    _nativeWebView = this->CreateNativeWebView(nativeWindow, _configuration);
+    _nativeWebView = this->CreateNativeWebView(nativeWindow, this->GetConfiguration());
 
     return this;
 }
@@ -41,49 +41,60 @@ WKWebView* PhotinoWebView::CreateNativeWebView(
     WKWebViewConfiguration* configuration
 )
 {
-    NSString* photinoWindowExtensions = @"\n"
-    "   window.__receiveMessageCallbacks = [];\n"
-    "   \n"
-    "   window.__dispatchMessageCallback = function(message)\n"
-    "   {\n"
-    "       window.__receiveMessageCallbacks\n"
-    "           .forEach(function(callback) \n"
-    "           {\n"
-    "               callback(message);\n"
-    "           });\n"
-    "   };\n"
-    "   \n"
-    "   window.external = {\n"
-    "       postMessage: function(message)\n"
-    "       {\n"
-    "           window.webkit\n"
-    "               .messageHandlers\n"
-    "               .photinointerop\n"
-    "               .postMessage(message);\n"
-    "       },\n"
-    "       receiveMessage: function(callback)\n"
-    "       {\n"
-    "           window.__receiveMessageCallbacks.push(callback);\n"
-    "       }\n"
-    "   };\n";
+    // Future use of TextFile when I found a way to include from
+    // application path / bundle path in a cross-platform fashion.
+    // TextFile photinoWebViewExtensions(APP_PATH + "/Assets/PhotinoWebViewExtensions.js");
 
-    WKUserScript* userScript = [
-        [WKUserScript alloc]
-        initWithSource: photinoWindowExtensions
-        injectionTime: WKUserScriptInjectionTimeAtDocumentStart
-        forMainFrameOnly: YES
+    std::string photinoWebViewExtensions = R"js(\
+window.__receiveMessageCallbacks = [];\
+\
+window.__dispatchMessageCallback = function(message)\
+{\
+    window.__receiveMessageCallbacks\
+        .forEach(function(callback) \
+        {\
+            callback(message);\
+        });\
+};\
+\
+window.external = {\
+    postMessage: function(message)\
+    {\
+        window.webkit\
+            .messageHandlers\
+            .photinointerop\
+            .postMessage(message);\
+    },\
+    receiveMessage: function(callback)\
+    {\
+        window.__receiveMessageCallbacks.push(callback);\
+    }\
+};\
+)js";
+
+    NSString* userScriptSource = [
+        NSString
+        stringWithUTF8String: photinoWebViewExtensions.c_str()
     ];
 
-    configuration.userContentController = [[WKUserContentController new] autorelease];
+    WKUserScript* userScript =[ [
+        [WKUserScript alloc]
+        initWithSource: userScriptSource
+        injectionTime: WKUserScriptInjectionTimeAtDocumentStart
+        forMainFrameOnly: YES
+    ] autorelease];
+
+    configuration.userContentController = [[
+        [WKUserContentController alloc] init
+    ] autorelease];
+    
     [configuration.userContentController addUserScript: userScript];
 
     // Create WebViewUiDelegate
-    PhotinoWebViewUiDelegate* uiDelegate = [[
-        [PhotinoWebViewUiDelegate alloc]
+    PhotinoWebKitUiDelegate* uiDelegate = [[
+        [PhotinoWebKitUiDelegate alloc]
         init
     ] autorelease];
-
-    uiDelegate->_nativeWindow = nativeWindow;
 
     // Create native WebView
     WKWebView* nativeWebView = [
@@ -95,30 +106,6 @@ WKWebView* PhotinoWebView::CreateNativeWebView(
     [nativeWebView setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
     nativeWebView.UIDelegate = uiDelegate;
-
-    [
-        [NSNotificationCenter defaultCenter]
-        addObserver: uiDelegate
-        selector: @selector(windowDidResize:)
-        name: NSWindowDidResizeNotification
-        object: nativeWindow
-    ];
-
-    [
-        [NSNotificationCenter defaultCenter]
-        addObserver: uiDelegate
-        selector: @selector(windowDidMove:)
-        name: NSWindowDidMoveNotification
-        object: nativeWindow
-    ];
-
-    [
-        [NSNotificationCenter defaultCenter]
-        addObserver: uiDelegate
-        selector: @selector(windowWillClose:)
-        name: NSWindowWillCloseNotification
-        object: nativeWindow
-    ];
 
     // Add native WebView to native Window
     [nativeWindow.contentView addSubview: nativeWebView];
@@ -180,7 +167,7 @@ bool PhotinoWebView::HasEnabledDevTools() { return _hasEnabledDevTools; }
 PhotinoWebView* PhotinoWebView::HasEnabledDevTools(bool value)
 {
     [
-        _configuration.preferences
+        this->GetConfiguration().preferences
         setValue: value ? @YES : @NO
         forKey: @"developerExtrasEnabled"
     ];

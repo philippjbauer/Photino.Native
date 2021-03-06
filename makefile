@@ -1,31 +1,55 @@
-CC=c++
-CFLAGS=-Wall -framework Cocoa -framework WebKit
+CC = c++
+CFLAGS = -Wall -O2 -std=c++11
+DLLFLAGS = -shared -fpic
 
-SRC=./src/
-SRC_SHARED=$(SRC)Shared/
+SRC = ./src
 
-DEST_PATH=./build/
+DEST_PATH = ./build
+DEST_FILE = PhotinoApp
 
-DEST_PATH_PROD=$(DEST_PATH)prod/
-DEST_PATH_DEV=$(DEST_PATH)dev/
-DEST_FILE=PhotinoApp
+DEST_PROD = $(DEST_PATH)/prod
+DEST_DEV = $(DEST_PATH)/dev
 
-run: clean compile execute
+DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
+DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
 
-clean:
-	rm -rf $(DEST_PATH_DEV) && mkdir -p $(DEST_PATH_DEV)
+MAC_SRCS = $(SRC)/Helpers/*.mm\
+		   $(SRC)/PhotinoApp/*.mm\
+		   $(SRC)/PhotinoWebView/*.mm\
+		   $(SRC)/PhotinoWindow/*.mm\
+		   $(SRC)/Shared/*.cpp\
+		   $(SRC)/Structs/*.cpp\
 
-compile:
+MAC_DEPS = -framework Cocoa\
+		   -framework WebKit
+
+run: build-exe-dev execute-dev
+
+build-exe-dev: ensure-output compile-exe-dev
+
+build-dll-dev: ensure-output compile-dll-dev
+
+copy-assets:
+	rm -rf $(DEST_DEV)/Assets &&\
+	cp -r $(SRC)/Assets $(DEST_DEV)/
+
+ensure-output:
+	mkdir -p $(DEST_DEV)
+
+compile-exe-dev:
 	$(CC) $(CFLAGS)\
-		$(SRC)Helpers/*.cpp\
-		$(SRC)Helpers/*.mm\
-		$(SRC)PhotinoApp/*.mm\
-		$(SRC)PhotinoWebView/*.mm\
-		$(SRC)PhotinoWindow/*.mm\
-		$(SRC)Structs/*.cpp\
-		$(SRC)main.mm\
-		-o $(DEST_PATH_DEV)$(DEST_FILE)
+		$(MAC_DEPS)\
+		$(MAC_SRCS)\
+		$(SRC)/main.mm\
+		-o $(DEV_EXE)
 
-execute:
+compile-dll-dev:
+	$(CC) $(CFLAGS) $(DLLFLAGS)\
+		$(MAC_DEPS)\
+		$(MAC_SRCS)\
+		$(SRC)/exports.mm\
+		-o $(DEV_DLL)
+
+execute-dev:
 	echo "----------------\nRun Application:\n----------------\n" &&\
-	$(DEST_PATH_DEV)$(DEST_FILE)
+	$(DEV_EXE)
