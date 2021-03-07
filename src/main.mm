@@ -1,7 +1,9 @@
+#include <functional>
 #include <memory>
 #include <Cocoa/Cocoa.h>
 
 #include "Photino/App/App.h"
+#include "Photino/Events/Events.h"
 #include "PhotinoHelpers/Metrics.h"
 #include "PhotinoShared/Log.h"
 
@@ -11,7 +13,7 @@ using namespace PhotinoShared;
 
 static Metrics AppMetrics;
 
-void* operator new(size_t size) _THROW_BAD_ALLOC
+ void *operator new(size_t size) _THROW_BAD_ALLOC
 {
     AppMetrics.UsedInstances++;
     AppMetrics.UsedMemory += size;
@@ -19,7 +21,7 @@ void* operator new(size_t size) _THROW_BAD_ALLOC
     return malloc(size);
 }
 
-void operator delete(void* memory, size_t size)
+void operator delete( void *memory, size_t size) _NOEXCEPT
 {
     AppMetrics.FreedInstances++;
     AppMetrics.FreedMemory += size;
@@ -27,36 +29,64 @@ void operator delete(void* memory, size_t size)
     free(memory);
 }
 
+enum class WindowEventTypes
+{
+    WillCreate,
+    DidCreate,
+    WillOpen,
+    DidOpen,
+    WillClose,
+    WillLoad,
+    DidLoad,
+};
+
+void WillCreateEventAction()
+{
+    Log::WriteLine("Window will close.");
+};
+
 int main()
 {
     Log::WriteLine("Starting execution");
 
-    App* app = new App();
-    Log::WriteMetrics(AppMetrics);
+    // Log::WriteLine("WillCreate: " + std::to_string(WindowEventTypes::WillCreate));
 
-    Window* mainWindow = new Window("Main Window");
-    Log::WriteMetrics(AppMetrics);
+    Events<WindowEventTypes> *windowEvents = new Events<WindowEventTypes>();
 
-    mainWindow
-        ->GetWebView()
-        ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
-    Log::WriteMetrics(AppMetrics);
+    EventAction willCreateEventAction = &WillCreateEventAction;
 
-    Window* secondWindow = new Window("Second Window");
-    Log::WriteMetrics(AppMetrics);
+    windowEvents->AddEventAction(WindowEventTypes::WillCreate, willCreateEventAction);
 
-    secondWindow
-        ->SetParent(mainWindow)
-        ->GetWebView()
-        ->LoadResource("http://www.tryphotino.io");
-    Log::WriteMetrics(AppMetrics);
+    delete windowEvents;
 
-    app->AddWindow(mainWindow)
-       ->AddWindow(secondWindow);
-    Log::WriteMetrics(AppMetrics);
+    // windowEvents.EmitEvent(WindowEventTypes::WillCreate);
 
-    app->Run();
-    delete app;
+    //  App *app = new App();
+    // Log::WriteMetrics(AppMetrics);
+
+    //  Window *mainWindow = new Window("Main Window");
+    // Log::WriteMetrics(AppMetrics);
+
+    // mainWindow
+    //     ->GetWebView()
+    //     ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
+    // Log::WriteMetrics(AppMetrics);
+
+    //  Window *secondWindow = new Window("Second Window");
+    // Log::WriteMetrics(AppMetrics);
+
+    // secondWindow
+    //     ->SetParent(mainWindow)
+    //     ->GetWebView()
+    //     ->LoadResource("http://www.tryphotino.io");
+    // Log::WriteMetrics(AppMetrics);
+
+    // app->AddWindow(mainWindow)
+    //    ->AddWindow(secondWindow);
+    // Log::WriteMetrics(AppMetrics);
+
+    // app->Run();
+    // delete app;
 
     Log::WriteLine("Stopping execution");
     return 0;

@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -Wall -O2 -std=c++11
+CFLAGS = -Wall -std=c++17
 DLLFLAGS = -shared -fpic
 
 SRC = ./src
@@ -14,6 +14,7 @@ DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
 DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
 
 MAC_SRCS = $(SRC)/Photino/App/*.mm\
+		   $(SRC)/Photino/Events/*.cpp\
 		   $(SRC)/Photino/Structs/*.cpp\
 		   $(SRC)/Photino/WebView/*.mm\
 		   $(SRC)/Photino/Window/*.mm\
