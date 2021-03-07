@@ -27,14 +27,14 @@ namespace PhotinoShared
     }
 
     std::string TextFile::GetPath() { return _path; }
-    TextFile* TextFile::SetPath(std::string value)
+    TextFile *TextFile::SetPath(std::string value)
     {
         _path = value;
         return this;
     }
 
     std::string TextFile::GetContent() { return _content; }
-    TextFile* TextFile::SetContent(std::string value)
+    TextFile *TextFile::SetContent(std::string value)
     {
         _content = value;
         return this;

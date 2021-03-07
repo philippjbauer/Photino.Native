@@ -12,10 +12,10 @@ namespace Photino
     class Window
     {
         private:
-            NSWindow* _nativeWindow;
-            WebView* _webView;
+            NSWindow *_nativeWindow;
+            WebView *_webView;
 
-            Window* _parent;
+            Window *_parent;
 
             std::string _title;
 
@@ -29,9 +29,9 @@ namespace Photino
             /**
              * Class Methods
              */
-            Window* Init();
-            NSWindow* CreateNativeWindow();
-            WebView* CreateWebView(NSWindow* nativeWindow);
+            Window *Init();
+            NSWindow *CreateNativeWindow();
+            WebView *CreateWebView(NSWindow *nativeWindow);
 
         public:
             /**
@@ -57,48 +57,48 @@ namespace Photino
             void Open();
             void Close();
 
-            Window* Show();
-            Window* Hide();
+            Window *Show();
+            Window *Hide();
 
-            Window* Center();
+            Window *Center();
 
             /**
              * Getters & Setters
              */
             // Window
-            NSWindow* GetNativeWindow();
+            NSWindow *GetNativeWindow();
 
             // WebView
-            WebView* GetWebView();
+            WebView *GetWebView();
 
             // Parent
-            Window* GetParent();
-            Window* SetParent(Window* value);
+            Window *GetParent();
+            Window *SetParent(Window *value);
 
             // Title
             std::string GetTitle();
-            Window* SetTitle(std::string value);
+            Window *SetTitle(std::string value);
 
             // Monitor
             Monitor GetMonitor();
-            Window* SetMonitor(Monitor value);
+            Window *SetMonitor(Monitor value);
 
             // Size
             WindowSize GetSize();
-            Window* SetSize(WindowSize value);
-            Window* SetSize(int width, int height);
+            Window *SetSize(WindowSize value);
+            Window *SetSize(int width, int height);
 
             // Location
             WindowLocation GetLocation();
-            Window* SetLocation(WindowLocation value);
-            Window* SetLocation(int left, int top);
+            Window *SetLocation(WindowLocation value);
+            Window *SetLocation(int left, int top);
 
             // IsResizable
             bool IsResizable();
-            Window* IsResizable(bool value);
+            Window *IsResizable(bool value);
 
             // IsFullscreen
             bool IsFullscreen();
-            Window* IsFullscreen(bool value);
+            Window *IsFullscreen(bool value);
     };
 }

@@ -10,15 +10,18 @@
 
 namespace Photino
 {
+    using Monitors = std::vector<Monitor>;
+    using Windows = std::vector<Window*>;
+
     class App
     {
         private:
-            NSAutoreleasePool* _pool;
-            NSApplication* _application;
+            NSAutoreleasePool *_pool;
+            NSApplication *_application;
 
-            std::vector<Window*> _windows;
+            Windows *_windows;
 
-            App* Init();
+            App *Init();
 
         public:
             App();
@@ -26,8 +29,8 @@ namespace Photino
 
             void Run();
 
-            std::vector<Monitor> GetMonitors();
+            Monitors GetMonitors();
 
-            App* AddWindow(Window* window);
+            App *AddWindow(Window *window);
     };
 }

@@ -8,32 +8,32 @@ namespace Photino
     class WebView
     {
         private:
-            WKWebViewConfiguration* _configuration;
-            WKWebView* _nativeWebView;
+            WKWebViewConfiguration *_configuration;
+            WKWebView *_nativeWebView;
 
             bool _hasEnabledDevTools;
 
             /**
              * Class Methods
              */
-            WebView* Init(NSWindow* nativeWindow);
-            WKWebViewConfiguration* CreateConfiguration();
-            WKWebView* CreateNativeWebView(
-                NSWindow* nativeWindow,
-                WKWebViewConfiguration* configuration);
+            WebView *Init(NSWindow *nativeWindow);
+            WKWebViewConfiguration *CreateConfiguration();
+            WKWebView *CreateNativeWebView(
+                NSWindow *nativeWindow,
+                WKWebViewConfiguration *configuration);
 
             /**
              * Getters & Setters
              */
             // Configuration
-            WKWebViewConfiguration* GetConfiguration();
+            WKWebViewConfiguration *GetConfiguration();
 
         public:
             /**
              *  Constructor / Destructor
              */
             WebView(
-                NSWindow* nativeWindow,
+                NSWindow *nativeWindow,
                 bool enableDevTools = false);
 
             ~WebView();
@@ -41,14 +41,14 @@ namespace Photino
             /**
              * Class Methods
              */
-            WebView* LoadResource(std::string url);
-            WebView* LoadHtmlString(std::string content);
+            WebView *LoadResource(std::string url);
+            WebView *LoadHtmlString(std::string content);
 
             /**
              * Getters & Setters
              */
             // WebView
-            WKWebView* GetNativeWebView();
+            WKWebView *GetNativeWebView();
 
             // HasEnabledDevTools
             bool HasEnabledDevTools();

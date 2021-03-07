@@ -8,6 +8,6 @@ using namespace Photino;
 @interface WindowDelegate : NSObject <NSWindowDelegate>
 {
     @public
-        Window* window;
+        Window *window;
 }
 @end

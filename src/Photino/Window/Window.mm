@@ -12,7 +12,7 @@ namespace Photino
     */
     Window::Window(std::string title)
     {
-        NSScreen* mainScreen = [[NSScreen screens] objectAtIndex: 0];
+        NSScreen *mainScreen = [[NSScreen screens] objectAtIndex: 0];
 
         Monitor monitor = PhotinoHelpers::MakeMonitor(mainScreen, false);
 
@@ -55,7 +55,7 @@ namespace Photino
     /**
     * Class Methods
     */
-    Window* Window::Init()
+    Window *Window::Init()
     {
         _nativeWindow = this->CreateNativeWindow();
         _webView = this->CreateWebView(this->GetNativeWindow());
@@ -63,7 +63,7 @@ namespace Photino
         return this;
     }
 
-    NSWindow* Window::CreateNativeWindow()
+    NSWindow *Window::CreateNativeWindow()
     {
         WindowSize size = this->GetSize();
         WindowLocation location = this->GetLocation();
@@ -80,7 +80,7 @@ namespace Photino
             | NSWindowStyleMaskMiniaturizable
             | NSWindowStyleMaskResizable;
         
-        NSWindow* window = [
+        NSWindow *window = [
             [NSWindow alloc]
             initWithContentRect: nsWindowFrame
             styleMask: nsWindowStyleMask
@@ -89,7 +89,7 @@ namespace Photino
         ];
 
         // Add WindowDelegate
-        WindowDelegate* windowDelegate = [[
+        WindowDelegate *windowDelegate = [[
             [WindowDelegate alloc] init
         ] autorelease];
 
@@ -100,9 +100,9 @@ namespace Photino
         return window;
     }
 
-    WebView* Window::CreateWebView(NSWindow* nativeWindow)
+    WebView *Window::CreateWebView( NSWindow *nativeWindow)
     {
-        WebView* webview = new WebView(nativeWindow, true);
+        WebView *webview = new WebView(nativeWindow, true);
 
         return webview;
     }
@@ -117,7 +117,7 @@ namespace Photino
         [this->GetNativeWindow() performClose: this->GetNativeWindow()];
     }
 
-    Window* Window::Show()
+    Window *Window::Show()
     {
         if (this->GetNativeWindow().miniaturized)
         {
@@ -129,14 +129,14 @@ namespace Photino
         return this;
     }
 
-    Window* Window::Hide()
+    Window *Window::Hide()
     {
         [this->GetNativeWindow() miniaturize: this->GetNativeWindow()];
 
         return this;
     }
 
-    Window* Window::Center()
+    Window *Window::Center()
     {
         Monitor monitor = this->GetMonitor();
         MonitorFrame workArea = monitor.workArea;
@@ -153,14 +153,14 @@ namespace Photino
     * Getters & Setters
     */
     // Window
-    NSWindow* Window::GetNativeWindow() { return _nativeWindow; }
+    NSWindow *Window::GetNativeWindow() { return _nativeWindow; }
 
     // WebView
-    WebView* Window::GetWebView() { return _webView; }
+    WebView *Window::GetWebView() { return _webView; }
 
     // Parent
-    Window* Window::GetParent() { return _parent; }
-    Window* Window::SetParent(Window *value) {
+    Window *Window::GetParent() { return _parent; }
+    Window *Window::SetParent(Window *value) {
         _parent = value;
 
         _nativeWindow.parentWindow = value->GetNativeWindow();
@@ -170,11 +170,11 @@ namespace Photino
 
     // Title
     std::string Window::GetTitle() { return _title; }
-    Window* Window::SetTitle(std::string value)
+    Window *Window::SetTitle(std::string value)
     {
         _title = value;
 
-        NSString* windowTitle = [[
+        NSString *windowTitle = [[
             NSString
             stringWithUTF8String: value.c_str()
         ] autorelease];
@@ -186,7 +186,7 @@ namespace Photino
 
     // Monitor
     Monitor Window::GetMonitor() { return _monitor; }
-    Window* Window::SetMonitor(Monitor value)
+    Window *Window::SetMonitor(Monitor value)
     {
         _monitor = value;
 
@@ -196,7 +196,7 @@ namespace Photino
     // Size
     WindowSize Window::GetSize() { return _size; }
 
-    Window* Window::SetSize(WindowSize value)
+    Window *Window::SetSize(WindowSize value)
     {
         _size = value;
 
@@ -215,7 +215,7 @@ namespace Photino
         return this;
     }
 
-    Window* Window::SetSize(int width, int height)
+    Window *Window::SetSize(int width, int height)
     {
         return this->SetSize(WindowSize(width, height));
     }
@@ -223,7 +223,7 @@ namespace Photino
     // Location
     WindowLocation Window::GetLocation() { return _location; }
 
-    Window* Window::SetLocation(WindowLocation value)
+    Window *Window::SetLocation(WindowLocation value)
     {
         _location = value;
 
@@ -237,14 +237,14 @@ namespace Photino
         return this;
     }
 
-    Window* Window::SetLocation(int left, int top)
+    Window *Window::SetLocation(int left, int top)
     {
         return this->SetLocation(WindowLocation(left, top));
     }
 
     // IsResizable
     bool Window::IsResizable() { return _isResizable; }
-    Window* Window::IsResizable(bool value)
+    Window *Window::IsResizable(bool value)
     {
         if (value == true)
         {
@@ -262,7 +262,7 @@ namespace Photino
 
     // IsFullscreen
     bool Window::IsFullscreen() { return _isFullscreen; }
-    Window* Window::IsFullscreen(bool value)
+    Window *Window::IsFullscreen(bool value)
     {
         if (_isFullscreen != value)
         {

@@ -4,7 +4,7 @@ using namespace Photino;
 
 namespace PhotinoHelpers
 {
-    int GetWindowNumber(NSScreen* screen)
+    int GetWindowNumber(NSScreen *screen)
     {
         int windowNumber = [[
                 [screen deviceDescription]
@@ -14,7 +14,7 @@ namespace PhotinoHelpers
         return windowNumber;
     }
 
-    Monitor MakeMonitor(NSScreen* screen, bool isMain)
+    Monitor MakeMonitor(NSScreen *screen, bool isMain)
     {
         // Might need inspection in the future
         // See: https://stackoverflow.com/questions/8661001/nsscreennumber-changes-randomly        

@@ -19,10 +19,10 @@ namespace PhotinoShared
             TextFile(std::string path);
 
             std::string GetPath();
-            TextFile* SetPath(std::string value);
+            TextFile *SetPath(std::string value);
 
             std::string GetContent();
-            TextFile* SetContent(std::string value);
+            TextFile *SetContent(std::string value);
 
             std::vector<std::string> GetLines();
     };

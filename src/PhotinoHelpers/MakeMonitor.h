@@ -6,7 +6,7 @@ using namespace Photino;
 
 namespace PhotinoHelpers
 {
-    int GetWindowNumber(NSScreen* screen);
-    Monitor MakeMonitor(NSScreen* screen, bool isMain);
+    int GetWindowNumber(NSScreen *screen);
+    Monitor MakeMonitor(NSScreen *screen, bool isMain);
     MonitorFrame MakeMonitorFrame(NSRect frame);
 }

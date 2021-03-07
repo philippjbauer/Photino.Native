@@ -18,7 +18,7 @@ namespace Photino
         // Release memory after window was closed
         Log::WriteLine("Release resources");
 
-        // for (Window* photinoWindow in _windows)
+        // for (Window *photinoWindow in _windows)
         // {
         //     delete photinoWindow;
         // }
@@ -27,12 +27,12 @@ namespace Photino
         [_pool release];
     }
 
-    App* App::Init()
+    App *App::Init()
     {
         Log::WriteLine("Init resources");
         _pool = [[NSAutoreleasePool alloc] init];
         
-        AppDelegate* appDelegate = [[
+        AppDelegate *appDelegate = [[
             [AppDelegate alloc]
             init
         ] autorelease];
@@ -41,6 +41,7 @@ namespace Photino
         [_application setDelegate: appDelegate];
         [_application setActivationPolicy: NSApplicationActivationPolicyRegular];
 
+        _windows = new Windows();
         // id applicationName = [[NSProcessInfo processInfo] processName];
 
         return this;
@@ -52,11 +53,11 @@ namespace Photino
         [_application run];
     }
 
-    std::vector<Monitor> App::GetMonitors()
+    Monitors App::GetMonitors()
     {
-        std::vector<Monitor> monitors;
+        Monitors monitors;
 
-        for (NSScreen* screen in [NSScreen screens])
+        for (NSScreen *screen in [NSScreen screens])
         {
             bool isMain = monitors.size() == 0;
             
@@ -67,9 +68,9 @@ namespace Photino
         return monitors;
     }
 
-    App* App::AddWindow(Window* photinoWindow)
+    App *App::AddWindow(Window *window)
     {
-        _windows.push_back(photinoWindow);
+        _windows->push_back(window);
 
         return this;
     }

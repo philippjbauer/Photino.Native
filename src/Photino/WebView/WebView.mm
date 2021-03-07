@@ -7,7 +7,7 @@ namespace Photino
     * Construct WebView
     */
     WebView::WebView(
-        NSWindow* nativeWindow,
+        NSWindow *nativeWindow,
         bool enableDevTools)
     {
         this->Init(nativeWindow)
@@ -23,7 +23,7 @@ namespace Photino
     /**
     * Class Methods
     */
-    WebView* WebView::Init(NSWindow* nativeWindow)
+    WebView *WebView::Init(NSWindow *nativeWindow)
     {
         _configuration = this->CreateConfiguration();
         _nativeWebView = this->CreateNativeWebView(nativeWindow, this->GetConfiguration());
@@ -31,16 +31,16 @@ namespace Photino
         return this;
     }
 
-    WKWebViewConfiguration* WebView::CreateConfiguration()
+    WKWebViewConfiguration *WebView::CreateConfiguration()
     {
-        WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
+        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
         
         return configuration;
     }
 
-    WKWebView* WebView::CreateNativeWebView(
-        NSWindow* nativeWindow,
-        WKWebViewConfiguration* configuration
+    WKWebView *WebView::CreateNativeWebView(
+        NSWindow *nativeWindow,
+        WKWebViewConfiguration *configuration
     )
     {
         // Future use of TextFile when I found a way to include from
@@ -74,12 +74,12 @@ window.external = {\
 };\
 )js";
 
-        NSString* userScriptSource = [
+        NSString *userScriptSource = [
             NSString
             stringWithUTF8String: webViewExtensions.c_str()
         ];
 
-        WKUserScript* userScript =[ [
+        WKUserScript *userScript =[ [
             [WKUserScript alloc]
             initWithSource: userScriptSource
             injectionTime: WKUserScriptInjectionTimeAtDocumentStart
@@ -93,7 +93,7 @@ window.external = {\
         [configuration.userContentController addUserScript: userScript];
 
         // Create WebViewUiDelegate
-        WebViewUiDelegate* uiDelegate = [[
+        WebViewUiDelegate *uiDelegate = [[
             [WebViewUiDelegate alloc]
             init
         ] autorelease];
@@ -105,7 +105,7 @@ window.external = {\
         ];
 
         // Create native WebView
-        WKWebView* nativeWebView = [
+        WKWebView *nativeWebView = [
             [WKWebView alloc]
             initWithFrame: nativeWindow.contentView.frame
             configuration: configuration
@@ -122,19 +122,19 @@ window.external = {\
         return nativeWebView;
     }
 
-    WebView* WebView::LoadResource(std::string resource)
+    WebView *WebView::LoadResource(std::string resource)
     {
-        WKWebView* webview = this->GetNativeWebView();
+        WKWebView *webview = this->GetNativeWebView();
 
-        NSString* resourceString = [[
+        NSString *resourceString = [[
             NSString stringWithUTF8String: resource.c_str()
         ] autorelease];
         
-        NSURL* url= [[
+        NSURL *url= [[
             NSURL URLWithString: resourceString
         ] autorelease];
 
-        NSURLRequest* request= [[
+        NSURLRequest *request= [[
             NSURLRequest requestWithURL: url
         ] autorelease];
         
@@ -143,11 +143,11 @@ window.external = {\
         return this;
     }
 
-    WebView* WebView::LoadHtmlString(std::string content)
+    WebView *WebView::LoadHtmlString(std::string content)
     {
-        WKWebView* webview = this->GetNativeWebView();
+        WKWebView *webview = this->GetNativeWebView();
 
-        NSString* htmlString = [[
+        NSString *htmlString = [[
             NSString
             stringWithUTF8String: content.c_str()
         ] autorelease];
@@ -165,14 +165,14 @@ window.external = {\
     * Getters & Setters
     */
     // Configuration
-    WKWebView* WebView::GetNativeWebView() { return _nativeWebView; }
+    WKWebView *WebView::GetNativeWebView() { return _nativeWebView; }
 
     // Configuration
-    WKWebViewConfiguration* WebView::GetConfiguration() { return _configuration; }
+    WKWebViewConfiguration *WebView::GetConfiguration() { return _configuration; }
 
     // HasEnabledDevTools
     bool WebView::HasEnabledDevTools() { return _hasEnabledDevTools; }
-    WebView* WebView::HasEnabledDevTools(bool value)
+    WebView *WebView::HasEnabledDevTools(bool value)
     {
         [
             this->GetConfiguration().preferences

@@ -29,7 +29,7 @@ using namespace PhotinoShared;
     - (BOOL)windowShouldClose: (NSWindow *)sender
     {
         Log::WriteLine("Window should close");
-        // NSAlert* alert = [[NSAlert alloc] init];
+        // NSAlert *alert = [[NSAlert alloc] init];
         // [alert addButtonWithTitle:@"Yes"];
         // [alert addButtonWithTitle:@"No"];
         // [alert setMessageText:@"Are you sure you want to quit?"];

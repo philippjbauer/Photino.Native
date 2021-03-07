@@ -5,5 +5,5 @@
 
 extern "C"
 {
-    EXPORTED PhotinoApp* PhotinoApp_ctor();
+    EXPORTED PhotinoApp *PhotinoApp_ctor();
 }
