@@ -1,34 +1,33 @@
 #include <iostream>
 #include <functional>
-// #include <memory>
+#include <memory>
 // #include <Cocoa/Cocoa.h>
 
 // #include "Photino/App/App.h"
 #include "Photino/Events/Events.h"
-// #include "PhotinoHelpers/Metrics.h"
-// #include "PhotinoShared/Log.h"
+#include "PhotinoShared/Metrics.h"
+#include "PhotinoShared/Log.h"
 
 using namespace Photino;
-// using namespace PhotinoHelpers;
-// using namespace PhotinoShared;
+using namespace PhotinoShared;
 
-// static Metrics AppMetrics;
+static Metrics AppMetrics;
 
-// void *operator new(size_t size) _THROW_BAD_ALLOC
-// {
-//     AppMetrics.UsedInstances++;
-//     AppMetrics.UsedMemory += size;
+void *operator new(size_t size) _THROW_BAD_ALLOC
+{
+    AppMetrics.UsedInstances++;
+    AppMetrics.UsedMemory += size;
     
-//     return malloc(size);
-// }
+    return malloc(size);
+}
 
-// void operator delete(void *memory, size_t size) _NOEXCEPT
-// {
-//     AppMetrics.FreedInstances++;
-//     AppMetrics.FreedMemory += size;
+void operator delete(void *memory, size_t size) _NOEXCEPT
+{
+    AppMetrics.FreedInstances++;
+    AppMetrics.FreedMemory += size;
     
-//     free(memory);
-// }
+    free(memory);
+}
 
 enum class WindowEventTypes
 {
@@ -41,34 +40,41 @@ enum class WindowEventTypes
     DidLoad,
 };
 
-void WillCreateEventAction()
+void WillCreateEventAction(void* sender)
 {
-    std::cout << "Window will be created.\n";
+    Log::WriteLine("Window will be created.");
 };
 
 int main()
 {
-    std::cout << "Starting execution\n";
+    Log::WriteLine("Starting execution");
+    Log::WriteMetrics(&AppMetrics);
 
-    // Log::WriteLine("WillCreate: " + std::to_string(WindowEventTypes::WillCreate));
+    void *nullClass = nullptr;
 
-    Events<WindowEventTypes> *windowEvents = new Events<WindowEventTypes>();
+    Events<void, WindowEventTypes> *windowEvents = new Events<void, WindowEventTypes>(nullClass);
+    Log::WriteMetrics(&AppMetrics);
 
     windowEvents->AddEventAction(WindowEventTypes::WillCreate, WillCreateEventAction);
+    Log::WriteMetrics(&AppMetrics);
 
-    windowEvents->AddEventAction(WindowEventTypes::WillClose, []
+    windowEvents->AddEventAction(WindowEventTypes::WillClose, [](void *sender)
     {
-        std::cout << "Closure: Window will be closed.\n";
+        Log::WriteLine("Closure: Window will be closed.");
     });
+    Log::WriteMetrics(&AppMetrics);
 
     windowEvents->EmitEvent(WindowEventTypes::WillCreate);
+    Log::WriteMetrics(&AppMetrics);
 
     windowEvents->EmitEvent(WindowEventTypes::WillClose);
+    Log::WriteMetrics(&AppMetrics);
 
     delete windowEvents;
+    Log::WriteMetrics(&AppMetrics);
 
     // App *app = new App();
-    // Log::WriteMetrics(AppMetrics);
+    // Log::WriteMetrics(&AppMetrics);
 
     // Window *mainWindow = new Window("Main Window");
     // Log::WriteMetrics(AppMetrics);
@@ -94,6 +100,6 @@ int main()
     // app->Run();
     // delete app;
 
-    std::cout << "Stopping execution\n";
+    Log::WriteLine("Stopping execution");
     return 0;
 }

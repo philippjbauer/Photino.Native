@@ -2,58 +2,68 @@
 #include <functional>
 #include <map>
 #include <vector>
+#include "../../PhotinoShared/Log.h"
+
+using namespace PhotinoShared;
 
 namespace Photino
 {
     // EventAction
-    using EventAction = void (*)();
+    template<class TEventClass>
+    using EventAction = void (*)(TEventClass* sender);
 
     //EventActions
-    using EventActions = std::vector<EventAction>;
+    template<class TEventClass>
+    using EventActions = std::vector<EventAction<TEventClass> >;
 
     // EventTypeActions
-    template<class TEventTypeEnum>
-    using EventTypeActions = std::pair<TEventTypeEnum, EventActions*>;
+    template<class TEventClass, typename TEventTypeEnum>
+    using EventTypeActions = std::pair<TEventTypeEnum, EventActions<TEventClass>*>;
 
     // EventMap
-    template<class TEventTypeEnum>
-    using EventMap = std::map<TEventTypeEnum, EventActions*>;
+    template<class TEventClass, typename TEventTypeEnum>
+    using EventMap = std::map<TEventTypeEnum, EventActions<TEventClass>*>;
 
-    template<class TEventTypeEnum>
+    template<class TEventClass, typename TEventTypeEnum>
     class Events
     {
         private:
-            EventMap<TEventTypeEnum> *_eventMap;
+            TEventClass *_eventClass;
+            EventMap<TEventClass, TEventTypeEnum> *_eventMap;
 
         public:
-            Events() 
+            Events(TEventClass *eventClass) 
             {
-                _eventMap = new EventMap<TEventTypeEnum>();
+                Log::WriteLine("Constructing Events<" + std::to_string(*typeid(TEventClass).name()) + ", " + std::to_string(*typeid(TEventTypeEnum).name()) + ">");
+
+                _eventClass = eventClass;
+                _eventMap = new EventMap<TEventClass, TEventTypeEnum>();
             }
 
             ~Events()
             {
+                Log::WriteLine("Destructing Events");
                 delete _eventMap;
             }
 
-            Events<TEventTypeEnum> *AddEventAction(TEventTypeEnum eventType, EventAction eventAction)
+            Events<TEventClass, TEventTypeEnum> *AddEventAction(TEventTypeEnum eventType, EventAction<TEventClass> eventAction)
             {
-                EventActions *eventActions = this->GetEventActionsForEventType(eventType);
+                EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
                 eventActions->push_back(eventAction);
 
                 return this;
             }
 
-            EventActions *GetEventActionsForEventType(TEventTypeEnum eventType)
+            EventActions<TEventClass> *GetEventActionsForEventType(TEventTypeEnum eventType)
             {
-                EventMap<TEventTypeEnum> *eventMap = this->GetEventMap();
+                EventMap<TEventClass, TEventTypeEnum> *eventMap = this->GetEventMap();
                 auto eventTypeActions = eventMap->find(eventType);
-                EventActions *eventActions;
+                EventActions<TEventClass> *eventActions;
 
                 if (eventTypeActions == eventMap->end())
                 {
-                    eventActions = new EventActions();
-                    eventMap->insert(EventTypeActions<TEventTypeEnum>(eventType, eventActions));
+                    eventActions = new EventActions<TEventClass>();
+                    eventMap->insert(EventTypeActions<TEventClass, TEventTypeEnum>(eventType, eventActions));
                 }
                 else
                 {
@@ -63,27 +73,27 @@ namespace Photino
                 return eventActions;
             }
 
-            EventMap<TEventTypeEnum> *GetEventMap()
+            EventMap<TEventClass, TEventTypeEnum> *GetEventMap()
             {
                 return _eventMap;
             }
 
-            Events<TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType)
+            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType)
             {
-                EventActions *eventActions = this->GetEventActionsForEventType(eventType);
+                EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
                 
                 if (eventActions->size() == 0)
                 {
-                    std::cout << "No actions registered for event\n";
+                    Log::WriteLine("No actions registered for event");
                 }
 
-                for (EventAction eventAction : *eventActions)
+                for (EventAction<TEventClass> eventAction : *eventActions)
                 {
                     try
                     {
-                        std::cout << "Emitting event\n";
-                        eventAction();
-                        std::cout << "Emitted event\n";
+                        Log::WriteLine("Emitting event");
+                        eventAction(_eventClass);
+                        Log::WriteLine("Emitted event");
                     }
                     catch(const std::exception& e)
                     {
@@ -95,67 +105,25 @@ namespace Photino
             }
 
             // template<typename P>
-            // Events<TEventTypeEnum> *EmitEvent<P>(TEventTypeEnum eventType, P arg1);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P>(TEventTypeEnum eventType, P arg1);
 
             // template <typename P, typename H>
-            // Events<TEventTypeEnum> *EmitEvent<P, H>(TEventTypeEnum eventType, P arg1, H arg2);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H>(TEventTypeEnum eventType, P arg1, H arg2);
 
             // template<typename P, typename H, typename O>
-            // Events<TEventTypeEnum> *EmitEvent<P, H, O>(TEventTypeEnum eventType, P arg1, H arg2, O arg3);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H, O>(TEventTypeEnum eventType, P arg1, H arg2, O arg3);
 
             // template<typename P, typename H, typename O, typename T>
-            // Events<TEventTypeEnum> *EmitEvent<P, H, O, T>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H, O, T>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4);
 
             // template<typename P, typename H, typename O, typename T, typename I>
-            // Events<TEventTypeEnum> *EmitEvent<P, H, O, T, I>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H, O, T, I>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5);
 
             // template<typename P, typename H, typename O, typename T, typename I, typename N>
-            // Events<TEventTypeEnum> *EmitEvent<P, H, O, T, I, N>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H, O, T, I, N>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6);
 
             // // Can't use O twice, so C ... looks close enough
             // template<typename P, typename H, typename O, typename T, typename I, typename N, typename C>
-            // Events<TEventTypeEnum> *EmitEvent<P, H, O, T, I, N, C>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6, C arg7);
+            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H, O, T, I, N, C>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6, C arg7);
     };
-
-    // template<class TEventTypeEnum, typename P>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent(TEventTypeEnum eventType, P arg1)
-    // {
-    //     return this;
-    // }
-
-    // template <class TEventTypeEnum, typename P, typename H>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H>(TEventTypeEnum eventType, P arg1, H arg2)
-    // {
-    //     return this;
-    // }
-
-    // template<class TEventTypeEnum, typename P, typename H, typename O>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H, O>(TEventTypeEnum eventType, P arg1, H arg2, O arg3)
-    // {
-    //     return this;
-    // }
-
-    // template<class TEventTypeEnum, typename P, typename H, typename O, typename T>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H, O, T>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4)
-    // {
-    //     return this;
-    // }
-
-    // template<class TEventTypeEnum, typename P, typename H, typename O, typename T, typename I>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H, O, T, I>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5)
-    // {
-    //     return this;
-    // }
-
-    // template<class TEventTypeEnum, typename P, typename H, typename O, typename T, typename I, typename N>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H, O, T, I, N>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6)
-    // {
-    //     return this;
-    // }
-
-    // template<class TEventTypeEnum, typename P, typename H, typename O, typename T, typename I, typename N, typename C>
-    // Events<TEventTypeEnum> *Events<TEventTypeEnum>::EmitEvent<P, H, O, T, I, N, C>(TEventTypeEnum eventType, P arg1, H arg2, O arg3, T arg4, I arg5, N arg6, C arg7)
-    // {
-    //     return this;
-    // }
 }

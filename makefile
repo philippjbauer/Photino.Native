@@ -14,12 +14,10 @@ DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
 DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
 
 MAC_SRCS = $(SRC)/Photino/App/*.mm\
-		   $(SRC)/Photino/Events/*.cpp\
 		   $(SRC)/Photino/Structs/*.cpp\
 		   $(SRC)/Photino/WebView/*.mm\
 		   $(SRC)/Photino/Window/*.mm\
 		   $(SRC)/PhotinoHelpers/*.mm\
-		   $(SRC)/PhotinoHelpers/*.cpp\
 		   $(SRC)/PhotinoShared/*.cpp
 
 MAC_EVT_SRCS = $(SRC)/Photino/Events/*.cpp
