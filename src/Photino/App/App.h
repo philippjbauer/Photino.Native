@@ -13,8 +13,8 @@ namespace Photino
 {
     enum AppEvents
     {
-        WillDestruct,
         WillRun,
+        WillDestruct,
         WillAddWindow,
         DidAddWindow,
     };
@@ -25,8 +25,8 @@ namespace Photino
             NSAutoreleasePool *_pool;
             NSApplication *_application;
 
-            Windows *_windows;
             Events<App, AppEvents> *_events;
+            Windows *_windows;
 
             App *Init();
 
@@ -34,12 +34,15 @@ namespace Photino
             App();
             ~App();
 
+            /**
+             * Class Methods
+             */
+            Events<App, AppEvents> *Events();
+
             void Run();
 
             App *AddWindow(Window *window);
-
+            
             Monitors GetMonitors();
-
-            Events<App, AppEvents> *Events();
     };
 }

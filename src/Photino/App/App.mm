@@ -30,6 +30,8 @@ namespace Photino
 
     App *App::Init()
     {
+        _events = new ::Events<App, AppEvents>(this);
+        
         _pool = [[NSAutoreleasePool alloc] init];
         
         AppDelegate *appDelegate = [[
@@ -42,12 +44,13 @@ namespace Photino
         [_application setActivationPolicy: NSApplicationActivationPolicyRegular];
 
         _windows = new Windows();
-        _events = new ::Events<App, AppEvents>(this);
 
         // id applicationName = [[NSProcessInfo processInfo] processName];
 
         return this;
     }
+
+    Events<App, AppEvents> *App::Events() { return _events; }
 
     void App::Run()
     {
@@ -79,10 +82,5 @@ namespace Photino
         }
 
         return monitors;
-    }
-
-    Events<App, AppEvents> *App::Events()
-    {
-        return _events;
     }
 }
