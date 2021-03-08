@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "MonitorFrame.h"
 
 namespace Photino
@@ -20,4 +21,6 @@ namespace Photino
             MonitorFrame monitorArea,
             MonitorFrame workArea);
     };
+
+    typedef std::vector<Monitor> Monitors;
 }

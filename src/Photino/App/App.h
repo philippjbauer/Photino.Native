@@ -11,9 +11,6 @@
 
 namespace Photino
 {
-    using Monitors = std::vector<Monitor>;
-    using Windows = std::vector<Window*>;
-
     enum AppEvents
     {
         WillDestruct,

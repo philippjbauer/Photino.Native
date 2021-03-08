@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <Cocoa/Cocoa.h>
 
 #include "../WebView/WebView.h"
@@ -101,4 +102,6 @@ namespace Photino
             bool IsFullscreen();
             Window *IsFullscreen(bool value);
     };
+
+    typedef std::vector<Window*> Windows;
 }
