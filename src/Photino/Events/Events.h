@@ -34,7 +34,7 @@ namespace Photino
         public:
             Events(TEventClass *eventClass) 
             {
-                Log::WriteLine("Constructing Events<" + std::to_string(*typeid(TEventClass).name()) + ", " + std::to_string(*typeid(TEventTypeEnum).name()) + ">");
+                Log::WriteLine("Constructing Events<" + std::to_string(*typeid(eventClass).name()) + ", " + std::to_string(*typeid(TEventTypeEnum).name()) + ">");
 
                 _eventClass = eventClass;
                 _eventMap = new EventMap<TEventClass, TEventTypeEnum>();
@@ -84,16 +84,16 @@ namespace Photino
                 
                 if (eventActions->size() == 0)
                 {
-                    Log::WriteLine("No actions registered for event");
+                    // Log::WriteLine("No actions for type ID: " + std::to_string(*typeid(eventType).name()));
+                    return this;
                 }
 
                 for (EventAction<TEventClass> eventAction : *eventActions)
                 {
                     try
                     {
-                        Log::WriteLine("Emitting event");
+                        // Log::WriteLine("Will emit event for type ID: " + std::to_string(*typeid(eventType).name()));
                         eventAction(_eventClass);
-                        Log::WriteLine("Emitted event");
                     }
                     catch(const std::exception& e)
                     {
