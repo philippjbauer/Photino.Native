@@ -2,6 +2,7 @@
 #include <vector>
 #include <Cocoa/Cocoa.h>
 
+#include "../Events/Events.h"
 #include "../Structs/Monitor.h"
 #include "../Structs/MonitorFrame.h"
 #include "../Window/Window.h"
@@ -13,6 +14,14 @@ namespace Photino
     using Monitors = std::vector<Monitor>;
     using Windows = std::vector<Window*>;
 
+    enum AppEvents
+    {
+        WillDestruct,
+        WillRun,
+        WillAddWindow,
+        DidAddWindow,
+    };
+
     class App
     {
         private:
@@ -20,6 +29,7 @@ namespace Photino
             NSApplication *_application;
 
             Windows *_windows;
+            Events<App, AppEvents> *_events;
 
             App *Init();
 
@@ -29,8 +39,10 @@ namespace Photino
 
             void Run();
 
+            App *AddWindow(Window *window);
+
             Monitors GetMonitors();
 
-            App *AddWindow(Window *window);
+            Events<App, AppEvents> *Events();
     };
 }

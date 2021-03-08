@@ -15,21 +15,21 @@ namespace Photino
 
     App::~App()
     {
-        // Release memory after window was closed
-        Log::WriteLine("Release resources");
+        this->Events()->EmitEvent(AppEvents::WillDestruct);
 
-        // for (Window *photinoWindow in _windows)
+        // for (Window *window : _windows)
         // {
-        //     delete photinoWindow;
+        //     delete window;
         // }
 
         [_application release];
         [_pool release];
+
+        delete this->Events();
     }
 
     App *App::Init()
     {
-        Log::WriteLine("Init resources");
         _pool = [[NSAutoreleasePool alloc] init];
         
         AppDelegate *appDelegate = [[
@@ -42,6 +42,8 @@ namespace Photino
         [_application setActivationPolicy: NSApplicationActivationPolicyRegular];
 
         _windows = new Windows();
+        _events = new ::Events<App, AppEvents>(this);
+
         // id applicationName = [[NSProcessInfo processInfo] processName];
 
         return this;
@@ -49,8 +51,19 @@ namespace Photino
 
     void App::Run()
     {
-        Log::WriteLine("Run application");
+        this->Events()->EmitEvent(AppEvents::WillRun);
         [_application run];
+    }
+
+    App *App::AddWindow(Window *window)
+    {
+        this->Events()->EmitEvent(AppEvents::WillAddWindow);
+        
+        _windows->push_back(window);
+
+        this->Events()->EmitEvent(AppEvents::DidAddWindow);
+
+        return this;
     }
 
     Monitors App::GetMonitors()
@@ -68,10 +81,8 @@ namespace Photino
         return monitors;
     }
 
-    App *App::AddWindow(Window *window)
+    Events<App, AppEvents> *App::Events()
     {
-        _windows->push_back(window);
-
-        return this;
+        return _events;
     }
 }
