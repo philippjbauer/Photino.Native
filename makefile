@@ -20,7 +20,9 @@ MAC_SRCS = $(SRC)/Photino/App/*.mm\
 		   $(SRC)/Photino/Window/*.mm\
 		   $(SRC)/PhotinoHelpers/*.mm\
 		   $(SRC)/PhotinoHelpers/*.cpp\
-		   $(SRC)/PhotinoShared/*.cpp\
+		   $(SRC)/PhotinoShared/*.cpp
+
+MAC_EVT_SRCS = $(SRC)/Photino/Events/*.cpp
 
 MAC_DEPS = -framework Cocoa\
 		   -framework WebKit
@@ -30,6 +32,8 @@ run: build-exe-dev execute-dev
 build-exe-dev: ensure-output compile-exe-dev
 
 build-dll-dev: ensure-output compile-dll-dev
+
+build-exe-evt-test: ensure-output compile-exe-evt-test
 
 copy-assets:
 	rm -rf $(DEST_DEV)/Assets &&\
@@ -51,6 +55,13 @@ compile-dll-dev:
 		$(MAC_SRCS)\
 		$(SRC)/exports.mm\
 		-o $(DEV_DLL)
+
+compile-exe-evt-test:
+	$(CC) $(CFLAGS)\
+		$(MAC_DEPS)\
+		$(MAC_EVT_SRCS)\
+		$(SRC)/main.mm\
+		-o $(DEV_EXE)
 
 execute-dev:
 	echo "----------------\nRun Application:\n----------------\n" &&\

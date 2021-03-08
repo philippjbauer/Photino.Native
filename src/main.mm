@@ -1,33 +1,34 @@
+#include <iostream>
 #include <functional>
-#include <memory>
-#include <Cocoa/Cocoa.h>
+// #include <memory>
+// #include <Cocoa/Cocoa.h>
 
-#include "Photino/App/App.h"
+// #include "Photino/App/App.h"
 #include "Photino/Events/Events.h"
-#include "PhotinoHelpers/Metrics.h"
-#include "PhotinoShared/Log.h"
+// #include "PhotinoHelpers/Metrics.h"
+// #include "PhotinoShared/Log.h"
 
 using namespace Photino;
-using namespace PhotinoHelpers;
-using namespace PhotinoShared;
+// using namespace PhotinoHelpers;
+// using namespace PhotinoShared;
 
-static Metrics AppMetrics;
+// static Metrics AppMetrics;
 
-void *operator new(size_t size) _THROW_BAD_ALLOC
-{
-    AppMetrics.UsedInstances++;
-    AppMetrics.UsedMemory += size;
+// void *operator new(size_t size) _THROW_BAD_ALLOC
+// {
+//     AppMetrics.UsedInstances++;
+//     AppMetrics.UsedMemory += size;
     
-    return malloc(size);
-}
+//     return malloc(size);
+// }
 
-void operator delete(void *memory, size_t size) _NOEXCEPT
-{
-    AppMetrics.FreedInstances++;
-    AppMetrics.FreedMemory += size;
+// void operator delete(void *memory, size_t size) _NOEXCEPT
+// {
+//     AppMetrics.FreedInstances++;
+//     AppMetrics.FreedMemory += size;
     
-    free(memory);
-}
+//     free(memory);
+// }
 
 enum class WindowEventTypes
 {
@@ -42,20 +43,20 @@ enum class WindowEventTypes
 
 void WillCreateEventAction()
 {
-    Log::WriteLine("Window will close.");
+    std::cout << "Window will be created.\n";
 };
 
 int main()
 {
-    Log::WriteLine("Starting execution");
+    std::cout << "Starting execution\n";
 
     // Log::WriteLine("WillCreate: " + std::to_string(WindowEventTypes::WillCreate));
 
     Events<WindowEventTypes> *windowEvents = new Events<WindowEventTypes>();
 
-    EventAction willCreateEventAction = &WillCreateEventAction;
+    // EventAction eventAction;
 
-    windowEvents->AddEventAction(WindowEventTypes::WillCreate, willCreateEventAction);
+    windowEvents->AddEventAction(WindowEventTypes::WillCreate, WillCreateEventAction);
 
     delete windowEvents;
 
@@ -88,6 +89,6 @@ int main()
     // app->Run();
     // delete app;
 
-    Log::WriteLine("Stopping execution");
+    std::cout << "Stopping execution\n";
     return 0;
 }
