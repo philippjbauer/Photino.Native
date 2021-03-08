@@ -10,25 +10,18 @@ using namespace PhotinoShared;
 @implementation WindowDelegate : NSObject
     - (void)windowDidResize: (NSNotification *)notification
     {
-        NSRect frame = [window->GetNativeWindow() frame];
-        NSSize windowSize = frame.size;
-
-        WindowSize size = WindowSize(windowSize.width, windowSize.height);
-        Log::WriteLine("Window sized to: " + size.ToString());
+        window->Events()->EmitEvent(WindowEvents::WindowDidResize);
     }
 
     - (void)windowDidMove: (NSNotification *)notification
     {
-        NSRect frame = [window->GetNativeWindow() frame];
-        NSPoint windowLocation = frame.origin;
-
-        WindowLocation location = WindowLocation(windowLocation.x, windowLocation.y);
-        Log::WriteLine("Window moved to: " + location.ToString());
+        window->Events()->EmitEvent(WindowEvents::WindowDidMove);
     }
 
     - (BOOL)windowShouldClose: (NSWindow *)sender
     {
-        Log::WriteLine("Window should close");
+        window->Events()->EmitEvent(WindowEvents::WindowShouldClose);
+        
         // NSAlert *alert = [[NSAlert alloc] init];
         // [alert addButtonWithTitle:@"Yes"];
         // [alert addButtonWithTitle:@"No"];
@@ -47,6 +40,6 @@ using namespace PhotinoShared;
 
     - (void)windowWillClose: (NSWindow *)sender
     {
-        Log::WriteLine("Window will close");
+        window->Events()->EmitEvent(WindowEvents::WindowWillClose);
     }
 @end

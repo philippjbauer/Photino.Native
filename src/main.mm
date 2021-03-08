@@ -35,36 +35,54 @@ int main()
     App *app = new App();
     Log::WriteMetrics(&AppMetrics);
 
-    app->Events()->AddEventAction(AppEvents::WillRun, [](App *sender)
-    {
-        Log::WriteLine("Application is about to run.");
-    });
+    app
+        ->Events()
+        ->AddEventAction(AppEvents::WillRun, [](App *sender)
+        {
+            Log::WriteLine("Application is about to run.");
+        });
+    Log::WriteMetrics(&AppMetrics);
 
-    // Window *mainWindow = new Window("Main Window");
-    // Log::WriteMetrics(AppMetrics);
+    Window *mainWindow = new Window("Main Window");
+    Log::WriteMetrics(&AppMetrics);
 
-    // mainWindow
-    //     ->GetWebView()
-    //     ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
-    // Log::WriteMetrics(AppMetrics);
+    mainWindow
+        ->Events()
+        ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender)
+        {
+            Log::WriteLine("Window did resize to: " + sender->GetSize().ToString());
+        })
+        ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender)
+        {
+            Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
+        });
+    Log::WriteMetrics(&AppMetrics);
+
+    mainWindow
+        ->WebView()
+        ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
+    Log::WriteMetrics(&AppMetrics);
 
     // Window *secondWindow = new Window("Second Window");
-    // Log::WriteMetrics(AppMetrics);
+    // Log::WriteMetrics(&AppMetrics);
 
     // secondWindow
     //     ->SetParent(mainWindow)
-    //     ->GetWebView()
+    //     ->WebView()
     //     ->LoadResource("http://www.tryphotino.io");
-    // Log::WriteMetrics(AppMetrics);
+    // Log::WriteMetrics(&AppMetrics);
 
     // app->AddWindow(mainWindow)
     //    ->AddWindow(secondWindow);
-    // Log::WriteMetrics(AppMetrics);
+    // Log::WriteMetrics(&AppMetrics);
 
     app->Run();
+
+    // None of this is outside of app event loop
+    // and is never fired because the app is terminated.
     delete app;
     Log::WriteMetrics(&AppMetrics);
-
+    
     Log::WriteLine("Stopping execution");
     return 0;
 }

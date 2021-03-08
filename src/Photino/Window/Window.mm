@@ -49,7 +49,7 @@ namespace Photino
     Window::~Window()
     {
         delete _webView;
-        [this->GetNativeWindow() release];
+        [this->NativeWindow() release];
     }
 
     /**
@@ -57,8 +57,10 @@ namespace Photino
     */
     Window *Window::Init()
     {
+        _events = new ::Events<Window, WindowEvents>(this);
+
         _nativeWindow = this->CreateNativeWindow();
-        _webView = this->CreateWebView(this->GetNativeWindow());
+        _webView = this->CreateWebView(this->NativeWindow());
 
         return this;
     }
@@ -100,12 +102,16 @@ namespace Photino
         return window;
     }
 
-    WebView *Window::CreateWebView( NSWindow *nativeWindow)
+    Photino::WebView *Window::CreateWebView( NSWindow *nativeWindow)
     {
-        WebView *webview = new WebView(nativeWindow, true);
+        Photino::WebView *webview = new Photino::WebView(nativeWindow, true);
 
         return webview;
     }
+
+    NSWindow *Window::NativeWindow() { return _nativeWindow; }
+    WebView *Window::WebView() { return _webView; }
+    Events<Window, WindowEvents> *Window::Events() { return _events; }
 
     void Window::Open()
     {
@@ -114,25 +120,31 @@ namespace Photino
 
     void Window::Close()
     {
-        [this->GetNativeWindow() performClose: this->GetNativeWindow()];
+        [this->NativeWindow() performClose: this->NativeWindow()];
     }
 
     Window *Window::Show()
     {
-        if (this->GetNativeWindow().miniaturized)
+        this->Events()->EmitEvent(WindowEvents::WindowWillShow);
+
+        if (this->NativeWindow().miniaturized)
         {
-            [this->GetNativeWindow() deminiaturize: this->GetNativeWindow()];
+            [this->NativeWindow() deminiaturize: this->NativeWindow()];
         }
 
-        [this->GetNativeWindow() orderFrontRegardless];
+        [this->NativeWindow() orderFrontRegardless];
 
+        this->Events()->EmitEvent(WindowEvents::WindowDidShow);
         return this;
     }
 
     Window *Window::Hide()
     {
-        [this->GetNativeWindow() miniaturize: this->GetNativeWindow()];
+        this->Events()->EmitEvent(WindowEvents::WindowWillHide);
 
+        [this->NativeWindow() miniaturize: this->NativeWindow()];
+
+        this->Events()->EmitEvent(WindowEvents::WindowDidHide);
         return this;
     }
 
@@ -152,18 +164,12 @@ namespace Photino
     /**
     * Getters & Setters
     */
-    // Window
-    NSWindow *Window::GetNativeWindow() { return _nativeWindow; }
-
-    // WebView
-    WebView *Window::GetWebView() { return _webView; }
-
     // Parent
     Window *Window::GetParent() { return _parent; }
     Window *Window::SetParent(Window *value) {
         _parent = value;
 
-        _nativeWindow.parentWindow = value->GetNativeWindow();
+        _nativeWindow.parentWindow = value->NativeWindow();
 
         return this;
     }
@@ -179,7 +185,7 @@ namespace Photino
             stringWithUTF8String: value.c_str()
         ] autorelease];
 
-        [this->GetNativeWindow() setTitle: windowTitle];
+        [this->NativeWindow() setTitle: windowTitle];
 
         return this;
     }
@@ -194,24 +200,33 @@ namespace Photino
     }
 
     // Size
-    WindowSize Window::GetSize() { return _size; }
+    WindowSize Window::GetSize()
+    {
+        NSRect frame = [this->NativeWindow() frame];
+        WindowSize windowSize(
+            (int)roundf(frame.size.width),
+            (int)roundf(frame.size.height));
+        
+        return windowSize;
+    }
 
     Window *Window::SetSize(WindowSize value)
     {
-        _size = value;
+        this->Events()->EmitEvent(WindowEvents::WindowWillSetSize);
 
         CGFloat width = (CGFloat)value.width;
         CGFloat height = (CGFloat)value.height;
 
-        NSRect frame = [this->GetNativeWindow() frame];
+        NSRect frame = [this->NativeWindow() frame];
         frame.size = CGSizeMake(width, height);
 
         [
-            this->GetNativeWindow()
+            this->NativeWindow()
             setFrame: frame
             display: YES
         ];
 
+        this->Events()->EmitEvent(WindowEvents::WindowDidSetSize);
         return this;
     }
 
@@ -221,19 +236,28 @@ namespace Photino
     }
 
     // Location
-    WindowLocation Window::GetLocation() { return _location; }
+    WindowLocation Window::GetLocation()
+    {
+        NSRect frame = [this->NativeWindow() frame];
+        WindowLocation windowLocation(
+            (int)roundf(frame.origin.x),
+            (int)roundf(frame.origin.y));
+        
+        return windowLocation;
+    }
 
     Window *Window::SetLocation(WindowLocation value)
     {
-        _location = value;
+        this->Events()->EmitEvent(WindowEvents::WindowWillSetLocation);
 
         CGFloat left = (CGFloat)value.left;
         CGFloat top = (CGFloat)value.left;
 
         CGPoint location = CGPointMake(left, top);
 
-        [this->GetNativeWindow() setFrameTopLeftPoint: location];
+        [this->NativeWindow() setFrameTopLeftPoint: location];
 
+        this->Events()->EmitEvent(WindowEvents::WindowDidSetLocation);
         return this;
     }
 
@@ -248,11 +272,11 @@ namespace Photino
     {
         if (value == true)
         {
-            this->GetNativeWindow().styleMask |= NSWindowStyleMaskResizable;
+            this->NativeWindow().styleMask |= NSWindowStyleMaskResizable;
         }
         else
         {
-            this->GetNativeWindow().styleMask &= ~NSWindowStyleMaskResizable;
+            this->NativeWindow().styleMask &= ~NSWindowStyleMaskResizable;
         }
         
         _isResizable = value;
@@ -267,7 +291,7 @@ namespace Photino
         if (_isFullscreen != value)
         {
             _isFullscreen = value;
-            [this->GetNativeWindow() toggleFullScreen: this->GetNativeWindow()];
+            [this->NativeWindow() toggleFullScreen: this->NativeWindow()];
         }
 
         return this;

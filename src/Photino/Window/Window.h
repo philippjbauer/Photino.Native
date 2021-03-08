@@ -3,26 +3,43 @@
 #include <vector>
 #include <Cocoa/Cocoa.h>
 
-#include "../WebView/WebView.h"
+#include "../Events/Events.h"
 #include "../Structs/Monitor.h"
 #include "../Structs/WindowLocation.h"
 #include "../Structs/WindowSize.h"
+#include "../WebView/WebView.h"
 
 namespace Photino
 {
+    enum WindowEvents
+    {
+        WindowShouldClose,
+        WindowWillClose,
+        WindowWillShow,
+        WindowDidShow,
+        WindowWillHide,
+        WindowDidHide,
+        WindowDidResize,
+        WindowDidMove,
+        WindowWillSetSize,
+        WindowDidSetSize,
+        WindowWillSetLocation,
+        WindowDidSetLocation,
+    };
+
     class Window
     {
         private:
             NSWindow *_nativeWindow;
             WebView *_webView;
+            
+            Events<Window, WindowEvents> *_events;
 
             Window *_parent;
 
             std::string _title;
 
             Monitor _monitor;
-            WindowSize _size;
-            WindowLocation _location;
 
             bool _isResizable;
             bool _isFullscreen;
@@ -55,6 +72,10 @@ namespace Photino
             /**
              * Class Methods
              */
+            NSWindow *NativeWindow();
+            WebView *WebView();
+            Events<Window, WindowEvents> *Events();
+
             void Open();
             void Close();
 
@@ -66,12 +87,6 @@ namespace Photino
             /**
              * Getters & Setters
              */
-            // Window
-            NSWindow *GetNativeWindow();
-
-            // WebView
-            WebView *GetWebView();
-
             // Parent
             Window *GetParent();
             Window *SetParent(Window *value);
