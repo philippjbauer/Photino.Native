@@ -54,13 +54,18 @@ int main()
 
     Events<WindowEventTypes> *windowEvents = new Events<WindowEventTypes>();
 
-    // EventAction eventAction;
-
     windowEvents->AddEventAction(WindowEventTypes::WillCreate, WillCreateEventAction);
 
-    delete windowEvents;
+    windowEvents->AddEventAction(WindowEventTypes::WillClose, []
+    {
+        std::cout << "Closure: Window will be closed.\n";
+    });
 
-    // windowEvents.EmitEvent(WindowEventTypes::WillCreate);
+    windowEvents->EmitEvent(WindowEventTypes::WillCreate);
+
+    windowEvents->EmitEvent(WindowEventTypes::WillClose);
+
+    delete windowEvents;
 
     // App *app = new App();
     // Log::WriteMetrics(AppMetrics);

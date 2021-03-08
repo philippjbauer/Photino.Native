@@ -58,7 +58,6 @@ compile-dll-dev:
 
 compile-exe-evt-test:
 	$(CC) $(CFLAGS)\
-		$(MAC_EVT_SRCS)\
 		$(SRC)/main.mm\
 		-o $(DEV_EXE)
 
