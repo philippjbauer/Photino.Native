@@ -52,30 +52,6 @@ namespace Photino
                 return this;
             }
 
-            EventActions<TEventClass> *GetEventActionsForEventType(TEventTypeEnum eventType)
-            {
-                EventMap<TEventClass, TEventTypeEnum> *eventMap = this->GetEventMap();
-                auto eventTypeActions = eventMap->find(eventType);
-                EventActions<TEventClass> *eventActions;
-
-                if (eventTypeActions == eventMap->end())
-                {
-                    eventActions = new EventActions<TEventClass>();
-                    eventMap->insert(EventTypeActions<TEventClass, TEventTypeEnum>(eventType, eventActions));
-                }
-                else
-                {
-                    eventActions = eventTypeActions->second;
-                }
-
-                return eventActions;
-            }
-
-            EventMap<TEventClass, TEventTypeEnum> *GetEventMap()
-            {
-                return _eventMap;
-            }
-
             Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType)
             {
                 EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
@@ -98,6 +74,30 @@ namespace Photino
                 }
 
                 return this;
+            }
+
+            EventActions<TEventClass> *GetEventActionsForEventType(TEventTypeEnum eventType)
+            {
+                EventMap<TEventClass, TEventTypeEnum> *eventMap = this->GetEventMap();
+                auto eventTypeActions = eventMap->find(eventType);
+                EventActions<TEventClass> *eventActions;
+
+                if (eventTypeActions == eventMap->end())
+                {
+                    eventActions = new EventActions<TEventClass>();
+                    eventMap->insert(EventTypeActions<TEventClass, TEventTypeEnum>(eventType, eventActions));
+                }
+                else
+                {
+                    eventActions = eventTypeActions->second;
+                }
+
+                return eventActions;
+            }
+
+            EventMap<TEventClass, TEventTypeEnum> *GetEventMap()
+            {
+                return _eventMap;
             }
 
             // template<typename P>
