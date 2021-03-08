@@ -1,8 +1,6 @@
 #include <iostream>
 #include "Log.h"
 
-using namespace PhotinoHelpers;
-
 namespace PhotinoShared
 {
     void Log::WriteLine(std::string message)
@@ -10,11 +8,21 @@ namespace PhotinoShared
         std::cout << message << std::endl;
     }
 
-    void Log::WriteMetrics(Metrics metrics)
+    void Log::WriteMetrics(Metrics *metrics)
     {
-        std::string instancesString = std::to_string(metrics.CurrentInstanceCount());
-        std::string usageInKbString = std::to_string(metrics.CurrentMemoryUsage() / 1024);
+        std::string instances = std::to_string(metrics->CurrentInstanceCount());
 
-        Log::WriteLine("Memory Usage: " + usageInKbString + " KB, Instances: " + instancesString);
+        uint32_t usageValue = metrics->CurrentMemoryUsage();
+        std::string usageUnit = "Bytes";
+
+        if (usageValue >= 1024 && usageValue < (usageValue * (1024 * 1024)))
+        {
+            usageValue = usageValue / 1024;
+            usageUnit = "KB";
+        }
+
+        std::string usage = std::to_string(usageValue);
+
+        Log::WriteLine("Memory Usage: " + usage + " " + usageUnit + ", Instances: " + instances);
     }
 }

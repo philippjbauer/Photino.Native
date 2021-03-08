@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-namespace PhotinoHelpers
+namespace PhotinoShared
 {
     struct Metrics
     {

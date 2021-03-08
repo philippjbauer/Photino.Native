@@ -1,6 +1,6 @@
 #include "Metrics.h"
 
-namespace PhotinoHelpers
+namespace PhotinoShared
 {
     Metrics::Metrics()
     {

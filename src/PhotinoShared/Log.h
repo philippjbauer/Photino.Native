@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "../PhotinoHelpers/Metrics.h"
+#include "Metrics.h"
 
 namespace PhotinoShared
 {
@@ -8,6 +8,6 @@ namespace PhotinoShared
     {
         public:
             static void WriteLine(std::string message);
-            static void WriteMetrics(PhotinoHelpers::Metrics metrics);
+            static void WriteMetrics(Metrics *metrics);
     };
 }
