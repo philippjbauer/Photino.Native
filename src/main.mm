@@ -3,8 +3,8 @@
 #include <memory>
 // #include <Cocoa/Cocoa.h>
 
-// #include "Photino/App/App.h"
-#include "Photino/Events/Events.h"
+#include "Photino/App/App.h"
+// #include "Photino/Events/Events.h"
 #include "PhotinoShared/Metrics.h"
 #include "PhotinoShared/Log.h"
 
@@ -29,52 +29,18 @@ void operator delete(void *memory, size_t size) _NOEXCEPT
     free(memory);
 }
 
-enum class WindowEventTypes
-{
-    WillCreate,
-    DidCreate,
-    WillOpen,
-    DidOpen,
-    WillClose,
-    WillLoad,
-    DidLoad,
-};
-
-void WillCreateEventAction(void* sender)
-{
-    Log::WriteLine("Window will be created.");
-};
-
 int main()
 {
     Log::WriteLine("Starting execution");
     Log::WriteMetrics(&AppMetrics);
 
-    void *nullClass = nullptr;
-
-    Events<void, WindowEventTypes> *windowEvents = new Events<void, WindowEventTypes>(nullClass);
+    App *app = new App();
     Log::WriteMetrics(&AppMetrics);
 
-    windowEvents->AddEventAction(WindowEventTypes::WillCreate, WillCreateEventAction);
-    Log::WriteMetrics(&AppMetrics);
-
-    windowEvents->AddEventAction(WindowEventTypes::WillClose, [](void *sender)
+    app->Events()->AddEventAction(AppEvents::WillRun, [](App *sender)
     {
-        Log::WriteLine("Closure: Window will be closed.");
+        Log::WriteLine("Application is about to run.");
     });
-    Log::WriteMetrics(&AppMetrics);
-
-    windowEvents->EmitEvent(WindowEventTypes::WillCreate);
-    Log::WriteMetrics(&AppMetrics);
-
-    windowEvents->EmitEvent(WindowEventTypes::WillClose);
-    Log::WriteMetrics(&AppMetrics);
-
-    delete windowEvents;
-    Log::WriteMetrics(&AppMetrics);
-
-    // App *app = new App();
-    // Log::WriteMetrics(&AppMetrics);
 
     // Window *mainWindow = new Window("Main Window");
     // Log::WriteMetrics(AppMetrics);
@@ -97,8 +63,9 @@ int main()
     //    ->AddWindow(secondWindow);
     // Log::WriteMetrics(AppMetrics);
 
-    // app->Run();
-    // delete app;
+    app->Run();
+    delete app;
+    Log::WriteMetrics(&AppMetrics);
 
     Log::WriteLine("Stopping execution");
     return 0;
