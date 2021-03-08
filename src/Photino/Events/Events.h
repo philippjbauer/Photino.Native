@@ -10,7 +10,7 @@ namespace Photino
 {
     // EventAction
     template<class TEventClass>
-    using EventAction = void (*)(TEventClass* sender);
+    using EventAction = void (*)(TEventClass *sender);
 
     //EventActions
     template<class TEventClass>
@@ -18,11 +18,11 @@ namespace Photino
 
     // EventTypeActions
     template<class TEventClass, typename TEventTypeEnum>
-    using EventTypeActions = std::pair<TEventTypeEnum, EventActions<TEventClass>*>;
+    using EventTypeActions = std::pair<TEventTypeEnum, EventActions<TEventClass>* >;
 
     // EventMap
     template<class TEventClass, typename TEventTypeEnum>
-    using EventMap = std::map<TEventTypeEnum, EventActions<TEventClass>*>;
+    using EventMap = std::map<TEventTypeEnum, EventActions<TEventClass>* >;
 
     template<class TEventClass, typename TEventTypeEnum>
     class Events
