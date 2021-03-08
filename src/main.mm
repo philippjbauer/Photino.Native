@@ -13,7 +13,7 @@ using namespace PhotinoShared;
 
 static Metrics AppMetrics;
 
- void *operator new(size_t size) _THROW_BAD_ALLOC
+void *operator new(size_t size) _THROW_BAD_ALLOC
 {
     AppMetrics.UsedInstances++;
     AppMetrics.UsedMemory += size;
@@ -21,7 +21,7 @@ static Metrics AppMetrics;
     return malloc(size);
 }
 
-void operator delete( void *memory, size_t size) _NOEXCEPT
+void operator delete(void *memory, size_t size) _NOEXCEPT
 {
     AppMetrics.FreedInstances++;
     AppMetrics.FreedMemory += size;
@@ -61,10 +61,10 @@ int main()
 
     // windowEvents.EmitEvent(WindowEventTypes::WillCreate);
 
-    //  App *app = new App();
+    // App *app = new App();
     // Log::WriteMetrics(AppMetrics);
 
-    //  Window *mainWindow = new Window("Main Window");
+    // Window *mainWindow = new Window("Main Window");
     // Log::WriteMetrics(AppMetrics);
 
     // mainWindow
@@ -72,7 +72,7 @@ int main()
     //     ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
     // Log::WriteMetrics(AppMetrics);
 
-    //  Window *secondWindow = new Window("Second Window");
+    // Window *secondWindow = new Window("Second Window");
     // Log::WriteMetrics(AppMetrics);
 
     // secondWindow
