@@ -1,10 +1,8 @@
 #include <iostream>
 #include <functional>
 #include <memory>
-// #include <Cocoa/Cocoa.h>
 
 #include "Photino/App/App.h"
-// #include "Photino/Events/Events.h"
 #include "PhotinoShared/Metrics.h"
 #include "PhotinoShared/Log.h"
 
