@@ -55,6 +55,14 @@ int main()
         ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender)
         {
             Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
+        })
+        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender)
+        {
+            Log::WriteLine("Window should close soon.");
+        })
+        ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender)
+        {
+            Log::WriteLine("Window will close now.");
         });
     Log::WriteMetrics(&AppMetrics);
 
@@ -63,14 +71,13 @@ int main()
         ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
     Log::WriteMetrics(&AppMetrics);
 
-    // Window *secondWindow = new Window("Second Window");
-    // Log::WriteMetrics(&AppMetrics);
+    Window *secondWindow = new Window("Second Window");
+    Log::WriteMetrics(&AppMetrics);
 
-    // secondWindow
-    //     ->SetParent(mainWindow)
-    //     ->WebView()
-    //     ->LoadResource("http://www.tryphotino.io");
-    // Log::WriteMetrics(&AppMetrics);
+    secondWindow
+        ->WebView()
+        ->LoadResource("http://www.tryphotino.io");
+    Log::WriteMetrics(&AppMetrics);
 
     // app->AddWindow(mainWindow)
     //    ->AddWindow(secondWindow);
