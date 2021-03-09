@@ -9,6 +9,7 @@ DEST_FILE = PhotinoApp
 
 DEST_PROD = $(DEST_PATH)/prod
 DEST_DEV = $(DEST_PATH)/dev
+DEST_PUB = $(DEST_PATH)/publish
 
 DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
 DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
@@ -27,20 +28,24 @@ MAC_DEPS = -framework Cocoa\
 
 run: build-exe-dev execute-dev
 
-build-exe-dev: ensure-output compile-exe-dev
+publish-app: ensure-output-pub compile-exe-dev create-bundle
 
-build-dll-dev: ensure-output compile-dll-dev
+build-exe-dev: ensure-output-dev compile-exe-dev
 
-build-exe-evt-test: ensure-output compile-exe-evt-test
+build-dll-dev: ensure-output-dev compile-dll-dev
 
 copy-assets:
 	rm -rf $(DEST_DEV)/Assets &&\
 	cp -r $(SRC)/Assets $(DEST_DEV)/
 
-ensure-output:
+ensure-output-dev:
 	mkdir -p $(DEST_DEV)
 
+ensure-output-pub:
+	mkdir -p $(DEST_PUB)
+
 compile-exe-dev:
+	rm $(DEV_EXE) &\
 	$(CC) $(CFLAGS)\
 		$(MAC_DEPS)\
 		$(MAC_SRCS)\
@@ -48,17 +53,18 @@ compile-exe-dev:
 		-o $(DEV_EXE)
 
 compile-dll-dev:
+	rm $(DEV_DLL) &\
 	$(CC) $(CFLAGS) $(DLLFLAGS)\
 		$(MAC_DEPS)\
 		$(MAC_SRCS)\
 		$(SRC)/exports.mm\
 		-o $(DEV_DLL)
 
-compile-exe-evt-test:
-	$(CC) $(CFLAGS)\
-		$(SRC)/main.mm\
-		-o $(DEV_EXE)
-
 execute-dev:
 	echo "----------------\nRun Application:\n----------------\n" &&\
 	$(DEV_EXE)
+
+create-bundle:
+	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/MacOS &&\
+	mv $(DEV_EXE) $(DEST_PUB)/PhotinoApp.app/Contents/MacOS/ &&\
+	cp ./Info.plist $(DEST_PUB)/PhotinoApp.app/Contents
