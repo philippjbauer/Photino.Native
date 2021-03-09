@@ -12,6 +12,16 @@ namespace Photino
 
     std::string WindowLocation::ToString()
     {
-        return std::to_string(this->left) + ", " + std::to_string(this->top);
+        char buffer[100];
+
+        std::sprintf(
+            buffer,
+            "WindowLocation(%i, %i)",
+            this->left,
+            this->top);
+
+        std::string result(buffer);
+
+        return result;
     }
 }

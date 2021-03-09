@@ -12,6 +12,16 @@ namespace Photino
 
     std::string WindowSize::ToString()
     {
-        return std::to_string(this->width) + ", " + std::to_string(this->height);
+        char buffer[100];
+
+        std::sprintf(
+            buffer,
+            "WindowSize(%i, %i)",
+            this->width,
+            this->height);
+
+        std::string result(buffer);
+
+        return result;
     }
 }
