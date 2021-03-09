@@ -18,9 +18,17 @@ Quite a bit of the original functionality is already present. But the implementa
 - [x] WebView
 - [x] Event System
 - [ ] Variadic EventAction calls
+- [ ] App / Window Menu
+- [ ] Dock (macOS only)
+- [ ] Alert Windows
 - [x] Add events to App 
 - [x] Add events to Window 
 - [ ] Add events to WebView
-- [ ] Load JavaScript into WebView from File (have to overcome basedir path issues)
+- [ ] Load JavaScript into WebView from File
+- [ ] Separate the header files from the implementation
+- [ ] Win32 Implementation ([Get Started](https://docs.microsoft.com/en-us/windows/win32/learnwin32/learn-to-program-for-windows))
+- [ ] GTK4 Implementation ([Get Started](https://www.gtk.org/docs/))
+- [ ] iOS Implementation (How?)
+- [ ] Android Implementation (How?)
 
 More to-dos will be added soon.
