@@ -38,10 +38,10 @@ namespace PhotinoHelpers
     MonitorFrame MakeMonitorFrame(NSRect frame)
     {
         MonitorFrame monitorFrame(
-            (int)roundf(frame.size.width),
-            (int)roundf(frame.size.height),
             (int)roundf(frame.origin.x),
-            (int)roundf(frame.origin.y));
+            (int)roundf(frame.origin.y),
+            (int)roundf(frame.size.width),
+            (int)roundf(frame.size.height));
         
         return monitorFrame;
     }

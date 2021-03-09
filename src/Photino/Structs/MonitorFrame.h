@@ -1,20 +1,23 @@
 #pragma once
+#include <string>
 
 namespace Photino
 {
     struct MonitorFrame
     {
-        int width;
-        int height;
         int x;
         int y;
+        int width;
+        int height;
 
         MonitorFrame();
 
         MonitorFrame(
-            int width,
-            int height,
             int x,
-            int y);
+            int y,
+            int width,
+            int height);
+
+        std::string ToString();
     };
 }
