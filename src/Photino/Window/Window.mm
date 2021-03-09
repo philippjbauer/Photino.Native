@@ -67,14 +67,7 @@ namespace Photino
 
     NSWindow *Window::CreateNativeWindow()
     {
-        WindowSize size = this->GetSize();
-        WindowLocation location = this->GetLocation();
-
-        NSRect nsWindowFrame = NSMakeRect(
-            size.width,
-            size.height,
-            location.left,
-            location.top);
+        NSRect nsWindowFrame = NSMakeRect(0, 0, 0, 0);
         
         NSWindowStyleMask nsWindowStyleMask =
             NSWindowStyleMaskTitled
@@ -238,10 +231,15 @@ namespace Photino
     // Location
     WindowLocation Window::GetLocation()
     {
+        MonitorFrame workArea = this->GetMonitor().workArea;
         NSRect frame = [this->NativeWindow() frame];
-        WindowLocation windowLocation(
-            (int)roundf(frame.origin.x),
-            (int)roundf(frame.origin.y));
+
+        int left = (int)roundf(frame.origin.x);
+        int bottom = (int)roundf(frame.origin.y);
+
+        int top = workArea.height - (bottom + frame.size.height);
+
+        WindowLocation windowLocation(left, top);
         
         return windowLocation;
     }
@@ -250,12 +248,15 @@ namespace Photino
     {
         this->Events()->EmitEvent(WindowEvents::WindowWillSetLocation);
 
+        WindowSize size = this->GetSize();
+        MonitorFrame workArea = this->GetMonitor().workArea;
+
         CGFloat left = (CGFloat)value.left;
-        CGFloat top = (CGFloat)value.left;
+        CGFloat top = (CGFloat)(workArea.height - (value.top + size.height));
 
         CGPoint location = CGPointMake(left, top);
 
-        [this->NativeWindow() setFrameTopLeftPoint: location];
+        [this->NativeWindow() setFrameOrigin: location];
 
         this->Events()->EmitEvent(WindowEvents::WindowDidSetLocation);
         return this;
