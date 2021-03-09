@@ -1,4 +1,5 @@
 # Photino.Native v2
+
 The unofficial version 2 of Photino.Native.
 
 ---
@@ -15,9 +16,11 @@ Quite a bit of the original functionality is already present. But the implementa
 - [x] Photino App 
 - [x] Photino Window
 - [x] WebView
-- [x] Event System (template in C++ were "fun" to learn)
+- [x] Event System
+- [ ] Variadic EventAction calls
 - [x] Add events to App 
 - [x] Add events to Window 
 - [ ] Add events to WebView
 - [ ] Load JavaScript into WebView from File (have to overcome basedir path issues)
-- [ ] Write more ToDos
+
+More to-dos will be added soon.
