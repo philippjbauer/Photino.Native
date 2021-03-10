@@ -3,11 +3,13 @@
 #include <Cocoa/Cocoa.h>
 #include <WebKit/WebKit.h>
 
-typedef void (*WebViewMessageReceivedHandler) (std::string message);
+#include "WebView.h"
+
+using namespace Photino;
 
 @interface WebViewUiDelegate : NSObject <WKUIDelegate, WKScriptMessageHandler>
 {
     @public
-        WebViewMessageReceivedHandler webViewMessageReceivedHandler;
+        Photino::WebView *webView;
 }
 @end

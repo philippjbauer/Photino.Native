@@ -30,7 +30,7 @@ run: build-exe-dev execute-dev
 
 publish-app: ensure-output-pub compile-exe-dev create-bundle
 
-build-exe-dev: ensure-output-dev compile-exe-dev
+build-exe-dev: ensure-output-dev copy-assets compile-exe-dev
 
 build-dll-dev: ensure-output-dev compile-dll-dev
 

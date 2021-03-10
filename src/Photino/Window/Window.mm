@@ -57,7 +57,7 @@ namespace Photino
     */
     Window *Window::Init()
     {
-        _events = new ::Events<Window, WindowEvents>(this);
+        _events = new Photino::Events<Window, WindowEvents>(this);
 
         _nativeWindow = this->CreateNativeWindow();
         _webView = this->CreateWebView(this->NativeWindow());

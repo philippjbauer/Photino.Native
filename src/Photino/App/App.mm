@@ -30,7 +30,7 @@ namespace Photino
 
     App *App::Init()
     {
-        _events = new ::Events<App, AppEvents>(this);
+        _events = new Photino::Events<App, AppEvents>(this);
         
         _pool = [[NSAutoreleasePool alloc] init];
         

@@ -3,15 +3,28 @@
 #include <Cocoa/Cocoa.h>
 #include <WebKit/WebKit.h>
 
+#include "../Events/Events.h"
+
 namespace Photino
 {
+    enum WebViewEvents
+    {
+        WillLoadResource,
+        DidLoadResource,
+        WillLoadHtmlString,
+        DidLoadHtmlString,
+        DidReceiveScriptMessage,
+    };
+
     class WebView
     {
         private:
             WKWebViewConfiguration *_configuration;
             WKWebView *_nativeWebView;
 
-            bool _hasEnabledDevTools;
+            Events<WebView, WebViewEvents> *_events;
+
+            bool _hasDeveloperExtrasEnabled;
 
             /**
              * Class Methods
@@ -27,6 +40,8 @@ namespace Photino
              */
             // Configuration
             WKWebViewConfiguration *GetConfiguration();
+            WKUserScript *GetUserScript();
+            NSURL *GetResourceURL(std::string resource);
 
         public:
             /**
@@ -41,7 +56,9 @@ namespace Photino
             /**
              * Class Methods
              */
-            WebView *LoadResource(std::string url);
+            Events<WebView, WebViewEvents> *Events();
+
+            WebView *LoadResource(std::string resource);
             WebView *LoadHtmlString(std::string content);
 
             /**
@@ -50,8 +67,8 @@ namespace Photino
             // WebView
             WKWebView *GetNativeWebView();
 
-            // HasEnabledDevTools
-            bool HasEnabledDevTools();
-            WebView *HasEnabledDevTools(bool value);
+            // HasDeveloperExtrasEnabled
+            bool HasDeveloperExtrasEnabled();
+            WebView *HasDeveloperExtrasEnabled(bool value);
     };
 }

@@ -39,9 +39,27 @@ int main()
             Log::WriteLine("Window will close now.");
         });
 
-    mainWindow
-        ->WebView()
-        ->LoadHtmlString("<html><body><h1>Hello Photino!</h1></body></html>");
+    Photino::WebView *mainWindowWebView = mainWindow->WebView();
+
+    mainWindowWebView
+        ->Events()
+        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender)
+        {
+            Log::WriteLine("Resource will load.");
+        })
+        ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender)
+        {
+            Log::WriteLine("Resource did load.");
+        })
+        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender)
+        {
+            Log::WriteLine("Received script message.");
+        });
+
+    mainWindowWebView
+        // ->LoadHtmlString("<html><body><h1>Hello Photino</h1></body></html>");
+        ->LoadResource("Assets/index.html");
+        // ->LoadResource("http://www.tryphotino.io");
     
     // Second Window
     // Window *secondWindow = new Window("Second Window");

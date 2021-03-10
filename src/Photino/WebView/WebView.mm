@@ -1,3 +1,4 @@
+#include <iostream>
 #include "WebView.h"
 #include "WebViewUiDelegate.h"
 
@@ -8,10 +9,10 @@ namespace Photino
     */
     WebView::WebView(
         NSWindow *nativeWindow,
-        bool enableDevTools)
+        bool developerExtrasEnabled)
     {
         this->Init(nativeWindow)
-            ->HasEnabledDevTools(enableDevTools);
+            ->HasDeveloperExtrasEnabled(developerExtrasEnabled);
     }
 
     WebView::~WebView()
@@ -25,6 +26,8 @@ namespace Photino
     */
     WebView *WebView::Init(NSWindow *nativeWindow)
     {
+        _events = new Photino::Events<WebView, WebViewEvents>(this);
+
         _configuration = this->CreateConfiguration();
         _nativeWebView = this->CreateNativeWebView(nativeWindow, this->GetConfiguration());
 
@@ -43,66 +46,30 @@ namespace Photino
         WKWebViewConfiguration *configuration
     )
     {
-        // Future use of TextFile when I found a way to include from
-        // application path / bundle path in a cross-platform fashion.
-        // TextFile webViewExtensions(APP_PATH + "/Assets/WebViewExtensions.js");
-
-        std::string webViewExtensions = R"js(\
-window.__receiveMessageCallbacks = [];\
-\
-window.__dispatchMessageCallback = function(message)\
-{\
-    window.__receiveMessageCallbacks\
-        .forEach(function(callback) \
-        {\
-            callback(message);\
-        });\
-};\
-\
-window.external = {\
-    postMessage: function(message)\
-    {\
-        window.webkit\
-            .messageHandlers\
-            .photinointerop\
-            .postMessage(message);\
-    },\
-    receiveMessage: function(callback)\
-    {\
-        window.__receiveMessageCallbacks.push(callback);\
-    }\
-};\
-)js";
-
-        NSString *userScriptSource = [
-            NSString
-            stringWithUTF8String: webViewExtensions.c_str()
-        ];
-
-        WKUserScript *userScript =[ [
-            [WKUserScript alloc]
-            initWithSource: userScriptSource
-            injectionTime: WKUserScriptInjectionTimeAtDocumentStart
-            forMainFrameOnly: YES
-        ] autorelease];
-
-        configuration.userContentController = [[
-            [WKUserContentController alloc] init
-        ] autorelease];
-        
-        [configuration.userContentController addUserScript: userScript];
-
         // Create WebViewUiDelegate
         WebViewUiDelegate *uiDelegate = [[
             [WebViewUiDelegate alloc]
             init
         ] autorelease];
+
+        uiDelegate->webView = this;
+
+        // Setup user content script interop
+        WKUserScript *userScript = this->GetUserScript();
+
+        WKUserContentController *userContentController = [[
+            [WKUserContentController alloc] init
+        ] autorelease];
+
+        [userContentController addUserScript: userScript];
         
         [
-            configuration.userContentController
+            userContentController
             addScriptMessageHandler: uiDelegate
             name: @"photinointerop"
         ];
+
+        configuration.userContentController = userContentController;
 
         // Create native WebView
         WKWebView *nativeWebView = [
@@ -122,29 +89,104 @@ window.external = {\
         return nativeWebView;
     }
 
-    WebView *WebView::LoadResource(std::string resource)
+    WKUserScript *WebView::GetUserScript()
     {
-        WKWebView *webview = this->GetNativeWebView();
+        // Future use of TextFile when I found a way to include from
+        // application path / bundle path in a cross-platform fashion.
+        // TextFile webViewExtensions(APP_PATH + "/Assets/WebViewExtensions.js");
+
+        std::string webViewExtensions = R"js(
+window.__receiveMessageCallbacks = [];
+
+window.__dispatchMessageCallback = function(message)
+{
+    window.__receiveMessageCallbacks
+        .forEach(function(callback) 
+        {
+            callback(message);
+        });
+};
+
+window.external = {
+    message: {
+        send: function(message)
+        {
+            window.webkit
+                .messageHandlers
+                .photinointerop
+                .postMessage(message);
+        },
+        receive: function(callback)
+        {
+            window.__receiveMessageCallbacks.push(callback);
+        }
+    }
+};
+)js";
+
+        NSString *userScriptSource = [
+            NSString
+            stringWithUTF8String: webViewExtensions.c_str()
+        ];
+
+        WKUserScript *userScript = [[
+            [WKUserScript alloc]
+            initWithSource: userScriptSource
+            injectionTime: WKUserScriptInjectionTimeAtDocumentStart
+            forMainFrameOnly: YES
+        ] autorelease];
+
+        return userScript;
+    }
+
+    NSURL *WebView::GetResourceURL(std::string resource)
+    {
+        NSURL *bundleURL = [
+            [NSBundle mainBundle]
+            resourceURL
+        ];
 
         NSString *resourceString = [[
             NSString stringWithUTF8String: resource.c_str()
         ] autorelease];
         
-        NSURL *url= [[
-            NSURL URLWithString: resourceString
+        NSURL *resourceURL = [[
+            NSURL 
+            URLWithString: resourceString
+            relativeToURL: bundleURL
         ] autorelease];
 
-        NSURLRequest *request= [[
-            NSURLRequest requestWithURL: url
+        return resourceURL;
+    }
+
+    Events<WebView, WebViewEvents> *WebView::Events() { return _events; }
+
+    WebView *WebView::LoadResource(std::string resource)
+    {
+        this->Events()->EmitEvent(WebViewEvents::WillLoadResource);
+
+        WKWebView *webview = this->GetNativeWebView();
+
+        NSURL *resourceURL = this->GetResourceURL(resource);
+
+        NSLog(@"%@", [resourceURL absoluteString]);
+
+        NSURLRequest *request = [[
+            NSURLRequest
+            requestWithURL: resourceURL
         ] autorelease];
         
         [webview loadRequest: request];
+
+        this->Events()->EmitEvent(WebViewEvents::DidLoadResource);
 
         return this;
     }
 
     WebView *WebView::LoadHtmlString(std::string content)
     {
+        this->Events()->EmitEvent(WebViewEvents::WillLoadHtmlString);
+
         WKWebView *webview = this->GetNativeWebView();
 
         NSString *htmlString = [[
@@ -158,6 +200,8 @@ window.external = {\
             baseURL: nil
         ];
 
+        this->Events()->EmitEvent(WebViewEvents::DidLoadHtmlString);
+
         return this;
     }
 
@@ -170,9 +214,9 @@ window.external = {\
     // Configuration
     WKWebViewConfiguration *WebView::GetConfiguration() { return _configuration; }
 
-    // HasEnabledDevTools
-    bool WebView::HasEnabledDevTools() { return _hasEnabledDevTools; }
-    WebView *WebView::HasEnabledDevTools(bool value)
+    // HasDeveloperExtrasEnabled
+    bool WebView::HasDeveloperExtrasEnabled() { return _hasDeveloperExtrasEnabled; }
+    WebView *WebView::HasDeveloperExtrasEnabled(bool value)
     {
         [
             this->GetConfiguration().preferences
@@ -180,7 +224,7 @@ window.external = {\
             forKey: @"developerExtrasEnabled"
         ];
 
-        _hasEnabledDevTools = value;
+        _hasDeveloperExtrasEnabled = value;
 
         return this;
     }
