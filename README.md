@@ -17,7 +17,7 @@ Quite a bit of the original functionality is already present. But the implementa
 - [x] Photino Window
 - [x] WebView
 - [x] Event System
-- [ ] Variadic EventAction calls
+- [ ] EventActions with multiple arguments (not just sender)
 - [ ] App / Window Menu
 - [ ] Dock (macOS only)
 - [ ] Alert Windows
