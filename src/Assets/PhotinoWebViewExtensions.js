@@ -1,24 +1,32 @@
-window.__receiveMessageCallbacks = [];
-
-window.__dispatchMessageCallback = function(message)
-{
-    window.__receiveMessageCallbacks
-        .forEach(function(callback) 
+const PhotinoApp = {
+    messages: {
+        handlers: [],
+        send: function(message)
         {
-            callback(message);
-        });
-};
+            if (typeof message === 'string')
+            {
+                window.webkit
+                    .messageHandlers
+                    .photinointerop
+                    .postMessage(message);
+            }
+        },
+        receive: function(handler)
+        {
+            if (typeof handler === 'function')
+            {
+                PhotinoApp.messages.handlers.push(handler);
+            }
 
-window.external = {
-    postMessage: function(message)
-    {
-        window.webkit
-            .messageHandlers
-            .photinointerop
-            .postMessage(message);
-    },
-    receiveMessage: function(callback)
-    {
-        window.__receiveMessageCallbacks.push(callback);
+            return PhotinoApp.messages;
+        },
+        dispatch: function(message)
+        {
+            const handlers = PhotinoApp.messages.handlers;
+            for (let i = 0; i < handlers.length; i++)
+            {
+                handlers[i](message);
+            }
+        }
     }
 };

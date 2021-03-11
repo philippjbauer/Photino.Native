@@ -22,27 +22,33 @@
     </style>
 </head>
 <body>
-    <button>Send Message</button>
+    <button>Say: Hello Ringo!</button>
     <div>
         Response: <span class="message"></span>
     </div>
     <script>
+        // Shorthand for the messaging system
+        const PhotinoMessages = PhotinoApp.messages;
+
         document
             .querySelector('button')
             .addEventListener('click', (target, event) =>
             {
-                window.external
-                    .messages.send('Hello Klaus!');
+                PhotinoMessages.send('Hello Ringo!');
             });
         
-        window.external
-            .messages.receive(message =>
-            {
-                document.querySelector('.message').innerHTML = message;
+        PhotinoMessages
+            .receive(message => alert(message))
+            .receive(message => {
+                const responseElement = document.querySelector('.message');
+
+                if (confirm(message)) {
+                    responseElement.innerHTML = message;
+                }
+                else {
+                    responseElement.innerHTML = "What's up, Paul!";
+                }
             });
-        
-        window.external
-            .messages.receive(message => alert(message));
     </script>
 </body>
 </html>

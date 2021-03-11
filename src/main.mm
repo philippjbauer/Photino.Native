@@ -52,13 +52,17 @@ int main()
         ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
             Log::WriteLine("Received message: " + *message);
-            sender->SendScriptMessage("Hello stranger!");
+            sender->SendScriptMessage("Hey George!");
         })
         ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
             Log::WriteLine("Overwrite message: " + *message);
-            *message = "You're an i\\'${hackz}mpostor!";
+            *message = "Hi John!";
             Log::WriteLine("New message: " + *message);
+        })
+        ->AddEventAction(WebViewEvents::CloseScriptConfirm, [](Photino::WebView *sender, std::string *isConfirmedString)
+        {
+            Log::WriteLine("Closed cofirmation dialog with: " + *isConfirmedString);
         });
 
     mainWindowWebView

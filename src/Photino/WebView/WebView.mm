@@ -98,9 +98,9 @@ namespace Photino
         // TextFile webViewExtensions(APP_PATH + "/Assets/WebViewExtensions.js");
 
         std::string webViewExtensions = R"js(
-window.external = {
+const PhotinoApp = {
     messages: {
-        delegates: [],
+        handlers: [],
         send: function(message)
         {
             if (typeof message === 'string')
@@ -111,19 +111,21 @@ window.external = {
                     .postMessage(message);
             }
         },
-        receive: function(delegate)
+        receive: function(handler)
         {
-            if (typeof delegate === 'function')
+            if (typeof handler === 'function')
             {
-                window.external.messages.delegates.push(delegate);
+                PhotinoApp.messages.handlers.push(handler);
             }
+
+            return PhotinoApp.messages;
         },
         dispatch: function(message)
         {
-            const delegates = window.external.messages.delegates;
-            for (let i = 0; i < delegates.length; i++)
+            const handlers = PhotinoApp.messages.handlers;
+            for (let i = 0; i < handlers.length; i++)
             {
-                delegates[i](message);
+                handlers[i](message);
             }
         }
     }
@@ -230,7 +232,7 @@ window.external = {
 
         NSString *evalString = [
             NSString 
-            stringWithFormat:@"window.external.messages.dispatch('%@')",
+            stringWithFormat:@"PhotinoApp.messages.dispatch('%@')",
             [NSString stringWithUTF8String: message.c_str()]
         ];
 
