@@ -57,7 +57,7 @@ int main()
         ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
             Log::WriteLine("Overwrite message: " + *message);
-            *message = "Impostor!";
+            *message = "You're an i\\'${hackz}mpostor!";
             Log::WriteLine("New message: " + *message);
         });
 

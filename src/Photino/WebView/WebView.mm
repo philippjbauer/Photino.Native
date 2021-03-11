@@ -1,4 +1,5 @@
-#include <iostream>
+#include "../../PhotinoShared/StringReplace.h"
+
 #include "WebView.h"
 #include "WebViewUiDelegate.h"
 
@@ -215,10 +216,19 @@ window.external = {
 
         WKWebView *webView = this->GetNativeWebView();
 
+        // Unescape all escaped single-quotes to not
+        // destroy a string that was escaped already.
+        // It's late, this should probably get another
+        // thought in order to catch more edge cases.
+        StringReplace(message, escapedQuote, quote);
+        
+        // Then escape all single quotes.
+        StringReplace(message, quote, escapedQuote);
+
         NSString *evalString = [
             NSString 
             stringWithFormat:@"window.external.messages.dispatch('%@')",
-            [NSString stringWithUTF8String: message.c_str()] // This needs to be escaped! Single quote breaks JS
+            [NSString stringWithUTF8String: message.c_str()]
         ];
 
         [
