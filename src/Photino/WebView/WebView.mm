@@ -220,6 +220,8 @@ window.external = {
         // destroy a string that was escaped already.
         // It's late, this should probably get another
         // thought in order to catch more edge cases.
+        std::string quote = "'";
+        std::string escapedQuote = "\\'";
         StringReplace(message, escapedQuote, quote);
         
         // Then escape all single quotes.
