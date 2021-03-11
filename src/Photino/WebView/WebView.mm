@@ -217,7 +217,7 @@ window.external = {
 
         NSString *evalString = [
             NSString 
-            stringWithFormat:@"window.external.message.dispatch('%@')",
+            stringWithFormat:@"window.external.messages.dispatch('%@')",
             [NSString stringWithUTF8String: message.c_str()] // This needs to be escaped! Single quote breaks JS
         ];
 
