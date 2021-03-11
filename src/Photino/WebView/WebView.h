@@ -16,6 +16,10 @@ namespace Photino
         DidReceiveScriptMessage,
         WillSendScriptMessage,
         DidSendScriptMessage,
+        OpenScriptAlert,
+        CloseScriptAlert,
+        OpenScriptConfirm,
+        CloseScriptConfirm,
     };
 
     class WebView

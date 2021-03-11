@@ -10,6 +10,7 @@ using namespace Photino;
 @interface WebViewUiDelegate : NSObject <WKUIDelegate, WKScriptMessageHandler>
 {
     @public
-        Photino::WebView *webView;
+        NSWindow *nativeWindow;
+        Photino::WebView *photinoWebView;
 }
 @end

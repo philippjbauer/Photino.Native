@@ -25,6 +25,9 @@
             {
                 document.querySelector('.message').innerHTML = message;
             });
+        
+        window.external
+            .messages.receive(message => alert(message));
     </script>
 </body>
 </html>

@@ -53,7 +53,8 @@ namespace Photino
             init
         ] autorelease];
 
-        uiDelegate->webView = this;
+        uiDelegate->nativeWindow = nativeWindow;
+        uiDelegate->photinoWebView = this;
 
         // Setup user content script interop
         WKUserScript *userScript = this->GetUserScript();
