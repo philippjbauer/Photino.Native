@@ -65,8 +65,10 @@ execute-dev:
 	$(DEV_EXE)
 
 create-bundle:
+	rm -rf $(DEST_PUB) &&\
 	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/MacOS &&\
 	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
 	mv $(DEV_EXE) $(DEST_PUB)/PhotinoApp.app/Contents/MacOS/ &&\
 	mv $(DEST_DEV)/Assets $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
+	cp ./macOS\ Icons/Icon-MacOS-512x512@2x.png $(DEST_PUB)/PhotinoApp.app/Contents/Resources/AppIcon.png &&\
 	cp ./Info.plist $(DEST_PUB)/PhotinoApp.app/Contents/
