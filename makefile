@@ -28,7 +28,7 @@ MAC_DEPS = -framework Cocoa\
 
 run: build-exe-dev execute-dev
 
-publish-app: ensure-output-pub compile-exe-dev create-bundle
+publish-app: ensure-output-pub build-exe-dev create-bundle
 
 build-exe-dev: ensure-output-dev copy-assets compile-exe-dev
 
@@ -66,5 +66,7 @@ execute-dev:
 
 create-bundle:
 	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/MacOS &&\
+	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
 	mv $(DEV_EXE) $(DEST_PUB)/PhotinoApp.app/Contents/MacOS/ &&\
-	cp ./Info.plist $(DEST_PUB)/PhotinoApp.app/Contents
+	mv $(DEST_DEV)/Assets $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
+	cp ./Info.plist $(DEST_PUB)/PhotinoApp.app/Contents/
