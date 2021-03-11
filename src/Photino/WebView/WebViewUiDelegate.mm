@@ -1,4 +1,3 @@
-#include <iostream>
 #include "WebViewUiDelegate.h"
 
 using namespace Photino;
@@ -8,7 +7,6 @@ using namespace Photino;
             didReceiveScriptMessage: (WKScriptMessage *)message
     {
         std::string messageString = [message.body UTF8String];
-        webView->Events()->EmitEvent(WebViewEvents::DidReceiveScriptMessage);
-        std::cout << messageString << std::endl;
+        webView->Events()->EmitEvent(WebViewEvents::DidReceiveScriptMessage, &messageString);
     }
 @end

@@ -10,7 +10,7 @@ namespace Photino
 {
     // EventAction
     template<class TEventClass>
-    using EventAction = void (*)(TEventClass *sender);
+    using EventAction = void (*)(TEventClass *sender, std::string *message);
 
     //EventActions
     template<class TEventClass>
@@ -52,7 +52,7 @@ namespace Photino
                 return this;
             }
 
-            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType)
+            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType, std::string *message = nullptr)
             {
                 EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
                 
@@ -65,7 +65,7 @@ namespace Photino
                 {
                     try
                     {
-                        eventAction(_eventClass);
+                        eventAction(_eventClass, message);
                     }
                     catch(const std::exception& e)
                     {

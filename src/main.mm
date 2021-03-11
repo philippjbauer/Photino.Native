@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Photino/App/App.h"
 #include "PhotinoShared/Log.h"
 
@@ -13,7 +11,7 @@ int main()
     App *app = new App();
     app
         ->Events()
-        ->AddEventAction(AppEvents::WillRun, [](App *sender)
+        ->AddEventAction(AppEvents::WillRun, [](App *sender, std::string *empty)
         {
             Log::WriteLine("Application is about to run.");
         });
@@ -22,19 +20,19 @@ int main()
     Window *mainWindow = new Window("Main Window");
     mainWindow
         ->Events()
-        ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender)
+        ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender, std::string *empty)
         {
             Log::WriteLine("Window did resize to: " + sender->GetSize().ToString());
         })
-        ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender)
+        ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender, std::string *empty)
         {
             Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
         })
-        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender)
+        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *empty)
         {
             Log::WriteLine("Window should close soon.");
         })
-        ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender)
+        ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender, std::string *empty)
         {
             Log::WriteLine("Window will close now.");
         });
@@ -43,17 +41,17 @@ int main()
 
     mainWindowWebView
         ->Events()
-        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender)
+        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender, std::string *empty)
         {
             Log::WriteLine("Resource will load.");
         })
-        ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender)
+        ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender, std::string *empty)
         {
             Log::WriteLine("Resource did load.");
         })
-        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender)
+        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
-            Log::WriteLine("Received script message.");
+            Log::WriteLine("Received script message: " + *message);
         });
 
     mainWindowWebView
