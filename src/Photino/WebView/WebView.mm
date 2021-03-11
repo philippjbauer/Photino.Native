@@ -96,29 +96,33 @@ namespace Photino
         // TextFile webViewExtensions(APP_PATH + "/Assets/WebViewExtensions.js");
 
         std::string webViewExtensions = R"js(
-window.__receiveMessageCallbacks = [];
-
-window.__dispatchMessageCallback = function(message)
-{
-    window.__receiveMessageCallbacks
-        .forEach(function(callback) 
-        {
-            callback(message);
-        });
-};
-
 window.external = {
-    message: {
+    messages: {
+        delegates: [],
         send: function(message)
         {
-            window.webkit
-                .messageHandlers
-                .photinointerop
-                .postMessage(message);
+            if (typeof message === 'string')
+            {
+                window.webkit
+                    .messageHandlers
+                    .photinointerop
+                    .postMessage(message);
+            }
         },
-        receive: function(callback)
+        receive: function(delegate)
         {
-            window.__receiveMessageCallbacks.push(callback);
+            if (typeof delegate === 'function')
+            {
+                window.external.messages.delegates.push(delegate);
+            }
+        },
+        dispatch: function(message)
+        {
+            const delegates = window.external.messages.delegates;
+            for (let i = 0; i < delegates.length; i++)
+            {
+                delegates[i](message);
+            }
         }
     }
 };
@@ -201,6 +205,29 @@ window.external = {
         ];
 
         this->Events()->EmitEvent(WebViewEvents::DidLoadHtmlString);
+
+        return this;
+    }
+
+    WebView *WebView::SendScriptMessage(std::string message)
+    {
+        this->Events()->EmitEvent(WebViewEvents::WillSendScriptMessage, &message);
+
+        WKWebView *webView = this->GetNativeWebView();
+
+        NSString *evalString = [
+            NSString 
+            stringWithFormat:@"window.external.message.dispatch('%@')",
+            [NSString stringWithUTF8String: message.c_str()] // This needs to be escaped! Single quote breaks JS
+        ];
+
+        [
+            webView
+            evaluateJavaScript: evalString
+            completionHandler: nil
+        ];
+
+        this->Events()->EmitEvent(WebViewEvents::DidSendScriptMessage, &message);
 
         return this;
     }

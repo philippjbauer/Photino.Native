@@ -4,9 +4,9 @@ using namespace Photino;
 
 @implementation WebViewUiDelegate : NSObject
     - (void)userContentController: (WKUserContentController *)userContentController 
-            didReceiveScriptMessage: (WKScriptMessage *)message
+            didReceiveScriptMessage: (WKScriptMessage *)scriptMessage
     {
-        std::string messageString = [message.body UTF8String];
-        webView->Events()->EmitEvent(WebViewEvents::DidReceiveScriptMessage, &messageString);
+        std::string message = [scriptMessage.body UTF8String];
+        webView->Events()->EmitEvent(WebViewEvents::DidReceiveScriptMessage, &message);
     }
 @end

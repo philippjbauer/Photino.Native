@@ -51,7 +51,14 @@ int main()
         })
         ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
-            Log::WriteLine("Received script message: " + *message);
+            Log::WriteLine("Received message: " + *message);
+            sender->SendScriptMessage("Hello stranger!");
+        })
+        ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
+        {
+            Log::WriteLine("Overwrite message: " + *message);
+            *message = "Impostor!";
+            Log::WriteLine("New message: " + *message);
         });
 
     mainWindowWebView

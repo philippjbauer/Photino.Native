@@ -14,6 +14,8 @@ namespace Photino
         WillLoadHtmlString,
         DidLoadHtmlString,
         DidReceiveScriptMessage,
+        WillSendScriptMessage,
+        DidSendScriptMessage,
     };
 
     class WebView
@@ -60,6 +62,8 @@ namespace Photino
 
             WebView *LoadResource(std::string resource);
             WebView *LoadHtmlString(std::string content);
+
+            WebView *SendScriptMessage(std::string message);
 
             /**
              * Getters & Setters

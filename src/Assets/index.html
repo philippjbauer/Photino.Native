@@ -8,13 +8,22 @@
 </head>
 <body>
     <button>Send Message</button>
+    <div>
+        Response: <span class="message"></span>
+    </div>
     <script>
         document
             .querySelector('button')
             .addEventListener('click', (target, event) =>
             {
-                console.log('Send message to Photino.Native');
-                window.external.message.send('A message from index.html');
+                window.external
+                    .messages.send('Hello Klaus!');
+            });
+        
+        window.external
+            .messages.receive(message =>
+            {
+                document.querySelector('.message').innerHTML = message;
             });
     </script>
 </body>
