@@ -67,20 +67,20 @@ namespace Photino
 
     NSWindow *Window::CreateNativeWindow()
     {
-        NSRect nsWindowFrame = NSMakeRect(0, 0, 0, 0);
+        NSRect windowFrame = NSMakeRect(1, 1, 1, 1);
         
-        NSWindowStyleMask nsWindowStyleMask =
-            NSWindowStyleMaskTitled
+        NSWindowStyleMask windowStyleMask =
+              NSWindowStyleMaskTitled
             | NSWindowStyleMaskClosable
             | NSWindowStyleMaskMiniaturizable
             | NSWindowStyleMaskResizable;
         
         NSWindow *window = [
             [NSWindow alloc]
-            initWithContentRect: nsWindowFrame
-            styleMask: nsWindowStyleMask
+            initWithContentRect: windowFrame
+            styleMask: windowStyleMask
             backing: NSBackingStoreBuffered
-            defer: NO
+            defer: YES
         ];
 
         // Add WindowDelegate
@@ -95,7 +95,7 @@ namespace Photino
         return window;
     }
 
-    Photino::WebView *Window::CreateWebView( NSWindow *nativeWindow)
+    Photino::WebView *Window::CreateWebView(NSWindow *nativeWindow)
     {
         Photino::WebView *webview = new Photino::WebView(nativeWindow, true);
 
