@@ -1,0 +1,37 @@
+html, body {
+    background: #EEE;
+    color: #111;
+}
+
+.full-height {
+    height: 100vh;
+    padding-bottom: 3em;
+}
+
+h1 > .badge {
+    margin-right: -3em;
+    transform: scale(0.5) translate(-3em, -0.65em);
+}
+
+.card-wrapper {
+    width: 80vw;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.card-dark {
+    background: #2a2a2a;
+}
+    .card-dark input,
+    .card-dark input:focus {
+        color: #FFF;
+        background: #333;
+        border-color: #555;
+    }
+
+@media (prefers-color-scheme: dark) {
+    html, body {
+        background: #333;
+        color: #EEE;
+    }
+}
