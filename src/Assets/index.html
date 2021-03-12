@@ -5,50 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photino.Native v2</title>
-    <style>
-        html, body {
-            background: #EEE;
-            margin: 0;
-            padding: 1em;
-            color: #111;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            html, body {
-                background: #333;
-                color: #EEE;
-            }
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <button>Say: Hello Ringo!</button>
-    <div>
-        Response: <span class="message"></span>
+    <div class="container">
+        <div class="row full-height justify-content-center align-items-center">
+            <div class="col">
+                <h1 class="text-center">
+                    Photino.Native <div class="badge bg-primary">version 2.0</div>
+                </h1>
+                <div class="card-wrapper">
+                    <div class="card card-dark rounded shadow mt-5 mb-3">
+                        <form class="card-body card-body">
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-auto">
+                                    <label for="name">Enter your name</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script>
-        // Shorthand for the messaging system
-        const PhotinoMessages = PhotinoApp.messages;
 
-        document
-            .querySelector('button')
-            .addEventListener('click', (target, event) =>
-            {
-                PhotinoMessages.send('Hello Ringo!');
-            });
-        
-        PhotinoMessages
-            .receive(message => alert(message))
-            .receive(message => {
-                const responseElement = document.querySelector('.message');
-
-                if (confirm(message)) {
-                    responseElement.innerHTML = message;
-                }
-                else {
-                    responseElement.innerHTML = "What's up, Paul!";
-                }
-            });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
 </body>
 </html>
