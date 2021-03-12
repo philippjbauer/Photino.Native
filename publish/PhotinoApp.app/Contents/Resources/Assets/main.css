@@ -19,19 +19,19 @@ h1 > .badge {
     margin: 0 auto;
 }
 
-.card-dark {
-    background: #2a2a2a;
-}
-    .card-dark input,
-    .card-dark input:focus {
-        color: #FFF;
-        background: #333;
-        border-color: #555;
-    }
-
 @media (prefers-color-scheme: dark) {
     html, body {
         background: #333;
         color: #EEE;
     }
+
+    .card {
+        background: #2a2a2a;
+    }
+        .card input,
+        .card input:focus {
+            color: #FFF;
+            background: #333;
+            border-color: #555;
+        }
 }
