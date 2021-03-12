@@ -9,6 +9,7 @@ BUILD_FILE = PhotinoApp
 BUILD_PATH = ./build
 BUILD_PATH_DEV = $(BUILD_PATH)/dev
 BUILD_PATH_DEV_BIN = $(BUILD_PATH_DEV)/bin
+BUILD_PATH_DEV_ASSETS = $(BUILD_PATH_DEV_BIN)/Assets
 BUILD_PATH_DEV_LIB = $(BUILD_PATH_DEV)/lib
 BUILD_EXE_DEV = $(BUILD_PATH_DEV_BIN)/$(BUILD_FILE)
 BUILD_DLL_DEV = $(BUILD_PATH_DEV_LIB)/$(BUILD_FILE).dylib
@@ -77,7 +78,8 @@ compile-dll-dev:
 		-o $(BUILD_DLL_DEV)
 
 copy-assets:
-	rm -rf $(BUILD_PATH_DEV_BIN)/Assets &\
+	rm -rf $(BUILD_PATH_DEV_ASSETS) &\
+	mkdir -p $(BUILD_PATH_DEV_ASSETS) &\
 	cp -r $(SRC_ASSETS) $(BUILD_PATH_DEV_BIN)/
 
 execute-dev:
@@ -88,6 +90,6 @@ create-macos-bundle:
 	mkdir -p $(PUB_PATH_MACOS) &&\
 	mkdir -p $(PUB_PATH_RESOURCES) &&\
 	cp $(BUILD_EXE_DEV) $(PUB_PATH_MACOS)/ &&\
-	cp -r $(BUILD_PATH_DEV_BIN)/Assets $(PUB_PATH_RESOURCES) &&\
+	cp -r $(BUILD_PATH_DEV_ASSETS) $(PUB_PATH_RESOURCES) &&\
 	cp ./res/BundleIcon.png $(PUB_PATH_RESOURCES)/ &&\
 	cp ./res/Info.plist $(PUB_PATH_CONTENTS)/
