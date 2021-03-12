@@ -2,19 +2,16 @@
 #include <functional>
 #include <map>
 #include <vector>
+#include "EventAction.h"
 #include "../../PhotinoShared/Log.h"
 
 using namespace PhotinoShared;
 
 namespace Photino
 {
-    // EventAction
-    template<class TEventClass>
-    using EventAction = void (*)(TEventClass *sender, std::string *message);
-
     //EventActions
     template<class TEventClass>
-    using EventActions = std::vector<EventAction<TEventClass> >;
+    using EventActions = std::vector<EventAction<TEventClass>* >;
 
     // EventTypeActions
     template<class TEventClass, typename TEventTypeEnum>
@@ -40,38 +37,13 @@ namespace Photino
 
             ~Events()
             {
-                Log::WriteLine("Destructing Events");
                 delete _eventMap;
             }
 
-            Events<TEventClass, TEventTypeEnum> *AddEventAction(TEventTypeEnum eventType, EventAction<TEventClass> eventAction)
+            Events<TEventClass, TEventTypeEnum> *AddEventAction(TEventTypeEnum eventType, EventAction<TEventClass> *eventAction)
             {
                 EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
                 eventActions->push_back(eventAction);
-
-                return this;
-            }
-
-            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType, std::string *message = nullptr)
-            {
-                EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
-                
-                if (eventActions->size() == 0)
-                {
-                    return this;
-                }
-
-                for (EventAction<TEventClass> eventAction : *eventActions)
-                {
-                    try
-                    {
-                        eventAction(_eventClass, message);
-                    }
-                    catch(const std::exception& e)
-                    {
-                        std::cerr << e.what() << '\n';
-                    }
-                }
 
                 return this;
             }
@@ -100,8 +72,54 @@ namespace Photino
                 return _eventMap;
             }
 
-            // template<typename P>
-            // Events<TEventClass, TEventTypeEnum> *EmitEvent<P>(TEventTypeEnum eventType, P arg1);
+            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType, std::string *message = nullptr)
+            {
+                EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
+                
+                if (eventActions->size() == 0)
+                {
+                    return this;
+                }
+
+                for (EventAction<TEventClass> *eventAction : *eventActions)
+                {
+                    try
+                    {
+                        eventAction->Invoke(_eventClass);
+                    }
+                    catch(const std::exception &e)
+                    {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+
+                return this;
+            }
+
+            template<typename P>
+            Events<TEventClass, TEventTypeEnum> *EmitEvent(TEventTypeEnum eventType, P args1)
+            {
+                EventActions<TEventClass> *eventActions = this->GetEventActionsForEventType(eventType);
+                
+                if (eventActions->size() == 0)
+                {
+                    return this;
+                }
+
+                for (EventAction<TEventClass> *eventAction : *eventActions)
+                {
+                    try
+                    {
+                        eventAction->Invoke(_eventClass, args1);
+                    }
+                    catch(const std::exception &e)
+                    {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+
+                return this;
+            }
 
             // template <typename P, typename H>
             // Events<TEventClass, TEventTypeEnum> *EmitEvent<P, H>(TEventTypeEnum eventType, P arg1, H arg2);

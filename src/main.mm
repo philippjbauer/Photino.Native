@@ -8,62 +8,62 @@ int main()
 {
     Log::WriteLine("Starting execution");
 
-    App *app = new App();
+    App *app = new App();    
     app
         ->Events()
-        ->AddEventAction(AppEvents::WillRun, [](App *sender, std::string *empty)
+        ->AddEventAction(AppEvents::WillRun, new EventAction<App>.Add<EventActionNoArgs>([](App *sender)
         {
             Log::WriteLine("Application is about to run.");
-        });
+        }));
 
     // Main Window
     Window *mainWindow = new Window("Main Window");
-    mainWindow
-        ->Events()
-        ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender, std::string *empty)
-        {
-            Log::WriteLine("Window did resize to: " + sender->GetSize().ToString());
-        })
-        ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender, std::string *empty)
-        {
-            Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
-        })
-        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *empty)
-        {
-            Log::WriteLine("Window should close soon.");
-        })
-        ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender, std::string *empty)
-        {
-            Log::WriteLine("Window will close now.");
-        });
+    // mainWindow
+    //     ->Events()
+    //     ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Window did resize to: " + sender->GetSize().ToString());
+    //     })
+    //     ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
+    //     })
+    //     ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Window should close soon.");
+    //     })
+    //     ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Window will close now.");
+    //     });
 
     Photino::WebView *mainWindowWebView = mainWindow->WebView();
 
-    mainWindowWebView
-        ->Events()
-        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender, std::string *empty)
-        {
-            Log::WriteLine("Resource will load.");
-        })
-        ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender, std::string *empty)
-        {
-            Log::WriteLine("Resource did load.");
-        })
-        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
-        {
-            Log::WriteLine("Received message: " + *message);
-            sender->SendScriptMessage("Hey George!");
-        })
-        ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
-        {
-            Log::WriteLine("Overwrite message: " + *message);
-            *message = "Hi John!";
-            Log::WriteLine("New message: " + *message);
-        })
-        ->AddEventAction(WebViewEvents::CloseScriptConfirm, [](Photino::WebView *sender, std::string *isConfirmedString)
-        {
-            Log::WriteLine("Closed cofirmation dialog with: " + *isConfirmedString);
-        });
+    // mainWindowWebView
+    //     ->Events()
+    //     ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Resource will load.");
+    //     })
+    //     ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender, std::string *empty)
+    //     {
+    //         Log::WriteLine("Resource did load.");
+    //     })
+    //     ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
+    //     {
+    //         Log::WriteLine("Received message: " + *message);
+    //         sender->SendScriptMessage("Hey George!");
+    //     })
+    //     ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
+    //     {
+    //         Log::WriteLine("Overwrite message: " + *message);
+    //         *message = "Hi John!";
+    //         Log::WriteLine("New message: " + *message);
+    //     })
+    //     ->AddEventAction(WebViewEvents::CloseScriptConfirm, [](Photino::WebView *sender, std::string *isConfirmedString)
+    //     {
+    //         Log::WriteLine("Closed cofirmation dialog with: " + *isConfirmedString);
+    //     });
 
     mainWindowWebView
         // ->LoadHtmlString("<html><body><h1>Hello Photino</h1></body></html>");
