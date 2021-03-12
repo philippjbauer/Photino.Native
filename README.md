@@ -2,6 +2,8 @@
 
 The unofficial version 2 of Photino.Native.
 
+<iframe style="width: 100vw; height: calc(100vw * 0.5625)" src="https://www.youtube-nocookie.com/embed/ApMFRFwYCB4&playlist=ApMFRFwYCB4&loop=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay="1"></iframe>
+
 ---
 
 For the current state of development and documentation go to https://www.tryphotino.io!
