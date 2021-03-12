@@ -30,5 +30,6 @@ Quite a bit of the original functionality is already present. But the implementa
 - [ ] GTK4 Implementation ([Get Started](https://www.gtk.org/docs/))
 - [ ] iOS Implementation (How?)
 - [ ] Android Implementation (How?)
+- [ ] Improved macOS App Bundling (dynamic name, eg.)
 
 More to-dos will be added soon.

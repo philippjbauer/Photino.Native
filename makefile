@@ -3,16 +3,24 @@ CFLAGS = -Wall -std=c++17
 DLLFLAGS = -shared -fpic
 
 SRC = ./src
+SRC_ASSETS = $(SRC)/Assets
 
-DEST_PATH = ./build
-DEST_FILE = PhotinoApp
+BUILD_FILE = PhotinoApp
+BUILD_PATH = ./build
+BUILD_PATH_DEV = $(BUILD_PATH)/dev
+BUILD_PATH_DEV_BIN = $(BUILD_PATH_DEV)/bin
+BUILD_PATH_DEV_LIB = $(BUILD_PATH_DEV)/lib
+BUILD_EXE_DEV = $(BUILD_PATH_DEV_BIN)/$(BUILD_FILE)
+BUILD_DLL_DEV = $(BUILD_PATH_DEV_LIB)/$(BUILD_FILE).dylib
+# BUILD_PATH_PROD = $(BUILD_PATH)/prod
+# BUILD_EXE_PROD = $(BUILD_PATH_PROD)/$(BUILD_FILE)
+# BUILD_DLL_PROD = $(BUILD_PATH_PROD)/$(BUILD_FILE).dylib
 
-DEST_PROD = $(DEST_PATH)/prod
-DEST_DEV = $(DEST_PATH)/dev
-DEST_PUB = $(DEST_PATH)/publish
-
-DEV_EXE = $(DEST_DEV)/$(DEST_FILE)
-DEV_DLL = $(DEST_DEV)/$(DEST_FILE).dylib
+PUB_PATH = ./publish
+PUB_PATH_APP = $(PUB_PATH)/$(BUILD_FILE).app
+PUB_PATH_CONTENTS = $(PUB_PATH_APP)/Contents
+PUB_PATH_MACOS = $(PUB_PATH_CONTENTS)/MacOS
+PUB_PATH_RESOURCES = $(PUB_PATH_CONTENTS)/Resources
 
 MAC_SRCS = $(SRC)/Photino/App/*.mm\
 		   $(SRC)/Photino/Structs/*.cpp\
@@ -26,49 +34,60 @@ MAC_EVT_SRCS = $(SRC)/Photino/Events/*.cpp
 MAC_DEPS = -framework Cocoa\
 		   -framework WebKit
 
-run: build-exe-dev execute-dev
+run: ensure-build-exe-dev\
+	 build-exe-dev\
+	 execute-dev
 
-publish-app: ensure-output-pub build-exe-dev create-bundle
+build-exe-dev: ensure-build-exe-dev\
+			   compile-exe-dev\
+			   copy-assets
 
-build-exe-dev: ensure-output-dev copy-assets compile-exe-dev
+build-dll-dev: ensure-build-dll-dev\
+			   compile-dll-dev
 
-build-dll-dev: ensure-output-dev compile-dll-dev
+publish-macos: ensure-build-exe-dev\
+			   build-exe-dev\
+			   ensure-output-pub\
+			   create-macos-bundle
 
-copy-assets:
-	rm -rf $(DEST_DEV)/Assets &&\
-	cp -r $(SRC)/Assets $(DEST_DEV)/
+ensure-build-exe-dev:
+	rm $(BUILD_EXE_DEV) &\
+	mkdir -p $(BUILD_PATH_DEV_BIN)
 
-ensure-output-dev:
-	mkdir -p $(DEST_DEV)
+ensure-build-dll-dev:
+	rm $(BUILD_DLL_DEV) &\
+	mkdir -p $(BUILD_PATH_DEV_LIB)
 
 ensure-output-pub:
-	mkdir -p $(DEST_PUB)
+	rm -rf $(PUB_PATH) &\
+	mkdir -p $(PUB_PATH)
 
 compile-exe-dev:
-	rm $(DEV_EXE) &\
 	$(CC) $(CFLAGS)\
 		$(MAC_DEPS)\
 		$(MAC_SRCS)\
 		$(SRC)/main.mm\
-		-o $(DEV_EXE)
+		-o $(BUILD_EXE_DEV)
 
 compile-dll-dev:
-	rm $(DEV_DLL) &\
 	$(CC) $(CFLAGS) $(DLLFLAGS)\
 		$(MAC_DEPS)\
 		$(MAC_SRCS)\
 		$(SRC)/exports.mm\
-		-o $(DEV_DLL)
+		-o $(BUILD_DLL_DEV)
+
+copy-assets:
+	rm -rf $(BUILD_PATH_DEV_BIN)/Assets &\
+	cp -r $(SRC_ASSETS) $(BUILD_PATH_DEV_BIN)/
 
 execute-dev:
 	echo "----------------\nRun Application:\n----------------\n" &&\
-	$(DEV_EXE)
+	./$(BUILD_EXE_DEV)
 
-create-bundle:
-	rm -rf $(DEST_PUB) &&\
-	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/MacOS &&\
-	mkdir -p $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
-	mv $(DEV_EXE) $(DEST_PUB)/PhotinoApp.app/Contents/MacOS/ &&\
-	mv $(DEST_DEV)/Assets $(DEST_PUB)/PhotinoApp.app/Contents/Resources &&\
-	cp ./macOS\ Icons/Icon-MacOS-512x512@2x.png $(DEST_PUB)/PhotinoApp.app/Contents/Resources/AppIcon.png &&\
-	cp ./Info.plist $(DEST_PUB)/PhotinoApp.app/Contents/
+create-macos-bundle:
+	mkdir -p $(PUB_PATH_MACOS) &&\
+	mkdir -p $(PUB_PATH_RESOURCES) &&\
+	cp $(BUILD_EXE_DEV) $(PUB_PATH_MACOS)/ &&\
+	cp -r $(BUILD_PATH_DEV_BIN)/Assets $(PUB_PATH_RESOURCES) &&\
+	cp ./res/BundleIcon.png $(PUB_PATH_RESOURCES)/ &&\
+	cp ./res/Info.plist $(PUB_PATH_CONTENTS)/

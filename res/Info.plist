@@ -13,7 +13,7 @@
 	<key>CFBundleName</key>
 	<string>PhotinoApp</string>
     <key>CFBundleIconFile</key>
-    <string>AppIcon</string>
+    <string>BundleIcon</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
