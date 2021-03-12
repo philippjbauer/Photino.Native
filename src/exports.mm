@@ -2,5 +2,5 @@
 
 extern "C"
 {
-    EXPORTED PhotinoApp *PhotinoApp_ctor() { return new PhotinoApp(); }
+    EXPORTED Photino::App *PhotinoApp_ctor() { return new Photino::App(); }
 }

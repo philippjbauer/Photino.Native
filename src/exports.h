@@ -1,9 +1,9 @@
 #pragma once
-#include "PhotinoApp/PhotinoApp.h"
+#include "Photino/App/App.h"
 
 #define EXPORTED
 
 extern "C"
 {
-    EXPORTED PhotinoApp *PhotinoApp_ctor();
+    EXPORTED Photino::App *PhotinoApp_ctor();
 }
