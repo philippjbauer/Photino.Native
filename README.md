@@ -2,8 +2,6 @@
 
 The unofficial version 2 of Photino.Native.
 
-<iframe style="width: 100vw; height: calc(100vw * 0.5625)" src="https://www.youtube-nocookie.com/embed/ApMFRFwYCB4&playlist=ApMFRFwYCB4&loop=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay="1"></iframe>
-
 ---
 
 For the current state of development and documentation go to https://www.tryphotino.io!
@@ -13,6 +11,13 @@ For the current state of development and documentation go to https://www.tryphot
 This is a testing ground for improving the original, experimental code by Steve Sanderson. Parts of this code will be transported over to v1 over time. We are trying to not break v1 at this point, but eyeing the release of v2 is a worthy goal, even if it remains the learning experience of using C++ and Objective-C.
 
 Quite a bit of the original functionality is already present. But the implementation will remain macOS only for a little while. Learning Obj-C/Cocoa was enough for the moment. The resulting header files can be separated out and made available for the implementation in gtk and win32.
+
+<a href="https://www.youtube.com/watch?v=ApMFRFwYCB4">
+    <img src="https://img.youtube.com/vi/ApMFRFwYCB4/0.jpg" alt="Photino.Native v2 Demo" style="width: 256px;">
+    <p>Demo of UI interaction (YouTube)</p> 
+</a>
+
+---
 
 ## ToDos
 - [x] Photino App 
