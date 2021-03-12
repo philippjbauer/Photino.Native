@@ -48,19 +48,19 @@ build-dll-dev: ensure-build-dll-dev\
 
 publish-macos: ensure-build-exe-dev\
 			   build-exe-dev\
-			   ensure-output-pub\
+			   ensure-publish-exe-dev\
 			   create-macos-bundle
 
 ensure-build-exe-dev:
-	rm $(BUILD_EXE_DEV) &\
+	rm -rf $(BUILD_PATH_DEV_BIN) &&\
 	mkdir -p $(BUILD_PATH_DEV_BIN)
 
 ensure-build-dll-dev:
-	rm $(BUILD_DLL_DEV) &\
+	rm -rf $(BUILD_PATH_DEV_LIB) &&\
 	mkdir -p $(BUILD_PATH_DEV_LIB)
 
-ensure-output-pub:
-	rm -rf $(PUB_PATH) &\
+ensure-publish-exe-dev:
+	rm -rf $(PUB_PATH) &&\
 	mkdir -p $(PUB_PATH)
 
 compile-exe-dev:
@@ -78,8 +78,8 @@ compile-dll-dev:
 		-o $(BUILD_DLL_DEV)
 
 copy-assets:
-	rm -rf $(BUILD_PATH_DEV_ASSETS) &\
-	mkdir -p $(BUILD_PATH_DEV_ASSETS) &\
+	rm -rf $(BUILD_PATH_DEV_ASSETS) &&\
+	mkdir -p $(BUILD_PATH_DEV_BIN) &&\
 	cp -r $(SRC_ASSETS) $(BUILD_PATH_DEV_BIN)/
 
 execute-dev:
