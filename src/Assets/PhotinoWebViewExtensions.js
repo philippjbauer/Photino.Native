@@ -21,15 +21,17 @@ const PhotinoApp = {
                 const handlers = PhotinoApp.events.handlers[type];
 
                 if (!handlers || handlers.length === 0) {
-                    return;
+                    return true;
                 }
 
                 for (let i = 0; i < handlers.length; i++) {
                     handlers[i](message);
                 }
+
+                return true;
             }
 
-            return PhotinoApp.events;
+            return false;
         }
     },
     messages: {

@@ -119,15 +119,17 @@ const PhotinoApp = {
                 const handlers = PhotinoApp.events.handlers[type];
 
                 if (!handlers || handlers.length === 0) {
-                    return;
+                    return true;
                 }
 
                 for (let i = 0; i < handlers.length; i++) {
                     handlers[i](message);
                 }
+
+                return true;
             }
 
-            return PhotinoApp.events;
+            return false;
         }
     },
     messages: {
@@ -239,9 +241,21 @@ const PhotinoApp = {
             [NSString stringWithUTF8String: message.c_str()]
         ];
 
+        Log::WriteLine([evalString UTF8String]);
+
         [webView
             evaluateJavaScript: evalString
-            completionHandler: nil];
+            completionHandler: ^void (id response, NSError *error)
+            {
+                if (response != nil)
+                {
+                    NSLog(@"Evaluated JavaScript Response: %@", response);
+                }
+                else
+                {
+                    NSLog(@"%@: %@", [error localizedDescription], [error localizedFailureReason]);
+                }
+            }];
 
         this->Events()->EmitEvent(WebViewEvents::DidSendScriptEvent, &message);
 
