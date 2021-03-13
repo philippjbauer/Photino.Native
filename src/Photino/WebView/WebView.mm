@@ -39,7 +39,6 @@ namespace Photino
     WKWebViewConfiguration *WebView::CreateConfiguration()
     {
         WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-        
         return configuration;
     }
 
@@ -66,11 +65,9 @@ namespace Photino
 
         [userContentController addUserScript: userScript];
         
-        [
-            userContentController
+        [userContentController
             addScriptMessageHandler: uiDelegate
-            name: @"photinointerop"
-        ];
+            name: @"photinointerop"];
 
         configuration.userContentController = userContentController;
 
@@ -133,10 +130,7 @@ const PhotinoApp = {
 };
 )js";
 
-        NSString *userScriptSource = [
-            NSString
-            stringWithUTF8String: webViewExtensions.c_str()
-        ];
+        NSString *userScriptSource = [NSString stringWithUTF8String: webViewExtensions.c_str()];
 
         WKUserScript *userScript = [[
             [WKUserScript alloc]
@@ -150,11 +144,7 @@ const PhotinoApp = {
 
     NSURL *WebView::GetResourceURL(std::string resource)
     {
-        NSURL *bundleURL = [
-            [NSBundle mainBundle]
-            resourceURL
-        ];
-
+        NSURL *bundleURL = [[NSBundle mainBundle] resourceURL];
         NSString *resourceString = [NSString stringWithUTF8String: resource.c_str()];
         
         NSURL *resourceURL = [
@@ -231,11 +221,9 @@ const PhotinoApp = {
             [NSString stringWithUTF8String: message.c_str()]
         ];
 
-        [
-            webView
+        [webView
             evaluateJavaScript: evalString
-            completionHandler: nil
-        ];
+            completionHandler: nil];
 
         this->Events()->EmitEvent(WebViewEvents::DidSendScriptMessage, &message);
 
@@ -252,11 +240,9 @@ const PhotinoApp = {
     bool WebView::HasDeveloperExtrasEnabled() { return _hasDeveloperExtrasEnabled; }
     WebView *WebView::HasDeveloperExtrasEnabled(bool value)
     {
-        [
-            this->GetConfiguration().preferences
+        [this->GetConfiguration().preferences
             setValue: value ? @YES : @NO
-            forKey: @"developerExtrasEnabled"
-        ];
+            forKey: @"developerExtrasEnabled"];
 
         _hasDeveloperExtrasEnabled = value;
 
