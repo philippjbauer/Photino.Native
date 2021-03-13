@@ -67,7 +67,7 @@ namespace Photino
         
         [userContentController
             addScriptMessageHandler: uiDelegate
-            name: @"photinointerop"];
+            name: @"photinoIPC"];
 
         configuration.userContentController = userContentController;
 
@@ -105,7 +105,7 @@ const PhotinoApp = {
             {
                 window.webkit
                     .messageHandlers
-                    .photinointerop
+                    .photinoIPC
                     .postMessage(message);
             }
         },
