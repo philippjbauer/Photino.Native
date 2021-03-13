@@ -155,15 +155,12 @@ const PhotinoApp = {
             resourceURL
         ];
 
-        NSString *resourceString = [[
-            NSString stringWithUTF8String: resource.c_str()
-        ] autorelease];
+        NSString *resourceString = [NSString stringWithUTF8String: resource.c_str()];
         
-        NSURL *resourceURL = [[
-            NSURL 
+        NSURL *resourceURL = [
+            NSURL
             URLWithString: resourceString
-            relativeToURL: bundleURL
-        ] autorelease];
+            relativeToURL: bundleURL];
 
         return resourceURL;
     }
@@ -200,16 +197,11 @@ const PhotinoApp = {
 
         WKWebView *webview = this->NativeWebView();
 
-        NSString *htmlString = [[
-            NSString
-            stringWithUTF8String: content.c_str()
-        ] autorelease];
+        NSString *htmlString = [NSString stringWithUTF8String: content.c_str()];
 
-        [
-            webview
+        [webview
             loadHTMLString: htmlString
-            baseURL: nil
-        ];
+            baseURL: nil];
 
         this->Events()->EmitEvent(WebViewEvents::DidLoadHtmlString);
 

@@ -173,10 +173,7 @@ namespace Photino
     {
         _title = value;
 
-        NSString *windowTitle = [[
-            NSString
-            stringWithUTF8String: value.c_str()
-        ] autorelease];
+        NSString *windowTitle = [NSString stringWithUTF8String: value.c_str()];
 
         [this->NativeWindow() setTitle: windowTitle];
 
