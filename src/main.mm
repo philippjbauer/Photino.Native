@@ -24,7 +24,7 @@ int main()
         {
             WindowSize size = sender->GetSize();
 
-            char buffer[50];
+            char buffer[100];
             std::sprintf(buffer, "{\"width\":%d,\"height\":%d}", size.width, size.height);
             std::string data(buffer);
 
@@ -36,8 +36,8 @@ int main()
         {
             WindowLocation location = sender->GetLocation();
 
-            char buffer[50];
-            std::sprintf(buffer, "{\"top\":%d,\"left\":%d}", location.top, location.left);
+            char buffer[100];
+            std::sprintf(buffer, "{\"left\":%d,\"top\":%d}", location.left, location.top);
             std::string data(buffer);
 
             Log::WriteLine("Window did move to: " + location.ToString());
@@ -64,11 +64,6 @@ int main()
         ->AddEventAction(WebViewEvents::DidLoadResource, [&](Photino::WebView *sender, std::string *empty)
         {
             Log::WriteLine("Resource did load.");
-
-            mainWindow
-                ->Events()
-                ->EmitEvent(WindowEvents::WindowDidResize)
-                ->EmitEvent(WindowEvents::WindowDidMove);
         })
         ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
