@@ -1,3 +1,4 @@
+#include "../../PhotinoHelpers/InvokeOnMainThread.h"
 #include "Alert.h"
 
 namespace Photino
@@ -22,25 +23,33 @@ namespace Photino
             ->AddButton(buttonLabel, buttonValue);
     }
 
+    Alert::~Alert()
+    {
+        [_alert release];
+        delete _events;
+    }
+
     Events<Alert, AlertEvents> *Alert::Events() { return _events; }
 
-    void Alert::Open(std::function<void (std::string)> completionHandler)
+    void Alert::Open(std::function<void (std::string)> callback)
     {
         this->Events()->EmitEvent(AlertEvents::WillOpen);
 
-        [_alert
-            beginSheetModalForWindow: _window
-            completionHandler:^void (NSModalResponse responseCode) {
-                this->Events()->EmitEvent(AlertEvents::WillClose);
-                
-                if (completionHandler != nullptr)
+        PhotinoHelpers::InvokeOnMainThread(^{
+            [_alert
+                beginSheetModalForWindow: _window
+                completionHandler: ^void (NSModalResponse responseCode)
                 {
-                    completionHandler(_responseValues.at(responseCode));
-                }
+                    this->Events()->EmitEvent(AlertEvents::WillClose);
+                    
+                    if (callback != nullptr)
+                    {
+                        callback(_responseValues.at(responseCode));
+                    }
 
-                [_alert release];
-            }
-        ];
+                    [_alert release];
+                }];
+        });
         
         this->Events()->EmitEvent(AlertEvents::DidOpen);
     }

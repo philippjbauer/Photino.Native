@@ -33,9 +33,11 @@ namespace Photino
                 std::string buttonLabel = "Confirm",
                 std::string buttonValue = "confirmed");
 
+            ~Alert();
+
             Events<Alert, AlertEvents> *Events();
 
-            void Open(std::function<void (std::string)> completionHandler = nullptr);
+            void Open(std::function<void (std::string)> callback = nullptr);
 
             Alert *SetStyle(NSAlertStyle style);
             Alert *SetTitle(std::string title);
