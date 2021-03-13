@@ -58,7 +58,45 @@ int main()
             }
             else
             {
-                sender->SendScriptMessage("You message was too long!");
+                // NSAlert* alert = [[NSAlert alloc] init];
+
+                // [alert setAlertStyle: NSAlertStyleInformational];
+                // [alert setMessageText: @"Alert"];
+                // [alert setInformativeText: @"Your input is too long!"];
+                // [alert addButtonWithTitle: @"OK"];
+
+                // [alert
+                //     beginSheetModalForWindow: sender->NativeWindow()
+                //     completionHandler:^void (NSModalResponse response) {
+                //         // photinoWebView->Events()->EmitEvent(WebViewEvents::CloseScriptAlert);
+                //         // completionHandler();
+                //         [alert release];
+                //     }
+                // ];
+
+                Alert *alert = new Alert(
+                    sender->NativeWindow(),
+                    "Alert",
+                    "Your input is too long!");
+                
+                alert
+                    ->Events()
+                    ->AddEventAction(AlertEvents::WillOpen, [](Alert *sender, std::string *empty)
+                    {
+                        Log::WriteLine("Alert will open.");
+                    })
+                    ->AddEventAction(AlertEvents::DidOpen, [](Alert *sender, std::string *empty)
+                    {
+                        Log::WriteLine("Alert did open.");
+                    })
+                    ->AddEventAction(AlertEvents::WillClose, [](Alert *sender, std::string *empty)
+                    {
+                        Log::WriteLine("Alert will close.");
+                    });
+                
+                alert->Open();
+
+                Log::WriteLine("Alert passed");
             }
         })
         // ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)
@@ -76,7 +114,7 @@ int main()
         // ->LoadHtmlString("<html><body><h1>Hello Photino</h1></body></html>");
         ->LoadResource("Assets/index.html");
         // ->LoadResource("http://www.tryphotino.io");
-    
+
     // Second Window
     // Window *secondWindow = new Window("Second Window");
     // secondWindow

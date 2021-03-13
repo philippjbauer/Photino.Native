@@ -3,6 +3,7 @@
 #include <vector>
 #include <Cocoa/Cocoa.h>
 
+#include "../Alert/Alert.h"
 #include "../Events/Events.h"
 #include "../Structs/Monitor.h"
 #include "../Structs/MonitorFrame.h"
