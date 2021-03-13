@@ -23,10 +23,8 @@ PUB_PATH_CONTENTS = $(PUB_PATH_APP)/Contents
 PUB_PATH_MACOS = $(PUB_PATH_CONTENTS)/MacOS
 PUB_PATH_RESOURCES = $(PUB_PATH_CONTENTS)/Resources
 
-MAC_SRCS = $(SRC)/Photino/App/*.mm\
-		   $(SRC)/Photino/Structs/*.cpp\
-		   $(SRC)/Photino/WebView/*.mm\
-		   $(SRC)/Photino/Window/*.mm\
+MAC_SRCS = $(SRC)/Photino/**/*.mm\
+		   $(SRC)/Photino/**/*.cpp\
 		   $(SRC)/PhotinoHelpers/*.mm\
 		   $(SRC)/PhotinoShared/*.cpp
 
