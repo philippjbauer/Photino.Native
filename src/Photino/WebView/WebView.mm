@@ -123,7 +123,12 @@ const PhotinoApp = {
                 }
 
                 for (let i = 0; i < handlers.length; i++) {
-                    handlers[i](message);
+                    if (message === undefined) {
+                        handlers[i]();
+                    }
+                    else {
+                        handlers[i](message);
+                    }
                 }
 
                 return true;
@@ -223,23 +228,42 @@ const PhotinoApp = {
 
         // Unescape all escaped single-quotes to not
         // destroy a string that was escaped already.
+
+        // ToDo:
         // It's late, this should probably get another
         // thought in order to catch more edge cases.
         std::string quote = "'";
         std::string escapedQuote = "\\'";
-        StringReplace(type, escapedQuote, quote);
-        StringReplace(message, escapedQuote, quote);
-        
-        // Then escape all single quotes.
-        StringReplace(type, quote, escapedQuote);
-        StringReplace(message, quote, escapedQuote);
 
-        NSString *evalString = [
-            NSString 
-            stringWithFormat:@"PhotinoApp.events.emitEvent('%@', '%@')",
-            [NSString stringWithUTF8String: type.c_str()],
-            [NSString stringWithUTF8String: message.c_str()]
-        ];
+        // Escape event type
+        StringReplace(type, escapedQuote, quote);
+        StringReplace(type, quote, escapedQuote);
+        
+        // Escape event message
+        if (message != "")
+        {
+            StringReplace(message, escapedQuote, quote);
+            StringReplace(message, quote, escapedQuote);
+        }
+
+        NSString *evalString;
+        if (message == "")
+        {
+            evalString = [
+                NSString 
+                stringWithFormat:@"PhotinoApp.events.emitEvent('%@')",
+                [NSString stringWithUTF8String: type.c_str()]
+            ];
+        }
+        else
+        {
+            evalString = [
+                NSString 
+                stringWithFormat:@"PhotinoApp.events.emitEvent('%@', '%@')",
+                [NSString stringWithUTF8String: type.c_str()],
+                [NSString stringWithUTF8String: message.c_str()]
+            ];
+        }
 
         Log::WriteLine([evalString UTF8String]);
 

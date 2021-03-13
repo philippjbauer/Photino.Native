@@ -71,7 +71,7 @@ namespace Photino
             WebView *LoadResource(std::string resource);
             WebView *LoadHtmlString(std::string content);
 
-            WebView *SendScriptEvent(std::string event, std::string message);
+            WebView *SendScriptEvent(std::string event, std::string message = "");
             WebView *SendScriptMessage(std::string message);
 
             /**

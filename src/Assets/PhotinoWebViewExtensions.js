@@ -25,7 +25,12 @@ const PhotinoApp = {
                 }
 
                 for (let i = 0; i < handlers.length; i++) {
-                    handlers[i](message);
+                    if (message === undefined) {
+                        handlers[i]();
+                    }
+                    else {
+                        handlers[i](message);
+                    }
                 }
 
                 return true;
