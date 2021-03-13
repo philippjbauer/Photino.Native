@@ -24,7 +24,7 @@ namespace Photino
 
     Events<Alert, AlertEvents> *Alert::Events() { return _events; }
 
-    void Alert::Open(void completionHandler(std::string response))
+    void Alert::Open(std::function<void (std::string)> completionHandler)
     {
         this->Events()->EmitEvent(AlertEvents::WillOpen);
 

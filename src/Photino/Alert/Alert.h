@@ -1,6 +1,7 @@
 #pragma once
-#include <string>
+#include <functional>
 #include <map>
+#include <string>
 #include <Cocoa/Cocoa.h>
 #include "../Events/Events.h"
 
@@ -29,12 +30,12 @@ namespace Photino
                 std::string message,
                 std::string title = "Info",
                 NSAlertStyle style = NSAlertStyleInformational,
-                std::string buttonLabel = "OK",
-                std::string buttonValue = "OK");
+                std::string buttonLabel = "Confirm",
+                std::string buttonValue = "confirmed");
 
             Events<Alert, AlertEvents> *Events();
 
-            void Open(void completionHandler(std::string response) = nullptr);
+            void Open(std::function<void (std::string)> completionHandler = nullptr);
 
             Alert *SetStyle(NSAlertStyle style);
             Alert *SetTitle(std::string title);
