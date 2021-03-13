@@ -58,26 +58,16 @@ int main()
             }
             else
             {
-                // NSAlert* alert = [[NSAlert alloc] init];
-
-                // [alert setAlertStyle: NSAlertStyleInformational];
-                // [alert setMessageText: @"Alert"];
-                // [alert setInformativeText: @"Your input is too long!"];
-                // [alert addButtonWithTitle: @"OK"];
-
-                // [alert
-                //     beginSheetModalForWindow: sender->NativeWindow()
-                //     completionHandler:^void (NSModalResponse response) {
-                //         // photinoWebView->Events()->EmitEvent(WebViewEvents::CloseScriptAlert);
-                //         // completionHandler();
-                //         [alert release];
-                //     }
-                // ];
-
                 Alert *alert = new Alert(
                     sender->NativeWindow(),
-                    "Alert",
-                    "Your input is too long!");
+                    "Your message is too long!",
+                    "Warning",
+                    NSAlertStyleCritical,
+                    "Confirm",
+                    "confirmed");
+                
+                alert->AddButton("Abort", "aborted");
+                alert->AddButton("Report", "reported");
                 
                 alert
                     ->Events()
@@ -93,10 +83,11 @@ int main()
                     {
                         Log::WriteLine("Alert will close.");
                     });
-                
-                alert->Open();
 
-                Log::WriteLine("Alert passed");
+                alert->Open([](std::string response)
+                {
+                    Log::WriteLine("User " + response + " event.");
+                });
             }
         })
         // ->AddEventAction(WebViewEvents::WillSendScriptMessage, [](Photino::WebView *sender, std::string *message)

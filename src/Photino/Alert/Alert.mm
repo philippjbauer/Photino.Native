@@ -1,64 +1,84 @@
-#include "../../PhotinoHelpers/InvokeOnMainThread.h"
 #include "Alert.h"
 
 namespace Photino
 {
     Alert::Alert(
-        NSWindow *nativeWindow,
-        std::string title,
+        NSWindow *window,
         std::string message,
-        NSAlertStyle alertStyle)
-        : _nativeWindow(nativeWindow),
-          _title(title),
-          _message(message),
-          _alertStyle(alertStyle)
-    {
-        this->Init();
-    }
-
-    Alert::~Alert()
-    {
-        // delete _events;
-        // [_alert release];
-    }
-
-    Alert *Alert::Init()
+        std::string title,
+        NSAlertStyle style,
+        std::string buttonLabel,
+        std::string buttonValue
+        )
+        : _window(window)
     {
         _events = new Photino::Events<Alert, AlertEvents>(this);
 
         _alert = [[NSAlert alloc] init];
 
-        [_alert setAlertStyle: _alertStyle];
-        [_alert setMessageText: [[NSString stringWithUTF8String: _title.c_str()] autorelease]];
-        [_alert setInformativeText: [[NSString stringWithUTF8String: _message.c_str()] autorelease]];
-        [_alert addButtonWithTitle: @"OK"];
-
-        return this;
+        this->SetMessage(message)
+            ->SetTitle(title)
+            ->SetStyle(style)
+            ->AddButton(buttonLabel, buttonValue);
     }
 
     Events<Alert, AlertEvents> *Alert::Events() { return _events; }
-    NSAlert *Alert::NativeAlert() { return _alert; }
 
-    void Alert::Open(void completionHandler (Alert *alert))
+    void Alert::Open(void completionHandler(std::string response))
     {
         this->Events()->EmitEvent(AlertEvents::WillOpen);
-        
-        PhotinoHelpers::InvokeOnMainThread(^{
-            [_alert
-                beginSheetModalForWindow: _nativeWindow
-                completionHandler: ^void (NSModalResponse response)
+
+        [_alert
+            beginSheetModalForWindow: _window
+            completionHandler:^void (NSModalResponse responseCode) {
+                this->Events()->EmitEvent(AlertEvents::WillClose);
+                
+                if (completionHandler != nullptr)
                 {
-                    this->Events()->EmitEvent(AlertEvents::WillClose);
-                    
-                    if (completionHandler != nullptr)
-                    {
-                        completionHandler(this);
-                    }
-                    
-                    // [_alert release];
-                }];
-        });
+                    completionHandler(_responseValues.at(responseCode));
+                }
+
+                [_alert release];
+            }
+        ];
         
         this->Events()->EmitEvent(AlertEvents::DidOpen);
+    }
+
+    Alert *Alert::SetStyle(NSAlertStyle style)
+    {
+        [_alert setAlertStyle: style];
+        return this;
+    }
+
+    Alert *Alert::SetTitle(std::string title)
+    {
+        [_alert setMessageText: [NSString stringWithUTF8String: title.c_str()]];
+        return this;
+    }
+
+    Alert *Alert::SetMessage(std::string message)
+    {
+        [_alert setInformativeText: [NSString stringWithUTF8String: message.c_str()]];
+        return this;
+    }
+
+    Alert *Alert::AddButton(std::string label, std::string value)
+    {
+        NSModalResponse modalResponse = NSAlertFirstButtonReturn;
+        if (_buttonCount == 1) { modalResponse = NSAlertSecondButtonReturn; }
+        else if (_buttonCount == 2) { modalResponse = NSAlertThirdButtonReturn; }
+        else if (_buttonCount > 2)
+        {
+            Log::WriteLine("Can't add more than 3 buttons.");
+            return this;
+        }
+        
+        _buttonCount++;
+
+        _responseValues.insert(std::pair<NSModalResponse, std::string>(modalResponse, value));
+        [_alert addButtonWithTitle: [NSString stringWithUTF8String: label.c_str()]];
+
+        return this;
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include <functional>
 #include <string>
+#include <map>
 #include <Cocoa/Cocoa.h>
 #include "../Events/Events.h"
 
@@ -16,34 +16,29 @@ namespace Photino
     class Alert
     {
         private:
+            NSWindow *_window;
+            NSAlert *_alert;
             Events<Alert, AlertEvents> *_events;
 
-            NSAlert *_alert;
-            NSWindow *_nativeWindow;
-            std::string _title;
-            std::string _message;
-            NSAlertStyle _alertStyle;
-
-            Alert *Init();
+            unsigned char _buttonCount = 0;
+            std::map<NSModalResponse, std::string> _responseValues;
 
         public:
-            /**
-             *  Constructor / Destructor
-             */
             Alert(
-                NSWindow *nativeWindow,
-                std::string title,
+                NSWindow *window,
                 std::string message,
-                NSAlertStyle alertStyle = NSAlertStyleInformational);
+                std::string title = "Info",
+                NSAlertStyle style = NSAlertStyleInformational,
+                std::string buttonLabel = "OK",
+                std::string buttonValue = "OK");
 
-            ~Alert();
-
-            /**
-             * Class Methods
-             */
             Events<Alert, AlertEvents> *Events();
-            NSAlert *NativeAlert();
 
-            void Open(void completionHandler (Alert *alert) = nullptr);
+            void Open(void completionHandler(std::string response) = nullptr);
+
+            Alert *SetStyle(NSAlertStyle style);
+            Alert *SetTitle(std::string title);
+            Alert *SetMessage(std::string message);
+            Alert *AddButton(std::string label, std::string value);
     };
 }
