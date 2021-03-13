@@ -22,11 +22,27 @@ int main()
         ->Events()
         ->AddEventAction(WindowEvents::WindowDidResize, [](Window *sender, std::string *empty)
         {
-            Log::WriteLine("Window did resize to: " + sender->GetSize().ToString());
+            WindowSize size = sender->GetSize();
+
+            char buffer[50];
+            std::sprintf(buffer, "{\"width\":%d,\"height\":%d}", size.width, size.height);
+            std::string data(buffer);
+
+            Log::WriteLine("Window did resize to: " + size.ToString());
+
+            sender->WebView()->SendScriptEvent("window-did-resize", data);
         })
         ->AddEventAction(WindowEvents::WindowDidMove, [](Window *sender, std::string *empty)
         {
-            Log::WriteLine("Window did move to: " + sender->GetLocation().ToString());
+            WindowLocation location = sender->GetLocation();
+
+            char buffer[50];
+            std::sprintf(buffer, "{\"top\":%d,\"left\":%d}", location.top, location.left);
+            std::string data(buffer);
+
+            Log::WriteLine("Window did move to: " + location.ToString());
+
+            sender->WebView()->SendScriptEvent("window-did-move", data);
         })
         ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *empty)
         {
@@ -45,9 +61,14 @@ int main()
         {
             Log::WriteLine("Resource will load: " + *resourceURL);
         })
-        ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender, std::string *empty)
+        ->AddEventAction(WebViewEvents::DidLoadResource, [&](Photino::WebView *sender, std::string *empty)
         {
             Log::WriteLine("Resource did load.");
+
+            mainWindow
+                ->Events()
+                ->EmitEvent(WindowEvents::WindowDidResize)
+                ->EmitEvent(WindowEvents::WindowDidMove);
         })
         ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
         {
@@ -102,9 +123,7 @@ int main()
         });
 
     mainWindowWebView
-        // ->LoadHtmlString("<html><body><h1>Hello Photino</h1></body></html>");
         ->LoadResource("Assets/index.html");
-        // ->LoadResource("http://www.tryphotino.io");
 
     // Second Window
     // Window *secondWindow = new Window("Second Window");
