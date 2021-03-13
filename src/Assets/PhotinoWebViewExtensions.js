@@ -38,7 +38,6 @@ const PhotinoApp = {
                 window.webkit
                     .messageHandlers
                     .photinoIPC
-                    .messages
                     .postMessage(message);
             }
         },
