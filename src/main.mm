@@ -41,9 +41,9 @@ int main()
 
     mainWindowWebView
         ->Events()
-        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender, std::string *empty)
+        ->AddEventAction(WebViewEvents::WillLoadResource, [](Photino::WebView *sender, std::string *resourceURL)
         {
-            Log::WriteLine("Resource will load.");
+            Log::WriteLine("Resource will load: " + *resourceURL);
         })
         ->AddEventAction(WebViewEvents::DidLoadResource, [](Photino::WebView *sender, std::string *empty)
         {

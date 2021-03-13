@@ -55,7 +55,7 @@ namespace Photino
              */
             WebView(
                 NSWindow *nativeWindow,
-                bool enableDevTools = false);
+                bool hasDeveloperExtrasEnabled = false);
 
             ~WebView();
 
@@ -70,11 +70,11 @@ namespace Photino
             WebView *LoadHtmlString(std::string content);
 
             WebView *SendScriptMessage(std::string message);
+            WebView *SendScriptEvent(std::string event, std::string message);
 
             /**
              * Getters & Setters
              */
-
             // HasDeveloperExtrasEnabled
             bool HasDeveloperExtrasEnabled();
             WebView *HasDeveloperExtrasEnabled(bool value);
