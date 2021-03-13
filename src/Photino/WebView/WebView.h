@@ -2,7 +2,6 @@
 #include <string>
 #include <Cocoa/Cocoa.h>
 #include <WebKit/WebKit.h>
-
 #include "../Events/Events.h"
 
 namespace Photino
@@ -27,6 +26,7 @@ namespace Photino
         private:
             WKWebViewConfiguration *_configuration;
             WKWebView *_nativeWebView;
+            NSWindow *_nativeWindow;
 
             Events<WebView, WebViewEvents> *_events;
 
@@ -35,7 +35,7 @@ namespace Photino
             /**
              * Class Methods
              */
-            WebView *Init(NSWindow *nativeWindow);
+            WebView *Init();
             WKWebViewConfiguration *CreateConfiguration();
             WKWebView *CreateNativeWebView(
                 NSWindow *nativeWindow,
@@ -63,6 +63,8 @@ namespace Photino
              * Class Methods
              */
             Events<WebView, WebViewEvents> *Events();
+            WKWebView *NativeWebView();
+            NSWindow *NativeWindow();
 
             WebView *LoadResource(std::string resource);
             WebView *LoadHtmlString(std::string content);
@@ -72,8 +74,6 @@ namespace Photino
             /**
              * Getters & Setters
              */
-            // WebView
-            WKWebView *GetNativeWebView();
 
             // HasDeveloperExtrasEnabled
             bool HasDeveloperExtrasEnabled();

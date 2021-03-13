@@ -10,27 +10,28 @@ namespace Photino
     */
     WebView::WebView(
         NSWindow *nativeWindow,
-        bool developerExtrasEnabled)
+        bool hasDeveloperExtrasEnabled)
+        : _nativeWindow(nativeWindow),
+          _hasDeveloperExtrasEnabled(hasDeveloperExtrasEnabled)
     {
-        this->Init(nativeWindow)
-            ->HasDeveloperExtrasEnabled(developerExtrasEnabled);
+        this->Init();
     }
 
     WebView::~WebView()
     {
         [this->GetConfiguration() release];
-        [this->GetNativeWebView() release];
+        [this->NativeWebView() release];
     }
 
     /**
     * Class Methods
     */
-    WebView *WebView::Init(NSWindow *nativeWindow)
+    WebView *WebView::Init()
     {
         _events = new Photino::Events<WebView, WebViewEvents>(this);
 
         _configuration = this->CreateConfiguration();
-        _nativeWebView = this->CreateNativeWebView(nativeWindow, this->GetConfiguration());
+        _nativeWebView = this->CreateNativeWebView(_nativeWindow, this->GetConfiguration());
 
         return this;
     }
@@ -168,12 +169,14 @@ const PhotinoApp = {
     }
 
     Events<WebView, WebViewEvents> *WebView::Events() { return _events; }
+    WKWebView *WebView::NativeWebView() { return _nativeWebView; }
+    NSWindow *WebView::NativeWindow() { return _nativeWindow; }
 
     WebView *WebView::LoadResource(std::string resource)
     {
         this->Events()->EmitEvent(WebViewEvents::WillLoadResource);
 
-        WKWebView *webview = this->GetNativeWebView();
+        WKWebView *webview = this->NativeWebView();
 
         NSURL *resourceURL = this->GetResourceURL(resource);
 
@@ -195,7 +198,7 @@ const PhotinoApp = {
     {
         this->Events()->EmitEvent(WebViewEvents::WillLoadHtmlString);
 
-        WKWebView *webview = this->GetNativeWebView();
+        WKWebView *webview = this->NativeWebView();
 
         NSString *htmlString = [[
             NSString
@@ -217,7 +220,7 @@ const PhotinoApp = {
     {
         this->Events()->EmitEvent(WebViewEvents::WillSendScriptMessage, &message);
 
-        WKWebView *webView = this->GetNativeWebView();
+        WKWebView *webView = this->NativeWebView();
 
         // Unescape all escaped single-quotes to not
         // destroy a string that was escaped already.
@@ -250,9 +253,6 @@ const PhotinoApp = {
     /**
     * Getters & Setters
     */
-    // Configuration
-    WKWebView *WebView::GetNativeWebView() { return _nativeWebView; }
-
     // Configuration
     WKWebViewConfiguration *WebView::GetConfiguration() { return _configuration; }
 
