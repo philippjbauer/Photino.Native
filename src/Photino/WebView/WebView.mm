@@ -131,7 +131,6 @@ const PhotinoApp = {
         }
     },
     messages: {
-        handlers: [],
         send: function(message) {
             if (typeof message === 'string') {
                 window.webkit
@@ -143,9 +142,6 @@ const PhotinoApp = {
         receive: function(handler) {
             PhotinoApp.events.addEventHandler('message-received', handler);
             return PhotinoApp.messages;
-        },
-        dispatch: function(message) {
-            PhotinoApp.events.emitEvent('message-received', message);
         }
     }
 };
@@ -217,9 +213,9 @@ const PhotinoApp = {
         return this;
     }
 
-    WebView *WebView::SendScriptMessage(std::string message)
+    WebView *WebView::SendScriptEvent(std::string type, std::string message)
     {
-        this->Events()->EmitEvent(WebViewEvents::WillSendScriptMessage, &message);
+        this->Events()->EmitEvent(WebViewEvents::WillSendScriptEvent, &message);
 
         WKWebView *webView = this->NativeWebView();
 
@@ -229,14 +225,17 @@ const PhotinoApp = {
         // thought in order to catch more edge cases.
         std::string quote = "'";
         std::string escapedQuote = "\\'";
+        StringReplace(type, escapedQuote, quote);
         StringReplace(message, escapedQuote, quote);
         
         // Then escape all single quotes.
+        StringReplace(type, quote, escapedQuote);
         StringReplace(message, quote, escapedQuote);
 
         NSString *evalString = [
             NSString 
-            stringWithFormat:@"PhotinoApp.messages.dispatch('%@')",
+            stringWithFormat:@"PhotinoApp.events.emitEvent('%@', '%@')",
+            [NSString stringWithUTF8String: type.c_str()],
             [NSString stringWithUTF8String: message.c_str()]
         ];
 
@@ -244,9 +243,14 @@ const PhotinoApp = {
             evaluateJavaScript: evalString
             completionHandler: nil];
 
-        this->Events()->EmitEvent(WebViewEvents::DidSendScriptMessage, &message);
+        this->Events()->EmitEvent(WebViewEvents::DidSendScriptEvent, &message);
 
         return this;
+    }
+
+    WebView *WebView::SendScriptMessage(std::string message)
+    {
+        return this->SendScriptEvent("message-received", message);
     }
 
     /**

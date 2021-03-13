@@ -15,6 +15,8 @@ namespace Photino
         DidReceiveScriptMessage,
         WillSendScriptMessage,
         DidSendScriptMessage,
+        WillSendScriptEvent,
+        DidSendScriptEvent,
         OpenScriptAlert,
         CloseScriptAlert,
         OpenScriptConfirm,
@@ -69,8 +71,8 @@ namespace Photino
             WebView *LoadResource(std::string resource);
             WebView *LoadHtmlString(std::string content);
 
-            WebView *SendScriptMessage(std::string message);
             WebView *SendScriptEvent(std::string event, std::string message);
+            WebView *SendScriptMessage(std::string message);
 
             /**
              * Getters & Setters

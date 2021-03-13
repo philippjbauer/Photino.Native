@@ -33,7 +33,6 @@ const PhotinoApp = {
         }
     },
     messages: {
-        handlers: [],
         send: function(message) {
             if (typeof message === 'string') {
                 window.webkit
@@ -46,9 +45,6 @@ const PhotinoApp = {
         receive: function(handler) {
             PhotinoApp.events.addEventHandler('message-received', handler);
             return PhotinoApp.messages;
-        },
-        dispatch: function(message) {
-            PhotinoApp.events.emitEvent('message-received', message);
         }
     }
 };
