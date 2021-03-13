@@ -90,4 +90,5 @@ create-macos-bundle:
 	cp $(BUILD_EXE_DEV) $(PUB_PATH_MACOS)/ &&\
 	cp -r $(BUILD_PATH_DEV_ASSETS) $(PUB_PATH_RESOURCES) &&\
 	cp ./res/BundleIcon.png $(PUB_PATH_RESOURCES)/ &&\
-	cp ./res/Info.plist $(PUB_PATH_CONTENTS)/
+	cp ./res/Info.plist $(PUB_PATH_CONTENTS)/ &&\
+	open $(PUB_PATH)
