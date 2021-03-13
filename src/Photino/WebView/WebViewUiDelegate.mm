@@ -11,7 +11,10 @@ using namespace Photino;
         photinoWebView->Events()->EmitEvent(WebViewEvents::DidReceiveScriptMessage, &message);
     }
 
-    - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)scriptMessage initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler
+    - (void)webView: (WKWebView *)webView
+            runJavaScriptAlertPanelWithMessage: (NSString *)scriptMessage
+            initiatedByFrame: (WKFrameInfo *)frame
+            completionHandler: (void (^)(void))completionHandler
     {
         // We don't use the (NSString *)scriptMessage directly
         // so that it can be mutated in the emitted event
@@ -27,7 +30,10 @@ using namespace Photino;
         });
     }
 
-    - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)scriptMessage initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler
+    - (void)webView:(WKWebView *)webView
+            runJavaScriptConfirmPanelWithMessage: (NSString *)scriptMessage
+            initiatedByFrame: (WKFrameInfo *)frame
+            completionHandler: (void (^)(BOOL result))completionHandler
     {
         // We don't use the (NSString *)scriptMessage directly
         // so that it can be mutated in the emitted event
@@ -53,8 +59,9 @@ using namespace Photino;
         });
     }
 
-    // - (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString *result))completionHandler
-    // {
-
-    // }
+    // - (void)webView:(WKWebView *)webView
+    // runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt
+    // defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame
+    // completionHandler:(void (^)(NSString *result))completionHandler
+    // { }
 @end
