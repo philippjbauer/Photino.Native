@@ -9,8 +9,8 @@ using namespace PhotinoShared;
 namespace Photino
 {
     // EventAction
-    template<class TEventClass>
-    using EventAction = void (*)(TEventClass *sender, std::string *message);
+    template <class TEventClass>
+    using EventAction = std::function<void(TEventClass*, std::string*)>;
 
     //EventActions
     template<class TEventClass>
