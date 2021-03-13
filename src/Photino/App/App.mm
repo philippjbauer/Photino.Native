@@ -17,15 +17,9 @@ namespace Photino
     {
         this->Events()->EmitEvent(AppEvents::WillDestruct);
 
-        // for (Window *window : _windows)
-        // {
-        //     delete window;
-        // }
-
-        [_application release];
         [_pool release];
-
-        delete this->Events();
+        delete _events;
+        delete _windows;
     }
 
     App *App::Init()
@@ -55,7 +49,7 @@ namespace Photino
     void App::Run()
     {
         this->Events()->EmitEvent(AppEvents::WillRun);
-        [_application run];
+        [NSApp run];
     }
 
     App *App::AddWindow(Window *window)
