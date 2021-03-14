@@ -48,7 +48,7 @@ int main()
         {
             Log::WriteLine("Window should close soon.");
 
-            *shouldClose = "NO";
+            *shouldClose = "NO"; // prevent default
 
             Alert *alert = new Alert(
                 sender->NativeWindow(),
@@ -59,13 +59,13 @@ int main()
                 "close");
             
             alert->AddButton("Cancel", "cancel");
-
-            alert->Open([&sender](std::string response)
+            
+            alert->Open([sender](std::string response)
             {
-                Log::WriteLine(response);
                 if (response == "close")
                 {
-                    [sender->NativeWindow() close];
+                    sender->ForceClose();
+                    delete sender;
                 }
             });
         })
