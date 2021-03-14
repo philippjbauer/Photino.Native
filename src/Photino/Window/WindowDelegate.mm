@@ -20,22 +20,10 @@ using namespace PhotinoShared;
 
     - (BOOL)windowShouldClose: (NSWindow *)sender
     {
-        window->Events()->EmitEvent(WindowEvents::WindowShouldClose);
-        
-        // NSAlert *alert = [[NSAlert alloc] init];
-        // [alert addButtonWithTitle:@"Yes"];
-        // [alert addButtonWithTitle:@"No"];
-        // [alert setMessageText:@"Are you sure you want to quit?"];
-        // [alert setAlertStyle:NSAlertStyleWarning];
-        // [alert setShowsSuppressionButton:YES];
-
-        // NSInteger result = [alert runModal];
-
-        // if (result == NSAlertFirstButtonReturn) {
-            return YES;
-        // } else {
-        //     return NO;
-        // }
+        std::string shouldClose = "YES";
+        window->Events()->EmitEvent(WindowEvents::WindowShouldClose, &shouldClose);
+        Log::WriteLine("Window should close: " + shouldClose);
+        return shouldClose == "YES";
     }
 
     - (void)windowWillClose: (NSWindow *)sender
