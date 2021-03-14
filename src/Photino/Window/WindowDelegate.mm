@@ -21,8 +21,12 @@ using namespace PhotinoShared;
     - (BOOL)windowShouldClose: (NSWindow *)sender
     {
         std::string shouldClose = "YES";
+
+        // The shouldClose value can be set to "NO"
+        // in an event action and the performClose / 
+        // user click can be aborted.
         window->Events()->EmitEvent(WindowEvents::WindowShouldClose, &shouldClose);
-        Log::WriteLine("Window should close: " + shouldClose);
+
         return shouldClose == "YES";
     }
 
