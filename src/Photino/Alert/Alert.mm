@@ -1,4 +1,3 @@
-#include "../../PhotinoHelpers/InvokeOnMainThread.h"
 #include "Alert.h"
 
 namespace Photino
@@ -35,22 +34,20 @@ namespace Photino
     {
         this->Events()->EmitEvent(AlertEvents::WillOpen);
 
-        PhotinoHelpers::InvokeOnMainThread(^{
-            [_alert
-                beginSheetModalForWindow: _window
-                completionHandler: ^void (NSModalResponse responseCode)
+        [_alert
+            beginSheetModalForWindow: _window
+            completionHandler: ^void (NSModalResponse responseCode)
+            {
+                this->Events()->EmitEvent(AlertEvents::WillClose);
+                
+                if (callback != nullptr)
                 {
-                    this->Events()->EmitEvent(AlertEvents::WillClose);
-                    
-                    if (callback != nullptr)
-                    {
-                        callback(_responseValues.at(responseCode));
-                    }
+                    callback(_responseValues.at(responseCode));
+                }
 
-                    [_alert release];
-                }];
-        });
-        
+                [_alert release];
+            }];
+    
         this->Events()->EmitEvent(AlertEvents::DidOpen);
     }
 
