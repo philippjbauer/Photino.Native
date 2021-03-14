@@ -24,10 +24,10 @@ Quite a bit of the original functionality is already present. But the implementa
 - [x] Photino Window
 - [x] WebView
 - [x] Event System
-- [ ] EventActions with multiple arguments (not just sender)
+- [ ] EventActions with multiple arguments (not just sender + optional string)
 - [ ] App / Window Menu
 - [ ] Dock (macOS only)
-- [ ] Alert Windows
+- [x] Alert Windows (Issue with WebView content reload after closing)
 - [x] Add events to App 
 - [x] Add events to Window 
 - [x] Add events to WebView
