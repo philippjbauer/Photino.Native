@@ -53,7 +53,7 @@ build-exe-dev: ensure-build-exe-dev\
 			   copy-assets-dev
 
 build-dll-prod: ensure-build-dll-prod\
-			   compile-dll-prod
+			    compile-dll-prod
 
 build-dll-dev: ensure-build-dll-dev\
 			   compile-dll-dev
