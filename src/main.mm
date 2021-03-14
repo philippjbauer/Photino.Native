@@ -44,9 +44,30 @@ int main()
 
             sender->WebView()->SendScriptEvent("window-did-move", data);
         })
-        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *empty)
+        ->AddEventAction(WindowEvents::WindowShouldClose, [](Window *sender, std::string *shouldClose)
         {
             Log::WriteLine("Window should close soon.");
+
+            *shouldClose = "NO";
+
+            Alert *alert = new Alert(
+                sender->NativeWindow(),
+                "Are you sure you want to close the app?",
+                "Warning",
+                NSAlertStyleWarning,
+                "Close",
+                "close");
+            
+            alert->AddButton("Cancel", "cancel");
+
+            alert->Open([&sender](std::string response)
+            {
+                Log::WriteLine(response);
+                if (response == "close")
+                {
+                    [sender->NativeWindow() close];
+                }
+            });
         })
         ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender, std::string *empty)
         {
