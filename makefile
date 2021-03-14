@@ -52,6 +52,10 @@ build-exe-dev: ensure-build-exe-dev\
 			   compile-exe-dev\
 			   copy-assets-dev
 
+build-exe-min: ensure-build-exe-dev\
+			   compile-exe-min\
+			   copy-assets-dev
+
 build-dll-prod: ensure-build-dll-prod\
 			    compile-dll-prod
 
@@ -99,6 +103,13 @@ compile-exe-dev:
 		$(MAC_DEPS)\
 		$(MAC_SRCS)\
 		$(SRC)/main.mm\
+		-o $(BUILD_EXE_DEV)
+
+compile-exe-min:
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS)\
+		$(MAC_DEPS)\
+		$(MAC_SRCS)\
+		$(SRC)/minimal.mm\
 		-o $(BUILD_EXE_DEV)
 
 compile-dll-prod:
