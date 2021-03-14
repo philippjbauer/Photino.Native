@@ -4,10 +4,9 @@
 
 namespace PhotinoShared
 {
-    class Log
+    namespace Log
     {
-        public:
-            static void WriteLine(std::string message);
-            static void WriteMetrics(Metrics *metrics);
-    };
+        void WriteLine(std::string message);
+        void WriteMetrics(Metrics *metrics);
+    }
 }

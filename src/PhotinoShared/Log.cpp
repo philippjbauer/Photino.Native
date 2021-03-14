@@ -4,7 +4,7 @@ namespace PhotinoShared
 {
     void Log::WriteLine(std::string message)
     {
-        std::cout << message << std::endl;
+        std::cout << message << "\n";
     }
 
     void Log::WriteMetrics(Metrics *metrics)
