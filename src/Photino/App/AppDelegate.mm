@@ -5,28 +5,28 @@
 using namespace PhotinoShared;
 
 @implementation AppDelegate : NSObject
-    - (AppDelegate *)init
+- (AppDelegate *)init
+{
+    if (self = [super init])
     {
-        if (self = [super init])
-        {
-            Log::WriteLine("PAD init");
-        }
-        
-        return self;
+        Log::WriteLine("PAD init");
     }
+    
+    return self;
+}
 
-    - (void)applicationDidFinishLaunching: (NSNotification *)notification
-    {
-        [NSApp activateIgnoringOtherApps: YES];
-    }
+- (void)applicationDidFinishLaunching: (NSNotification *)notification
+{
+    [NSApp activateIgnoringOtherApps: YES];
+}
 
-    - (BOOL)applicationShouldTerminateAfterLastWindowClosed: (NSApplication *)sender
-    {
-        return true;
-    }
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed: (NSApplication *)sender
+{
+    return true;
+}
 
-    - (void)dealloc
-    {
-        [super dealloc];
-    }
+- (void)dealloc
+{
+    [super dealloc];
+}
 @end
