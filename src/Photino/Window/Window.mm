@@ -116,6 +116,11 @@ namespace Photino
         [this->NativeWindow() performClose: this->NativeWindow()];
     }
 
+    void Window::ForceClose()
+    {
+        [this->NativeWindow() close];
+    }
+
     Window *Window::Show()
     {
         this->Events()->EmitEvent(WindowEvents::WindowWillShow);

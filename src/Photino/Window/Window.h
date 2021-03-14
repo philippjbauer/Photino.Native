@@ -78,6 +78,7 @@ namespace Photino
 
             void Open();
             void Close();
+            void ForceClose();
 
             Window *Show();
             Window *Hide();
