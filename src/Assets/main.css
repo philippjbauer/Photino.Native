@@ -25,6 +25,16 @@ h1 > .badge {
     border-radius: 5px;
 }
 
+.window-props {
+    table-layout: fixed;
+}
+.window-props tr > th {
+    width: 125px;
+}
+.window-props tr > td.data {
+    width: 75px;
+}
+
 @media (prefers-color-scheme: dark) {
     html, body {
         background: #333;
@@ -33,7 +43,13 @@ h1 > .badge {
 
     .card {
         background: #2a2a2a;
+        color: #FFF;
     }
+        .card .table {
+            color: #FFF;
+            border-color: #555;
+        }
+
         .card input,
         .card input:focus {
             color: #FFF;
