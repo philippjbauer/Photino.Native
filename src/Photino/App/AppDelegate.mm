@@ -5,15 +5,15 @@
 using namespace PhotinoShared;
 
 @implementation AppDelegate : NSObject
-- (AppDelegate *)init
-{
-    if (self = [super init])
-    {
-        Log::WriteLine("PAD init");
-    }
+// - (AppDelegate *)init
+// {
+//     if (self = [super init])
+//     {
+//         Log::WriteLine("PAD init");
+//     }
     
-    return self;
-}
+//     return self;
+// }
 
 - (void)applicationDidFinishLaunching: (NSNotification *)notification
 {
@@ -25,8 +25,8 @@ using namespace PhotinoShared;
     return true;
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
+// - (void)dealloc
+// {
+//     [super dealloc];
+// }
 @end

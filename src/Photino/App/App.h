@@ -24,7 +24,6 @@ namespace Photino
     class App
     {
         private:
-            NSAutoreleasePool *_pool;
             NSApplication *_application;
 
             Events<App, AppEvents> *_events;

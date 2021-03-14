@@ -49,7 +49,6 @@ namespace Photino
     Window::~Window()
     {
         delete _webView;
-        [this->NativeWindow() release];
     }
 
     /**
@@ -84,9 +83,7 @@ namespace Photino
         ];
 
         // Add WindowDelegate
-        WindowDelegate *windowDelegate = [[
-            [WindowDelegate alloc] init
-        ] autorelease];
+        WindowDelegate *windowDelegate = [[WindowDelegate alloc] init];
 
         windowDelegate->window = this;
 

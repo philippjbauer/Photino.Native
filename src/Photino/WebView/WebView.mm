@@ -18,11 +18,7 @@ namespace Photino
             ->HasDeveloperExtrasEnabled(hasDeveloperExtrasEnabled);
     }
 
-    WebView::~WebView()
-    {
-        [this->GetConfiguration() release];
-        [this->NativeWebView() release];
-    }
+    WebView::~WebView() { }
 
     /**
     * Class Methods
@@ -49,9 +45,7 @@ namespace Photino
     )
     {
         // Create WebViewUiDelegate
-        WebViewUiDelegate *uiDelegate = [[
-            [WebViewUiDelegate alloc] init
-        ] autorelease];
+        WebViewUiDelegate *uiDelegate = [[WebViewUiDelegate alloc] init];
 
         uiDelegate->nativeWindow = nativeWindow;
         uiDelegate->photinoWebView = this;
@@ -59,9 +53,7 @@ namespace Photino
         // Setup user content script interop
         WKUserScript *userScript = this->GetUserScript();
 
-        WKUserContentController *userContentController = [[
-            [WKUserContentController alloc] init
-        ] autorelease];
+        WKUserContentController *userContentController = [[WKUserContentController alloc] init];
 
         [userContentController addUserScript: userScript];
         
@@ -156,12 +148,12 @@ const PhotinoApp = {
 
         NSString *userScriptSource = [NSString stringWithUTF8String: webViewExtensions.c_str()];
 
-        WKUserScript *userScript = [[
+        WKUserScript *userScript = [
             [WKUserScript alloc]
             initWithSource: userScriptSource
             injectionTime: WKUserScriptInjectionTimeAtDocumentStart
             forMainFrameOnly: YES
-        ] autorelease];
+        ];
 
         return userScript;
     }
@@ -191,10 +183,7 @@ const PhotinoApp = {
 
         this->Events()->EmitEvent(WebViewEvents::WillLoadResource, &absoluteURL);
 
-        NSURLRequest *request = [[
-            NSURLRequest
-            requestWithURL: resourceURL
-        ] autorelease];
+        NSURLRequest *request = [NSURLRequest requestWithURL: resourceURL];
         
         [webview loadRequest: request];
 

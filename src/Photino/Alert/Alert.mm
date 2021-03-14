@@ -14,7 +14,7 @@ namespace Photino
     {
         _events = new Photino::Events<Alert, AlertEvents>(this);
 
-        _alert = [[NSAlert alloc] init];
+        _alert = [NSAlert new];
 
         this->SetMessage(message)
             ->SetTitle(title)
@@ -24,7 +24,6 @@ namespace Photino
 
     Alert::~Alert()
     {
-        [_alert release];
         delete _events;
     }
 
@@ -44,8 +43,6 @@ namespace Photino
                 {
                     callback(_responseValues.at(responseCode));
                 }
-
-                [_alert release];
             }];
     
         this->Events()->EmitEvent(AlertEvents::DidOpen);

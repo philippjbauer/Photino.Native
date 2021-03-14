@@ -17,7 +17,6 @@ namespace Photino
     {
         this->Events()->EmitEvent(AppEvents::WillDestruct);
 
-        [_pool release];
         delete _events;
         delete _windows;
     }
@@ -26,12 +25,7 @@ namespace Photino
     {
         _events = new Photino::Events<App, AppEvents>(this);
         
-        _pool = [[NSAutoreleasePool alloc] init];
-        
-        AppDelegate *appDelegate = [[
-            [AppDelegate alloc]
-            init
-        ] autorelease];
+        AppDelegate *appDelegate = [[AppDelegate alloc] init];
 
         _application = [NSApplication sharedApplication];
         [_application setDelegate: appDelegate];

@@ -1,5 +1,5 @@
 CC = c++
-CFLAGS = -Wall -std=c++2a
+CFLAGS = -Wall -std=c++2a -fobjc-arc
 DEBUG_FLAGS = -O0 -g
 PROD_FLAGS = -O2
 DLL_FLAGS = -shared -fpic
@@ -58,8 +58,12 @@ build-dll-prod: ensure-build-dll-prod\
 build-dll-dev: ensure-build-dll-dev\
 			   compile-dll-dev
 
-publish-macos: ensure-build-exe-prod\
-			   build-exe-prod\
+build-all: build-exe-prod\
+		   build-exe-dev\
+		   build-dll-prod\
+		   build-dll-dev
+
+publish-macos: build-exe-prod\
 			   ensure-publish-path\
 			   create-macos-bundle
 
