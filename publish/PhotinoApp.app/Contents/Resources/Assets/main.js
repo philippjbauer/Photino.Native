@@ -1,8 +1,12 @@
 // Shorthand for the messaging system
+const PhotinoEvents = PhotinoApp.events;
 const PhotinoMessages = PhotinoApp.messages;
 
-document
-    .querySelector('button[type="submit"]')
+const SubmitButton = document.querySelector('button[type="submit"]');
+const WindowLocationOutput = document.querySelector('#window-location');
+const WindowSizeOutput = document.querySelector('#window-size');
+
+SubmitButton
     .addEventListener('click', (target) =>
     {
         const name = document.querySelector('#name').value.trim();
@@ -17,3 +21,15 @@ document
 
 PhotinoMessages
     .receive(message => alert(message));
+
+PhotinoEvents
+    .addEventHandler('window-did-move', data => {
+        const location = JSON.parse(data);
+        WindowLocationOutput.querySelector('td:nth-of-type(1)').innerHTML = `${location.left}px`;
+        WindowLocationOutput.querySelector('td:nth-of-type(2)').innerHTML = `${location.top}px`;
+    })
+    .addEventHandler('window-did-resize', data => {
+        const size = JSON.parse(data);
+        WindowSizeOutput.querySelector('td:nth-of-type(1)').innerHTML = `${size.width}px`;
+        WindowSizeOutput.querySelector('td:nth-of-type(2)').innerHTML = `${size.height}px`;
+    });
