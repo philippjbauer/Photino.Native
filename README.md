@@ -42,7 +42,7 @@ Quite a bit of the original functionality is already present. But the implementa
 - [ ] EventActions with multiple arguments (not just sender + optional string)
 - [ ] App / Window Menu
 - [ ] Dock (macOS only)
-- [x] Alert Windows (Issue with WebView content reload after closing)
+- [x] Alert Windows
 - [x] Add events to App 
 - [x] Add events to Window 
 - [x] Add events to WebView
