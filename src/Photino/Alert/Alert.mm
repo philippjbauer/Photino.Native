@@ -68,18 +68,9 @@ namespace Photino
 
     Alert *Alert::AddButton(std::string label, std::string value)
     {
-        NSModalResponse modalResponse = NSAlertFirstButtonReturn;
-        if (_buttonCount == 1) { modalResponse = NSAlertSecondButtonReturn; }
-        else if (_buttonCount == 2) { modalResponse = NSAlertThirdButtonReturn; }
-        else if (_buttonCount > 2)
-        {
-            Log::WriteLine("Can't add more than 3 buttons.");
-            return this;
-        }
-        
-        _buttonCount++;
-
-        _responseValues.insert(std::pair<NSModalResponse, std::string>(modalResponse, value));
+        size_t modalResponse = 1000 + _responseValues.size();
+ 
+        _responseValues.insert(std::pair<size_t, std::string>(modalResponse, value));
         [_alert addButtonWithTitle: [NSString stringWithUTF8String: label.c_str()]];
 
         return this;

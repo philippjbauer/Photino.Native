@@ -21,8 +21,7 @@ namespace Photino
             NSAlert *_alert;
             Events<Alert, AlertEvents> *_events;
 
-            unsigned char _buttonCount = 0;
-            std::map<NSModalResponse, std::string> _responseValues;
+            std::map<size_t, std::string> _responseValues;
 
         public:
             Alert(
