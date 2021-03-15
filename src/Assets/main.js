@@ -2,13 +2,15 @@
 const PhotinoEvents = PhotinoApp.events;
 const PhotinoMessages = PhotinoApp.messages;
 
-const SubmitButton = document.querySelector('button.submit');
+const SubmitForm = document.querySelector('form');
 const WindowLocationOutput = document.querySelector('#window-location');
 const WindowSizeOutput = document.querySelector('#window-size');
 
-SubmitButton
-    .addEventListener('click', (target) =>
+SubmitForm
+    .addEventListener('submit', (event) =>
     {
+        event.preventDefault();
+
         const name = document.querySelector('#name').value.trim();
 
         if (name === "") {
