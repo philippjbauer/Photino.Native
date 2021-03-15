@@ -2,7 +2,7 @@
 const PhotinoEvents = PhotinoApp.events;
 const PhotinoMessages = PhotinoApp.messages;
 
-const SubmitButton = document.querySelector('button[type="submit"]');
+const SubmitButton = document.querySelector('button.submit');
 const WindowLocationOutput = document.querySelector('#window-location');
 const WindowSizeOutput = document.querySelector('#window-size');
 
