@@ -41,8 +41,8 @@ namespace Photino
 
             Monitor _monitor;
 
-            bool _isResizable;
-            bool _isFullscreen;
+            bool _isResizable = true;
+            bool _isFullscreen = false;
 
             /**
              * Class Methods
