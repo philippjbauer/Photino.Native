@@ -123,7 +123,7 @@ int main()
                         Log::WriteLine("Alert will close.");
                     });
 
-                alert->Open([&alert](std::string response)
+                alert->Open([=](std::string response)
                 {
                     Log::WriteLine("User " + response + " event.");
                     delete alert;
@@ -138,7 +138,7 @@ int main()
         // })
         ->AddEventAction(WebViewEvents::CloseScriptConfirm, [](Photino::WebView *sender, std::string *isConfirmedString)
         {
-            Log::WriteLine("Closed cofirmation dialog with: " + *isConfirmedString);
+            Log::WriteLine("Closed confirmation dialog with: " + *isConfirmedString);
         });
 
     mainWindowWebView
