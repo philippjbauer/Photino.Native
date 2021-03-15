@@ -3,6 +3,8 @@ CFLAGS = -Wall -std=c++2a -fobjc-arc
 DEBUG_FLAGS = -O0 -g
 PROD_FLAGS = -O2
 DLL_FLAGS = -shared -fpic
+MAC_FLAGS = -framework Cocoa\
+		    -framework WebKit
 
 SRC = ./src
 SRC_ASSETS = $(SRC)/Assets
@@ -36,9 +38,6 @@ MAC_SRCS = $(SRC)/Photino/**/*.mm\
 		   $(SRC)/PhotinoShared/*.cpp
 
 MAC_EVT_SRCS = $(SRC)/Photino/Events/*.cpp
-
-MAC_DEPS = -framework Cocoa\
-		   -framework WebKit
 
 run: ensure-build-exe-dev\
 	 build-exe-dev\
@@ -93,35 +92,35 @@ ensure-publish-path:
 
 compile-exe-prod:
 	$(CC) $(CFLAGS) $(PROD_FLAGS)\
-		$(MAC_DEPS)\
+		$(MAC_FLAGS)\
 		$(MAC_SRCS)\
 		$(SRC)/main.mm\
 		-o $(BUILD_EXE_PROD)
 
 compile-exe-dev:
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS)\
-		$(MAC_DEPS)\
+		$(MAC_FLAGS)\
 		$(MAC_SRCS)\
 		$(SRC)/main.mm\
 		-o $(BUILD_EXE_DEV)
 
 compile-exe-min:
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS)\
-		$(MAC_DEPS)\
+		$(MAC_FLAGS)\
 		$(MAC_SRCS)\
 		$(SRC)/minimal.mm\
 		-o $(BUILD_EXE_DEV)
 
 compile-dll-prod:
 	$(CC) $(CFLAGS) $(PROD_FLAGS) $(DLL_FLAGS)\
-		$(MAC_DEPS)\
+		$(MAC_FLAGS)\
 		$(MAC_SRCS)\
 		$(SRC)/exports.mm\
 		-o $(BUILD_DLL_PROD)
 
 compile-dll-dev:
 	$(CC) $(CFLAGS) $(DLL_FLAGS)\
-		$(MAC_DEPS)\
+		$(MAC_FLAGS)\
 		$(MAC_SRCS)\
 		$(SRC)/exports.mm\
 		-o $(BUILD_DLL_DEV)
