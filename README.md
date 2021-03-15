@@ -14,23 +14,7 @@ Quite a bit of the original functionality is already present. But the implementa
 
 ---
 
-<table border="0" cellpadding="0px" cellspacing="10px">
-    <tr>
-        <td align="center" bgcolor="#333" width="300">
-            <a href="https://www.youtube.com/watch?v=ApMFRFwYCB4">
-                <img src="https://img.youtube.com/vi/ApMFRFwYCB4/0.jpg" alt="Photino.Native v2 Demo">
-                <h3>1<small><sup>st</sup></small> UI Interaction Demo</h3>
-            </a>
-        </td>
-        <td>
-        <td align="center" bgcolor="#333" width="300">
-            <a href="https://www.youtube.com/watch?v=mx54OoIOyjM">
-                <img src="https://img.youtube.com/vi/mx54OoIOyjM/0.jpg" alt="Photino.Native v2 Demo 2">
-                <h3>2<small><sup>nd</sup></small> UI Interaction Demo</h3>
-            </a>
-        </td>
-    </tr>
-</table>
+![image](photino-native-v2.gif)
 
 ---
 
