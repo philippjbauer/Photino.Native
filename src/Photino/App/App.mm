@@ -44,7 +44,7 @@ namespace Photino
     void App::Run()
     {
         this->Events()->EmitEvent(AppEvents::WillRun);
-        [NSApp run];
+        [_application run];
     }
 
     App *App::AddWindow(Window *window)
