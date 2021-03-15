@@ -23,11 +23,24 @@ using namespace Photino;
     photinoWebView->Events()->EmitEvent(WebViewEvents::OpenScriptAlert, &message);
 
     Alert *alert = new Alert(nativeWindow, message);
-    alert->Open([=](std::string response) -> void
+    alert->Open([=](std::string response)
     {
         photinoWebView->Events()->EmitEvent(WebViewEvents::CloseScriptAlert);
         completionHandler();
+        delete alert;
     });
+
+    // Produces same unexpected reload on close:
+    // NSAlert *alert = [NSAlert new];
+    // [alert setMessageText: @"Test"];
+    // [alert setInformativeText: [NSString stringWithUTF8String: message.c_str()]];
+    // [alert
+    //     beginSheetModalForWindow: nativeWindow
+    //     completionHandler: ^void (NSModalResponse response)
+    //     {
+    //         photinoWebView->Events()->EmitEvent(WebViewEvents::CloseScriptAlert);
+    //         completionHandler();
+    //     }];
 }
 
 - (void)webView:(WKWebView *)webView
@@ -56,6 +69,7 @@ using namespace Photino;
         std::string isConfirmedString = isConfirmed ? "true" : "false";
         photinoWebView->Events()->EmitEvent(WebViewEvents::CloseScriptConfirm, &isConfirmedString);
         completionHandler(isConfirmed);
+        delete alert;
     });
 }
 

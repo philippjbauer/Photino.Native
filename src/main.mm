@@ -60,13 +60,15 @@ int main()
             
             alert->AddButton("Cancel", "cancel");
             
-            alert->Open([sender](std::string response)
+            alert->Open([=](std::string response)
             {
                 if (response == "close")
                 {
                     sender->ForceClose();
                     delete sender;
                 }
+                
+                delete alert;
             });
         })
         ->AddEventAction(WindowEvents::WindowWillClose, [](Window *sender, std::string *empty)
@@ -121,9 +123,10 @@ int main()
                         Log::WriteLine("Alert will close.");
                     });
 
-                alert->Open([](std::string response)
+                alert->Open([&alert](std::string response)
                 {
                     Log::WriteLine("User " + response + " event.");
+                    delete alert;
                 });
             }
         })
@@ -151,6 +154,7 @@ int main()
     //    ->AddWindow(secondWindow);
 
     app->Run();
+    delete app;
     
     Log::WriteLine("Stopping execution");
     return 0;

@@ -18,7 +18,11 @@ namespace Photino
             ->HasDeveloperExtrasEnabled(hasDeveloperExtrasEnabled);
     }
 
-    WebView::~WebView() { }
+    WebView::~WebView()
+    {
+        Log::WriteLine("Destructing WebView");
+        delete _events;
+    }
 
     /**
     * Class Methods

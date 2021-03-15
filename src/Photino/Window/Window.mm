@@ -48,6 +48,8 @@ namespace Photino
 
     Window::~Window()
     {
+        Log::WriteLine("Destructing Window");
+        delete _events;
         delete _webView;
     }
 

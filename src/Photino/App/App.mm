@@ -15,6 +15,7 @@ namespace Photino
 
     App::~App()
     {
+        Log::WriteLine("Destructing App");
         this->Events()->EmitEvent(AppEvents::WillDestruct);
 
         delete _events;
