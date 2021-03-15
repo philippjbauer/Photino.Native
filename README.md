@@ -14,76 +14,23 @@ Quite a bit of the original functionality is already present. But the implementa
 
 ---
 
-<style>
-.p-card {
-    overflow: hidden;
-    background: #333;
-    width: 300px;
-    margin: 1em 2em 1em 0;
-    color: #FFF;
-    border-radius: 3px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .25);
-}
-.p-card:hover {
-    text-decoration: none;
-}
-    .p-card .p-card-header {
-        overflow: hidden;
-        position: relative;
-    }
-        .p-card .p-card-header::after {
-            box-sizing: content;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            content: '▶';
-            width: 80px;
-            height: 80px;
-            color: #FFF;
-            font-size: 40px;
-            position: absolute;
-            top: calc(50% - 40px);
-            left: calc(50% - 40px);
-            border-radius: 50%;
-            border: 5px solid #FFF;
-            transition: all 0.1s linear;
-        }
-        .p-card:hover .p-card-header::after {
-            transform: scale(0.9);
-        }
-        
-        .p-card .p-card-header img {
-            display: block;
-            width: 100%;
-            margin: -28px 0;
-        }
-
-    .p-card .p-card-content {
-        padding: 1em 1em;
-    }
-        .p-card .p-card-content h3 {
-            text-align: center;
-        }
-</style>
-<div style="display: flex;">
-<a class="p-card" href="https://www.youtube.com/watch?v=ApMFRFwYCB4">
-    <div class="p-card-header">
-        <img src="https://img.youtube.com/vi/ApMFRFwYCB4/0.jpg" alt="Photino.Native v2 Demo">
-    </div>
-    <div class="p-card-content">
-        <h3>1<small><sup>st</sup></small> UI Interaction Demo</h3>
-    </div>
-</a>
-
-<a class="p-card" href="https://www.youtube.com/watch?v=mx54OoIOyjM">
-    <div class="p-card-header">
-        <img src="https://img.youtube.com/vi/mx54OoIOyjM/0.jpg" alt="Photino.Native v2 Demo 2">
-    </div>
-    <div class="p-card-content">
-        <h3>2<small><sup>nd</sup></small> UI Interaction Demo</h3>
-    </div>
-</a>
-</div>
+<table border="0" cellpadding="0px" cellspacing="10px">
+    <tr>
+        <td align="center" bgcolor="#333" width="300">
+            <a href="https://www.youtube.com/watch?v=ApMFRFwYCB4">
+                <img src="https://img.youtube.com/vi/ApMFRFwYCB4/0.jpg" alt="Photino.Native v2 Demo">
+                <h3>1<small><sup>st</sup></small> UI Interaction Demo</h3>
+            </a>
+        </td>
+        <td>
+        <td align="center" bgcolor="#333" width="300">
+            <a href="https://www.youtube.com/watch?v=mx54OoIOyjM">
+                <img src="https://img.youtube.com/vi/mx54OoIOyjM/0.jpg" alt="Photino.Native v2 Demo 2">
+                <h3>2<small><sup>nd</sup></small> UI Interaction Demo</h3>
+            </a>
+        </td>
+    </tr>
+</table>
 
 ---
 
