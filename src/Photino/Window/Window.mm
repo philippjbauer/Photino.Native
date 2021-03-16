@@ -221,7 +221,7 @@ namespace Photino
         [
             this->NativeWindow()
             setFrame: frame
-            display: @YES
+            display: true
         ];
 
         this->Events()->EmitEvent(WindowEvents::WindowDidSetSize);
