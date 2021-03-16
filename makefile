@@ -1,9 +1,10 @@
 CC = c++
-CFLAGS = -Wall -std=c++2a -fobjc-arc
+CFLAGS = -std=c++2a -Wall
 DEBUG_FLAGS = -O0 -g
 PROD_FLAGS = -O2
 DLL_FLAGS = -shared -fpic
-MAC_FLAGS = -framework Cocoa\
+MAC_FLAGS = -fobjc-arc\
+			-framework Cocoa\
 		    -framework WebKit
 
 SRC = ./src
