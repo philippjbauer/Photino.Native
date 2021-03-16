@@ -17,15 +17,15 @@ namespace Photino
     class Alert
     {
         private:
-            NSWindow *_window;
-            NSAlert *_alert;
+            NSWindow *_nativeWindow;
+            NSAlert *_nativeAlert;
             Events<Alert, AlertEvents> *_events;
 
             std::map<size_t, std::string> _responseValues;
 
         public:
             Alert(
-                NSWindow *window,
+                NSWindow *nativeWindow,
                 std::string message,
                 std::string title = "Info",
                 NSAlertStyle style = NSAlertStyleInformational,

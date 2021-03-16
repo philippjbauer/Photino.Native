@@ -26,15 +26,13 @@ namespace Photino
     {
         _events = new Photino::Events<App, AppEvents>(this);
         
-        AppDelegate *appDelegate = [[AppDelegate alloc] init];
+        AppDelegate *appDelegate = [AppDelegate new];
 
         _application = [NSApplication sharedApplication];
         [_application setDelegate: appDelegate];
         [_application setActivationPolicy: NSApplicationActivationPolicyRegular];
 
         _windows = new Windows();
-
-        // id applicationName = [[NSProcessInfo processInfo] processName];
 
         return this;
     }

@@ -49,6 +49,7 @@ namespace Photino
     Window::~Window()
     {
         Log::WriteLine("Destructing Window");
+        _nativeWindow = nil;
         delete _events;
         delete _webView;
     }
@@ -85,7 +86,7 @@ namespace Photino
         ];
 
         // Add WindowDelegate
-        WindowDelegate *windowDelegate = [[WindowDelegate alloc] init];
+        WindowDelegate *windowDelegate = [WindowDelegate new];
 
         windowDelegate->window = this;
 

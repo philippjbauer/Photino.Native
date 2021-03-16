@@ -21,6 +21,8 @@ namespace Photino
     WebView::~WebView()
     {
         Log::WriteLine("Destructing WebView");
+        _configuration = nil;
+        _nativeWebView = nil;
         delete _events;
     }
 
@@ -39,7 +41,7 @@ namespace Photino
 
     WKWebViewConfiguration *WebView::CreateConfiguration()
     {
-        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+        WKWebViewConfiguration *configuration = [WKWebViewConfiguration new];
         return configuration;
     }
 
@@ -49,7 +51,7 @@ namespace Photino
     )
     {
         // Create WebViewUiDelegate
-        WebViewUiDelegate *uiDelegate = [[WebViewUiDelegate alloc] init];
+        WebViewUiDelegate *uiDelegate = [WebViewUiDelegate new];
 
         uiDelegate->nativeWindow = nativeWindow;
         uiDelegate->photinoWebView = this;
@@ -57,7 +59,7 @@ namespace Photino
         // Setup user content script interop
         WKUserScript *userScript = this->GetUserScript();
 
-        WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+        WKUserContentController *userContentController = [WKUserContentController new];
 
         [userContentController addUserScript: userScript];
         
