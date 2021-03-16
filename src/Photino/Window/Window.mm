@@ -129,7 +129,7 @@ namespace Photino
             [this->NativeWindow() deminiaturize: this->NativeWindow()];
         }
 
-        [this->NativeWindow() orderFrontRegardless];
+        [this->NativeWindow() makeKeyAndOrderFront: nil];
 
         this->Events()->EmitEvent(WindowEvents::WindowDidShow);
         return this;
@@ -208,16 +208,20 @@ namespace Photino
     {
         this->Events()->EmitEvent(WindowEvents::WindowWillSetSize);
 
+        NSRect frame = [this->NativeWindow() frame];
+
+        CGFloat oldHeight = frame.size.height;
+
         CGFloat width = (CGFloat)value.width;
         CGFloat height = (CGFloat)value.height;
 
-        NSRect frame = [this->NativeWindow() frame];
         frame.size = CGSizeMake(width, height);
+        frame.origin.y -= height - oldHeight;
 
         [
             this->NativeWindow()
             setFrame: frame
-            display: YES
+            display: @YES
         ];
 
         this->Events()->EmitEvent(WindowEvents::WindowDidSetSize);
