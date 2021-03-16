@@ -159,6 +159,16 @@ namespace Photino
         return this->SetLocation(left, top);
     }
 
+    Window *Window::Offset(int left, int top)
+    {
+        WindowLocation location = this->GetLocation();
+
+        location.left += left;
+        location.top += top;
+
+        return this->SetLocation(location);
+    }
+
     /**
     * Getters & Setters
     */

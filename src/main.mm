@@ -126,6 +126,17 @@ int main()
                 alert->Open([=](std::string response)
                 {
                     Log::WriteLine("User " + response + " event.");
+
+                    if (response == "reported")
+                    {
+                        // Second Window
+                        Window *secondWindow = new Window("Error Report");
+                        secondWindow
+                            ->Offset(20, 20)
+                            ->WebView()
+                            ->LoadHtmlString("Thank you for your feedback!");
+                    }
+
                     delete alert;
                 });
             }

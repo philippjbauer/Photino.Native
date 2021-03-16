@@ -84,6 +84,7 @@ namespace Photino
             Window *Hide();
 
             Window *Center();
+            Window *Offset(int left, int top);
 
             /**
              * Getters & Setters
