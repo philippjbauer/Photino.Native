@@ -12,6 +12,12 @@ using namespace Photino;
 }
 
 - (void)webView: (WKWebView *)webView
+        didFinishNavigation: (WKNavigation *)navigation
+{
+    photinoWebView->Events()->EmitEvent(WebViewEvents::DidFinishNavigation);
+}
+
+- (void)webView: (WKWebView *)webView
         runJavaScriptAlertPanelWithMessage: (NSString *)scriptMessage
         initiatedByFrame: (WKFrameInfo *)frame
         completionHandler: (void (^)(void))completionHandler

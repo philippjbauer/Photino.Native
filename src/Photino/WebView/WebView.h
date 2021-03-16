@@ -21,6 +21,7 @@ namespace Photino
         CloseScriptAlert,
         OpenScriptConfirm,
         CloseScriptConfirm,
+        DidFinishNavigation
     };
 
     class WebView

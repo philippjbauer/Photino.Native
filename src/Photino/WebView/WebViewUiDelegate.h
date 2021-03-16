@@ -7,7 +7,7 @@
 
 using namespace Photino;
 
-@interface WebViewUiDelegate : NSObject <WKUIDelegate, WKScriptMessageHandler>
+@interface WebViewUiDelegate : NSObject <WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate>
 {
     @public
         NSWindow *nativeWindow;
