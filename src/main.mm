@@ -88,7 +88,7 @@ int main()
         {
             Log::WriteLine("Resource did load.");
         })
-        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [](Photino::WebView *sender, std::string *message)
+        ->AddEventAction(WebViewEvents::DidReceiveScriptMessage, [=](Photino::WebView *sender, std::string *message)
         {
             if (message->size() <= 30)
             {
@@ -132,6 +132,7 @@ int main()
                         // Second Window
                         Window *secondWindow = new Window("Error Report");
                         secondWindow
+                            ->SetLocation(mainWindow->GetLocation())
                             ->Offset(20, 20)
                             ->WebView()
                             ->LoadHtmlString("Thank you for your feedback!");
