@@ -1,6 +1,18 @@
 const PhotinoApp = {
     events: {
         handlers: {},
+        send: function (event, message) {
+            if (typeof event === 'string'
+                && typeof message === 'string'
+            ) {
+                const data = JSON.stringify({event, message});
+
+                window.webkit
+                    .messageHandlers
+                    .photinoIPC
+                    .postMessage(data);
+            }
+        },
         addEventHandler: function (type, handler) {
             if (typeof type === 'string'
                 && typeof handler === 'function'
@@ -40,15 +52,11 @@ const PhotinoApp = {
         }
     },
     messages: {
-        send: function(message) {
-            if (typeof message === 'string') {
-                window.webkit
-                    .messageHandlers
-                    .photinoIPC
-                    .postMessage(message);
-            }
+        send: function (message) {
+            PhotinoApp.events.send('message-sent', message);
+            return PhotinoApp.message;
         },
-        receive: function(handler) {
+        receive: function (handler) {
             PhotinoApp.events.addEventHandler('message-received', handler);
             return PhotinoApp.messages;
         }

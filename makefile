@@ -9,6 +9,7 @@ MAC_FLAGS = -fobjc-arc\
 
 SRC = ./src
 SRC_ASSETS = $(SRC)/Assets
+SRC_RESOURCES = $(SRC)/Resources
 
 BUILD_FILE = PhotinoApp
 BUILD_PATH = ./build
@@ -37,8 +38,6 @@ MAC_SRCS = $(SRC)/Photino/**/*.mm\
 		   $(SRC)/Photino/**/*.cpp\
 		   $(SRC)/PhotinoHelpers/*.mm\
 		   $(SRC)/PhotinoShared/*.cpp
-
-MAC_EVT_SRCS = $(SRC)/Photino/Events/*.cpp
 
 run: ensure-build-exe-dev\
 	 build-exe-dev\
@@ -149,6 +148,6 @@ create-macos-bundle:
 	mkdir -p $(PUB_PATH_RESOURCES) &&\
 	cp $(BUILD_EXE_PROD) $(PUB_PATH_MACOS)/ &&\
 	cp -r $(BUILD_PATH_PROD_ASSETS) $(PUB_PATH_RESOURCES) &&\
-	cp ./res/BundleIcon.png $(PUB_PATH_RESOURCES)/ &&\
-	cp ./res/Info.plist $(PUB_PATH_CONTENTS)/ &&\
+	cp $(SRC_RESOURCES)/BundleIcon.png $(PUB_PATH_RESOURCES)/ &&\
+	cp $(SRC_RESOURCES)/Info.plist $(PUB_PATH_CONTENTS)/ &&\
 	open $(PUB_PATH)
